@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Liste des compétitions</title>
+</head>
+<body>
+<h1>Compétitions</h1>
+<a href="/competitions/new">Créer une nouvelle compétition</a>
+<table border="1">
+    <tr>
+        <th>Id</th>
+        <th>Nom</th>
+        <th>Date début</th>
+        <th>Date fin</th>
+        <th>Actions</th>
+    </tr>
+    <tr th:each="c : ${competitions}">
+        <td th:text="${c.id}"></td>
+        <td th:text="${c.name}"></td>
+        <td th:text="${c.dateDebut}"></td>
+        <td th:text="${c.dateFin}"></td>
+        <td>
+            <a th:href="@{'/competitions/delete/' + ${c.id}}">Supprimer</a>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

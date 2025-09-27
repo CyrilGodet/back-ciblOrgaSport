@@ -1,0 +1,13 @@
+package com.glop.cibl_orga_sport;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class CiblOrgaSportApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(CiblOrgaSportApplication.class, args);
+	}
+
+}

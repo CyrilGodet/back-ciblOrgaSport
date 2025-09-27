@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Créer une compétition</title>
+</head>
+<body>
+<h1>Créer une compétition</h1>
+<form th:action="@{/competitions/save}" method="post">
+    Nom: <input type="text" name="name" required><br>
+    Date début: <input type="date" name="dateDebutStr" required><br>
+    Date fin: <input type="date" name="dateFinStr" required><br>
+    <button type="submit">Enregistrer</button>
+</form>
+<a href="/competitions">Retour à la liste</a>
+</body>
+</html>

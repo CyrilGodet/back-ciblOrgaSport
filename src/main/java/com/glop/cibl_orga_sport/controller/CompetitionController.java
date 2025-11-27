@@ -2,6 +2,7 @@ package com.glop.cibl_orga_sport.controller;
 
 import java.time.LocalDate;
 import java.sql.Date;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,28 +27,41 @@ public class CompetitionController {
 
     @GetMapping
     public ModelAndView listCompetitions() {
-        ModelAndView model = new ModelAndView("competitions");
+        ModelAndView model = new ModelAndView("competition/list");
         model.addObject("competitions", service.getAllCompetitions());
         return model;
     }
 
     @GetMapping("/new")
     public ModelAndView showForm() {
-        ModelAndView model = new ModelAndView("competition-form");
+        ModelAndView model = new ModelAndView("competition/form");
         model.addObject("competition", new Competition());
         return model;
     }
 
+    @GetMapping("/edit/{id}")
+    public ModelAndView showEditForm(@PathVariable Long id) {
+        Optional<Competition> competition = service.getCompetition(id);
+        if (competition.isPresent()) {
+            ModelAndView model = new ModelAndView("competition/form");
+            model.addObject("competition", competition.get());
+            return model;
+        }
+        return new ModelAndView("redirect:/competitions");
+    }
+
     @PostMapping("/save")
-    public RedirectView saveCompetition(@ModelAttribute Competition competition,@RequestParam String dateDebutStr,@RequestParam String dateFinStr) {
+    public RedirectView saveCompetition(@ModelAttribute Competition competition, @RequestParam String dateDebutStr, @RequestParam String dateFinStr) {
 
         Date dateDebut = Date.valueOf(LocalDate.parse(dateDebutStr));
         Date dateFin = Date.valueOf(LocalDate.parse(dateFinStr));
 
-        competition.setDateDebut(dateDebut);
-        competition.setDateFin(dateFin);
-
-        service.createCompetition(competition.getName(),competition.getDateDebut(), competition.getDateFin());
+        if (competition.getIdCompetition() != null) {
+            service.updateCompetition(competition.getIdCompetition(), competition.getNameCompetition(), dateDebut, dateFin);
+        } 
+        else {
+            service.createCompetition(competition.getNameCompetition(), dateDebut, dateFin);
+        }
         return new RedirectView("/competitions");
     }
 

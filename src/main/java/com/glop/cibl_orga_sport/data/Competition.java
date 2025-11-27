@@ -1,22 +1,34 @@
 package com.glop.cibl_orga_sport.data;
 
 import java.sql.Date;
+import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.JoinColumn;
 
 @Entity
 public class Competition {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long idCompetition;
 
     @Column
-    private String name;
+    private String nameCompetition;
+
+    @ManyToMany
+    @JoinTable(
+        name = "constitution_competition_epreuve", 
+        joinColumns = @JoinColumn(name = "competition_id"), 
+        inverseJoinColumns = @JoinColumn(name = "epreuve_id")
+    )
+    private Set<Epreuve> epreuves;
 
     @Column
     private Date dateDebut;
@@ -27,25 +39,25 @@ public class Competition {
     public Competition() {}
 
     public Competition(String name, Date dateDebut, Date dateFin) {
-        this.name = name;
+        this.nameCompetition = name;
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
     }
 
-    public Long getId() {
-        return id;
+    public Long getIdCompetition() {
+        return idCompetition;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setIdCompetition(Long idCompetition) {
+        this.idCompetition = idCompetition;
     }
 
-    public String getName() {
-        return name;
+    public String getNameCompetition() {
+        return nameCompetition;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNameCompetition(String name) {
+        this.nameCompetition = name;
     }
 
     public Date getDateDebut() {
@@ -62,5 +74,23 @@ public class Competition {
 
     public void setDateFin(Date dateFin) {
         this.dateFin = dateFin;
-    }    
+    }
+
+    public Set<Epreuve> getEpreuves() {
+        return epreuves;
+    }
+
+    public void setEpreuves(Set<Epreuve> epreuves) {
+        this.epreuves = epreuves;
+    }
+
+    public void addEpreuve(Epreuve epreuve) {
+        this.epreuves.add(epreuve);
+    }
+
+    public void removeEpreuve(Epreuve epreuve) throws IllegalAccessException {
+        if(!this.epreuves.remove(epreuve)) {
+            throw new IllegalAccessException("L'épreuve n'est pas associée à cette compétition.");
+        }
+    }
 }

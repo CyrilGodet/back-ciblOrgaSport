@@ -8,6 +8,7 @@ import java.util.Optional;
 public interface CompetitionService {
 
     Competition createCompetition(String name, Date date_debut, Date date_fin);
+    Competition updateCompetition(Long id, String name, Date date_debut, Date date_fin);
     boolean deleteCompetition(Long id);
     List<Competition> getAllCompetitions();
     Optional<Competition> getCompetition(Long id);

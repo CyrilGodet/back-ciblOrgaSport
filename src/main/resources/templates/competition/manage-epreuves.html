@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gérer les épreuves</title>
+    <meta name="author" content="Cyril Godet">
+</head>
+<body>
+<div class="navbar">
+    <a href="/">Accueil</a>
+    <a href="/competitions" class="active">Compétitions</a>
+    <a href="/epreuves">Épreuves</a>
+    <a href="/phases">Phases</a>
+    <a href="/categories">Catégories</a>
+</div>
+<div class="content">
+    <h1>Gérer les épreuves de <span th:text="${competition.nameCompetition}"></span></h1>
+    <p><a href="/competitions" class="btn btn-primary">← Retour aux compétitions</a></p>
+
+    <!-- Section: Épreuves associées -->
+    <div class="section">
+        <h2>Épreuves associées à cette compétition</h2>
+        <table th:if="${competition.epreuves != null && !competition.epreuves.isEmpty()}">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nom de l'épreuve</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="epreuve : ${competition.epreuves}">
+                    <td th:text="${epreuve.idEpreuve}"></td>
+                    <td th:text="${epreuve.nomEpreuve}"></td>
+                    <td>
+                        <a th:href="@{'/competitions/' + ${competition.idCompetition} + '/epreuves/remove/' + ${epreuve.idEpreuve}}" 
+                           class="btn btn-danger"
+                           onclick="return confirm('Êtes-vous sûr de vouloir retirer cette épreuve de la compétition ?')">
+                           Retirer
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <p th:if="${competition.epreuves == null || competition.epreuves.isEmpty()}" style="color: #666; font-style: italic;">
+            Aucune épreuve associée à cette compétition.
+        </p>
+    </div>
+
+    <!-- Section: Ajouter une épreuve -->
+    <div class="section">
+        <h2>Ajouter une épreuve</h2>
+        <form th:action="@{'/competitions/' + ${competition.idCompetition} + '/epreuves/add'}" method="post">
+            <div class="form-group">
+                <label for="epreuveId">Sélectionner une épreuve :</label>
+                <select id="epreuveId" name="epreuveId" required>
+                    <option value="">-- Choisir une épreuve --</option>
+                    <option th:each="epreuve : ${allEpreuves}" 
+                            th:value="${epreuve.idEpreuve}" 
+                            th:text="${epreuve.nomEpreuve}">
+                    </option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Ajouter l'épreuve</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

@@ -24,6 +24,21 @@ public class CompetitionServiceImpl implements CompetitionService {
     }
 
     @Override
+    public Competition updateCompetition(Long id, String name, Date dateDebut, Date dateFin) {
+        Optional<Competition> existingCompetition = repository.findById(id);
+        if (existingCompetition.isPresent()) {
+            Competition c = existingCompetition.get();
+            c.setNameCompetition(name);
+            c.setDateDebut(dateDebut);
+            c.setDateFin(dateFin);
+            System.out.println("Modification compétition : " + id);
+            return repository.save(c);
+        }
+        System.out.println("Compétition non trouvée : " + id);
+        return null;
+    }
+
+    @Override
     public boolean deleteCompetition(Long id) {
         Optional<Competition> c = repository.findById(id);
         if (c.isPresent()) {

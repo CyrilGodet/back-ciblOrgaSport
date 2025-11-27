@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Liste des catégories</title>
+    <meta name="author" content="Cyril Godet">
+</head>
+<body>
+<div class="navbar">
+    <a href="/">Accueil</a>
+    <a href="/competitions">Compétitions</a>
+    <a href="/epreuves">Épreuves</a>
+    <a href="/phases">Phases</a>
+    <a href="/categories" class="active">Catégories</a>
+</div>
+<div class="content">
+<h1>Catégories</h1>
+<a href="/categories/new" class="btn btn-primary">Créer une nouvelle catégorie</a>
+<table>
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nom de la catégorie</th>
+            <th>Épreuve</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="c : ${categories}">
+            <td th:text="${c.idCategory}"></td>
+            <td th:text="${c.nameCategory}"></td>
+            <td th:text="${c.epreuve != null ? c.epreuve.nomEpreuve : 'Aucune'}"></td>
+            <td>
+                <a th:href="@{'/categories/edit/' + ${c.idCategory}}" class="btn btn-warning">Modifier</a>
+                <a th:href="@{'/categories/delete/' + ${c.idCategory}}" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette catégorie ?')">Supprimer</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+</div>
+</body>
+</html>

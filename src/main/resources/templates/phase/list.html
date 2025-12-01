@@ -22,6 +22,7 @@
             <th>Id</th>
             <th>Nom de la phase</th>
             <th>Épreuve</th>
+            <th>Compétition</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -30,6 +31,7 @@
             <td th:text="${p.idPhase}"></td>
             <td th:text="${p.nomPhase}"></td>
             <td th:text="${p.epreuve != null ? p.epreuve.nomEpreuve : 'Aucune'}"></td>
+            <td th:text="${p.epreuve != null && p.epreuve.competition != null ? p.epreuve.competition.nameCompetition : 'Aucune'}"></td>
             <td>
                 <a th:href="@{'/phases/edit/' + ${p.idPhase}}" class="btn btn-warning">Modifier</a>
                 <a th:href="@{'/phases/delete/' + ${p.idPhase}}" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette phase ?')">Supprimer</a>

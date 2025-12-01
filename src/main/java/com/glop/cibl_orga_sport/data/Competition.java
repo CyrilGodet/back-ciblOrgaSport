@@ -1,6 +1,7 @@
 package com.glop.cibl_orga_sport.data;
 
 import java.sql.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import jakarta.persistence.Column;
@@ -8,9 +9,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Competition {
@@ -22,12 +21,7 @@ public class Competition {
     @Column
     private String nameCompetition;
 
-    @ManyToMany
-    @JoinTable(
-        name = "constitution_competition_epreuve", 
-        joinColumns = @JoinColumn(name = "competition_id"), 
-        inverseJoinColumns = @JoinColumn(name = "epreuve_id")
-    )
+    @OneToMany(mappedBy = "competition")
     private Set<Epreuve> epreuves;
 
     @Column
@@ -42,6 +36,7 @@ public class Competition {
         this.nameCompetition = name;
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
+        this.epreuves = new HashSet<>();
     }
 
     public Long getIdCompetition() {
@@ -86,11 +81,13 @@ public class Competition {
 
     public void addEpreuve(Epreuve epreuve) {
         this.epreuves.add(epreuve);
+        epreuve.setCompetition(this);
     }
 
     public void removeEpreuve(Epreuve epreuve) throws IllegalAccessException {
         if(!this.epreuves.remove(epreuve)) {
             throw new IllegalAccessException("L'épreuve n'est pas associée à cette compétition.");
         }
+        epreuve.setCompetition(null);
     }
 }

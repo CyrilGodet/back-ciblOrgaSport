@@ -14,7 +14,17 @@
         <label for="nomEpreuve">Nom de l'épreuve:</label>
         <input type="text" id="nomEpreuve" name="nomEpreuve" th:value="*{nomEpreuve}" required>
     </div>
-    
+    <div class="form-group">
+        <label for="competitionId">Compétition associée:</label>
+        <select id="competitionId" name="competitionId">
+            <option value="">-- Aucune compétition --</option>
+            <option th:each="comp : ${competitions}" 
+                    th:value="${comp.idCompetition}" 
+                    th:text="${comp.nameCompetition}" 
+                    th:selected="${epreuve.competition != null && comp.idCompetition == epreuve.competition.idCompetition}">
+            </option>
+        </select>
+    </div>
     <button type="submit" class="btn btn-primary">Enregistrer</button>
     <a href="/epreuves" class="btn btn-secondary">Annuler</a>
 </form>

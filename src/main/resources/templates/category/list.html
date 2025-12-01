@@ -22,6 +22,7 @@
             <th>Id</th>
             <th>Nom de la catégorie</th>
             <th>Épreuve</th>
+            <th>Compétition</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -30,6 +31,7 @@
             <td th:text="${c.idCategory}"></td>
             <td th:text="${c.nameCategory}"></td>
             <td th:text="${c.epreuve != null ? c.epreuve.nomEpreuve : 'Aucune'}"></td>
+            <td th:text="${c.epreuve != null && c.epreuve.competition != null ? c.epreuve.competition.nameCompetition : 'Aucune'}"></td>
             <td>
                 <a th:href="@{'/categories/edit/' + ${c.idCategory}}" class="btn btn-warning">Modifier</a>
                 <a th:href="@{'/categories/delete/' + ${c.idCategory}}" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette catégorie ?')">Supprimer</a>

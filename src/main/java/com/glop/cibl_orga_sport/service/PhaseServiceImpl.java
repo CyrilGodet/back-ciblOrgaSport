@@ -29,8 +29,13 @@ public class PhaseServiceImpl implements PhaseService {
         if (existingPhase.isPresent()) {
             Phase p = existingPhase.get();
             p.setNomPhase(nomPhase);
-            if (epreuve != null) {
-                p.setEpreuve(epreuve);
+            Epreuve oldEpreuve = p.getEpreuve();
+            if (oldEpreuve != null && !oldEpreuve.equals(epreuve)) {
+                oldEpreuve.getPhases().remove(p);
+            }
+            p.setEpreuve(epreuve);
+            if (epreuve != null && !epreuve.getPhases().contains(p)) {
+                epreuve.getPhases().add(p);
             }
             System.out.println("Modification phase : " + id);
             return repository.save(p);

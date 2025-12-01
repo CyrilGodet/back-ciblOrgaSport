@@ -20,9 +20,9 @@
         <select id="epreuveId" name="epreuveId">
             <option value="">-- Sélectionner une épreuve --</option>
             <option th:each="e : ${epreuves}" 
-                    th:value="${e.idEpreuve}" 
-                    th:text="${e.nomEpreuve}"
-                    th:selected="${phase.epreuve != null && phase.epreuve.idEpreuve == e.idEpreuve}">
+                th:value="${e.idEpreuve}" 
+                th:text="${e.nomEpreuve} + (${e.competition != null} ? ' - ' + ${e.competition.nameCompetition} : '')"
+                th:selected="${phase.epreuve != null && phase.epreuve.idEpreuve == e.idEpreuve}">
             </option>
         </select>
     </div>

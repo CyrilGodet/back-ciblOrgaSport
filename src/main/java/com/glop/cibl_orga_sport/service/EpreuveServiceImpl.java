@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.glop.cibl_orga_sport.data.Competition;
 import com.glop.cibl_orga_sport.data.Epreuve;
 import com.glop.cibl_orga_sport.repository.EpreuveRepository;
 
@@ -16,18 +17,32 @@ public class EpreuveServiceImpl implements EpreuveService {
     private EpreuveRepository repository;
 
     @Override
-    public Epreuve createEpreuve(String nomEpreuve) {
+    public Epreuve createEpreuve(String nomEpreuve, Competition competition) {
         Epreuve e = new Epreuve(nomEpreuve);
+        e.setCompetition(competition);
+        if (competition != null && !competition.getEpreuves().contains(e)) {
+            competition.getEpreuves().add(e);
+        }
         System.out.println("Création épreuve : " + nomEpreuve);
         return repository.save(e);
     }
 
     @Override
-    public Epreuve updateEpreuve(Long id, String nomEpreuve) {
+    public Epreuve updateEpreuve(Long id, String nomEpreuve, Competition competition) {
         Optional<Epreuve> existingEpreuve = repository.findById(id);
         if (existingEpreuve.isPresent()) {
             Epreuve e = existingEpreuve.get();
             e.setNomEpreuve(nomEpreuve);
+            
+            Competition oldCompetition = e.getCompetition();
+            if (oldCompetition != null && !oldCompetition.equals(competition)) {
+                oldCompetition.getEpreuves().remove(e);
+            }
+            e.setCompetition(competition);
+            if (competition != null && !competition.getEpreuves().contains(e)) {
+                competition.getEpreuves().add(e);
+            }
+            
             System.out.println("Modification épreuve : " + id);
             return repository.save(e);
         }

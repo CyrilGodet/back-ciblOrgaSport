@@ -21,6 +21,7 @@
         <tr>
             <th>Id</th>
             <th>Nom de l'épreuve</th>
+            <th>Compétition associée</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -28,6 +29,10 @@
         <tr th:each="e : ${epreuves}">
             <td th:text="${e.idEpreuve}"></td>
             <td th:text="${e.nomEpreuve}"></td>
+            <td>
+                <span th:if="${e.competition != null}" th:text="${e.competition.nameCompetition}"></span>
+                <span th:if="${e.competition == null}" style="color: #999; font-style: italic;">Aucune</span>
+            </td>
             <td>
                 <a th:href="@{'/epreuves/edit/' + ${e.idEpreuve}}" class="btn btn-warning">Modifier</a>
                 <a th:href="@{'/epreuves/delete/' + ${e.idEpreuve}}" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette épreuve ?')">Supprimer</a>

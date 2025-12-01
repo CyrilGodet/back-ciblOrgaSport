@@ -1,5 +1,6 @@
 package com.glop.cibl_orga_sport.data;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import jakarta.persistence.Column;
@@ -7,7 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
 @Entity
@@ -20,19 +21,21 @@ public class Epreuve {
     @Column
     private String nomEpreuve;
 
-    @ManyToMany(mappedBy = "epreuves")
-    private Set<Competition> competitions;
+    @ManyToOne
+    private Competition competition;
 
-    @OneToMany(mappedBy = "epreuve")
+    @OneToMany(mappedBy = "epreuve", cascade = jakarta.persistence.CascadeType.ALL, orphanRemoval = true)
     private Set<Phase> phases;
 
-    @OneToMany(mappedBy = "epreuve")
+    @OneToMany(mappedBy = "epreuve", cascade = jakarta.persistence.CascadeType.ALL, orphanRemoval = true)
     private Set<Category> categories;
 
     public Epreuve() {}
 
     public Epreuve(String nomEpreuve) {
         this.nomEpreuve = nomEpreuve;
+        this.phases = new HashSet<>();
+        this.categories = new HashSet<>();
     }
 
     public Long getIdEpreuve() {
@@ -51,22 +54,12 @@ public class Epreuve {
         this.nomEpreuve = nomEpreuve;
     }
 
-    public Set<Competition> getCompetitions() {
-        return competitions;
+    public Competition getCompetition() {
+        return competition;
     }
 
-    public void setCompetitions(Set<Competition> competitions) {
-        this.competitions = competitions;
-    }
-
-    public void addCompetition(Competition competition) {
-        this.competitions.add(competition);
-    }
-
-    public void removeCompetition(Competition competition) throws IllegalArgumentException {
-        if (!this.competitions.remove(competition)) {
-            throw new IllegalArgumentException("La compétition n'est pas associée à cette épreuve");
-        }
+    public void setCompetition(Competition competition) {
+        this.competition = competition;
     }
 
     public Set<Phase> getPhases() {
@@ -79,12 +72,14 @@ public class Epreuve {
 
     public void addPhase(Phase phase) {
         this.phases.add(phase);
+        phase.setEpreuve(this);
     }
 
     public void removePhase(Phase phase) throws IllegalArgumentException {
         if (!this.phases.remove(phase)) {
             throw new IllegalArgumentException("La phase n'est pas associée à cette épreuve");
         }
+        phase.setEpreuve(null);
     }
 
     public Set<Category> getCategories() {
@@ -97,12 +92,14 @@ public class Epreuve {
 
     public void addCategory(Category category) {
         this.categories.add(category);
+        category.setEpreuve(this);
     }
 
     public void removeCategory(Category category) throws IllegalArgumentException {
         if (!this.categories.remove(category)) {
             throw new IllegalArgumentException("La catégorie n'est pas associée à cette épreuve");
         }
+        category.setEpreuve(null);
     }
 
 }

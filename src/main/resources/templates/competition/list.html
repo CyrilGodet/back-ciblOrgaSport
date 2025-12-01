@@ -23,6 +23,7 @@
             <th>Nom</th>
             <th>Date début</th>
             <th>Date fin</th>
+            <th>Nombre d'épreuves</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -32,8 +33,8 @@
             <td th:text="${c.nameCompetition}"></td>
             <td th:text="${c.dateDebut}"></td>
             <td th:text="${c.dateFin}"></td>
+            <td th:text="${c.epreuves != null ? c.epreuves.size() : 0}"></td>
             <td>
-                <a th:href="@{'/competitions/' + ${c.idCompetition} + '/epreuves'}" class="btn btn-info">Gérer épreuves</a>
                 <a th:href="@{'/competitions/edit/' + ${c.idCompetition}}" class="btn btn-warning">Modifier</a>
                 <a th:href="@{'/competitions/delete/' + ${c.idCompetition}}" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette compétition ?')">Supprimer</a>
             </td>

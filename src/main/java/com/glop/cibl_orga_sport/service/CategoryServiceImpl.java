@@ -30,8 +30,13 @@ public class CategoryServiceImpl implements CategoryService {
         if (existingCategory.isPresent()) {
             Category c = existingCategory.get();
             c.setNameCategory(nameCategory);
-            if (epreuve != null) {
-                c.setEpreuve(epreuve);
+            Epreuve oldEpreuve = c.getEpreuve();
+            if (oldEpreuve != null && !oldEpreuve.equals(epreuve)) {
+                oldEpreuve.getCategories().remove(c);
+            }
+            c.setEpreuve(epreuve);
+            if (epreuve != null && !epreuve.getCategories().contains(c)) {
+                epreuve.getCategories().add(c);
             }
             System.out.println("Modification catégorie : " + id);
             return repository.save(c);

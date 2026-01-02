@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.glop.cibl_orga_sport.data.Phase;
 import com.glop.cibl_orga_sport.data.Epreuve;
+import com.glop.cibl_orga_sport.data.Lieu;
 import com.glop.cibl_orga_sport.repository.PhaseRepository;
 
 @Service
@@ -17,14 +18,22 @@ public class PhaseServiceImpl implements PhaseService {
     private PhaseRepository repository;
 
     @Override
-    public Phase createPhase(String nomPhase, Epreuve epreuve) {
-        Phase p = new Phase(nomPhase, epreuve);
+    public Phase createPhase(String nomPhase, Epreuve epreuve, Lieu lieu) {
+        Phase p = new Phase(nomPhase, epreuve, lieu);
+        if (epreuve != null) {
+            if (epreuve.getPhases() == null) epreuve.setPhases(new java.util.HashSet<>());
+            epreuve.getPhases().add(p);
+        }
+        if (lieu != null) {
+            if (lieu.getPhases() == null) lieu.setPhases(new java.util.HashSet<>());
+            lieu.getPhases().add(p);
+        }
         System.out.println("Création phase : " + nomPhase);
         return repository.save(p);
     }
 
     @Override
-    public Phase updatePhase(Long id, String nomPhase, Epreuve epreuve) {
+    public Phase updatePhase(Long id, String nomPhase, Epreuve epreuve, Lieu lieu) {
         Optional<Phase> existingPhase = repository.findById(id);
         if (existingPhase.isPresent()) {
             Phase p = existingPhase.get();
@@ -36,6 +45,14 @@ public class PhaseServiceImpl implements PhaseService {
             p.setEpreuve(epreuve);
             if (epreuve != null && !epreuve.getPhases().contains(p)) {
                 epreuve.getPhases().add(p);
+            }
+            Lieu oldLieu = p.getLieu();
+            if (oldLieu != null && !oldLieu.equals(lieu)) {
+                oldLieu.getPhases().remove(p);
+            }
+            p.setLieu(lieu);
+            if (lieu != null && !lieu.getPhases().contains(p)) {
+                lieu.getPhases().add(p);
             }
             System.out.println("Modification phase : " + id);
             return repository.save(p);

@@ -71,11 +71,15 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
-        boolean deleted = categoryService.deleteCategory(id);
-        if (deleted) {
-            return ResponseEntity.noContent().build();
+    public ResponseEntity<?> deleteCategory(@PathVariable Long id) {
+        try {
+            boolean deleted = categoryService.deleteCategory(id);
+            if (deleted) {
+                return ResponseEntity.noContent().build();
+            }
+            return ResponseEntity.notFound().build();
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(409).body("{\"error\":\"" + e.getMessage() + "\"}");
         }
-        return ResponseEntity.notFound().build();
     }
 }

@@ -94,11 +94,15 @@ public class PhaseController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePhase(@PathVariable Long id) {
-        boolean deleted = phaseService.deletePhase(id);
-        if (deleted) {
-            return ResponseEntity.noContent().build();
+    public ResponseEntity<?> deletePhase(@PathVariable Long id) {
+        try {
+            boolean deleted = phaseService.deletePhase(id);
+            if (deleted) {
+                return ResponseEntity.noContent().build();
+            }
+            return ResponseEntity.notFound().build();
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(409).body("{\"error\":\"" + e.getMessage() + "\"}");
         }
-        return ResponseEntity.notFound().build();
     }
 }

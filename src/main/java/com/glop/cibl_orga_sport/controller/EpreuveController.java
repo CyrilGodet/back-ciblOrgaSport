@@ -71,11 +71,15 @@ public class EpreuveController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteEpreuve(@PathVariable Long id) {
-        boolean deleted = epreuveService.deleteEpreuve(id);
-        if (deleted) {
-            return ResponseEntity.noContent().build();
+    public ResponseEntity<?> deleteEpreuve(@PathVariable Long id) {
+        try {
+            boolean deleted = epreuveService.deleteEpreuve(id);
+            if (deleted) {
+                return ResponseEntity.noContent().build();
+            }
+            return ResponseEntity.notFound().build();
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(409).body("{\"error\":\"" + e.getMessage() + "\"}");
         }
-        return ResponseEntity.notFound().build();
     }
 }

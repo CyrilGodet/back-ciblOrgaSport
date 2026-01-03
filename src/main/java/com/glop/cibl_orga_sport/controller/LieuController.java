@@ -45,11 +45,15 @@ public class LieuController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteLieu(@PathVariable Long id) {
-        boolean deleted = lieuService.deleteLieu(id);
-        if (deleted) {
-            return ResponseEntity.noContent().build();
+    public ResponseEntity<?> deleteLieu(@PathVariable Long id) {
+        try {
+            boolean deleted = lieuService.deleteLieu(id);
+            if (deleted) {
+                return ResponseEntity.noContent().build();
+            }
+            return ResponseEntity.notFound().build();
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(409).body("{\"error\":\"" + e.getMessage() + "\"}");
         }
-        return ResponseEntity.notFound().build();
     }
 }

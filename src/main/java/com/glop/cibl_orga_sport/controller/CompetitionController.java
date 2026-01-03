@@ -54,11 +54,15 @@ public class CompetitionController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCompetition(@PathVariable Long id) {
-        boolean deleted = service.deleteCompetition(id);
-        if (deleted) {
-            return ResponseEntity.noContent().build();
+    public ResponseEntity<?> deleteCompetition(@PathVariable Long id) {
+        try {
+            boolean deleted = service.deleteCompetition(id);
+            if (deleted) {
+                return ResponseEntity.noContent().build();
+            }
+            return ResponseEntity.notFound().build();
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(409).body("{\"error\":\"" + e.getMessage() + "\"}");
         }
-        return ResponseEntity.notFound().build();
     }
 }

@@ -54,6 +54,14 @@ public class EpreuveServiceImpl implements EpreuveService {
     public boolean deleteEpreuve(Long id) {
         Optional<Epreuve> e = repository.findById(id);
         if (e.isPresent()) {
+            Epreuve epreuve = e.get();
+            boolean hasPhases = epreuve.getPhases() != null && !epreuve.getPhases().isEmpty();
+            boolean hasCategories = epreuve.getCategories() != null && !epreuve.getCategories().isEmpty();
+            
+            if (hasPhases || hasCategories) {
+                throw new IllegalStateException("Impossible de supprimer cette épreuve car elle contient des phases ou des catégories.");
+            }
+            
             repository.deleteById(id);
             System.out.println("Épreuve supprimée : " + id);
             return true;

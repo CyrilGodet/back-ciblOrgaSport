@@ -3,6 +3,9 @@ package com.glop.cibl_orga_sport.data;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,12 +25,15 @@ public class Epreuve {
     private String nomEpreuve;
 
     @ManyToOne
+    @JsonBackReference("competition-epreuves")
     private Competition competition;
 
     @OneToMany(mappedBy = "epreuve", cascade = jakarta.persistence.CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference("epreuve-phases")
     private Set<Phase> phases;
 
     @OneToMany(mappedBy = "epreuve", cascade = jakarta.persistence.CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference("epreuve-categories")
     private Set<Category> categories;
 
     public Epreuve() {}

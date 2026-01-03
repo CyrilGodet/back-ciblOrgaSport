@@ -4,6 +4,8 @@ import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,6 +24,7 @@ public class Competition {
     private String nameCompetition;
 
     @OneToMany(mappedBy = "competition")
+    @JsonManagedReference("competition-epreuves")
     private Set<Epreuve> epreuves;
 
     @Column

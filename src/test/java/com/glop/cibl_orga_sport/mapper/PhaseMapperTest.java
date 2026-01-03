@@ -1,0 +1,100 @@
+package com.glop.cibl_orga_sport.mapper;
+
+import com.glop.cibl_orga_sport.data.Competition;
+import com.glop.cibl_orga_sport.data.Epreuve;
+import com.glop.cibl_orga_sport.data.Lieu;
+import com.glop.cibl_orga_sport.data.Phase;
+import com.glop.cibl_orga_sport.dto.CompetitionDTO;
+import com.glop.cibl_orga_sport.dto.EpreuveDTO;
+import com.glop.cibl_orga_sport.dto.LieuDTO;
+import com.glop.cibl_orga_sport.dto.PhaseDTO;
+import org.junit.jupiter.api.Test;
+
+import java.sql.Date;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class PhaseMapperTest {
+
+    private Competition createCompetition(String name, Long id) {
+        Competition competition = new Competition(name, Date.valueOf("2026-01-01"), Date.valueOf("2026-01-10"));
+        competition.setIdCompetition(id);
+        return competition;
+    }
+
+    private Epreuve createEpreuve(String name, Long id, Competition competition) {
+        Epreuve epreuve = new Epreuve(name);
+        epreuve.setIdEpreuve(id);
+        epreuve.setCompetition(competition);
+        return epreuve;
+    }
+
+    private Lieu createLieu(String nom, String ville, String adresse, Long id) {
+        Lieu lieu = new Lieu(nom, ville, adresse);
+        lieu.setIdLieu(id);
+        return lieu;
+    }
+
+    private Phase createPhase(String name, Long id, Epreuve epreuve, Lieu lieu) {
+        Phase phase = new Phase(name, epreuve, lieu);
+        phase.setIdPhase(id);
+        return phase;
+    }
+
+    private CompetitionDTO createCompetitionDTO(String name, Long id) {
+        return new CompetitionDTO(id, name, Date.valueOf("2026-01-01"), Date.valueOf("2026-01-10"));
+    }
+
+    private EpreuveDTO createEpreuveDTO(String name, Long id, CompetitionDTO competitionDTO) {
+        return new EpreuveDTO(id, name, competitionDTO);
+    }
+
+    private LieuDTO createLieuDTO(String nom, String ville, String adresse, Long id) {
+        return new LieuDTO(id, nom, ville, adresse);
+    }
+
+    private PhaseDTO createPhaseDTO(String name, Long id, EpreuveDTO epreuveDTO, LieuDTO lieuDTO) {
+        return new PhaseDTO(id, name, epreuveDTO, lieuDTO);
+    }
+
+    @Test
+    void testToDTO() {
+        Competition competition = createCompetition("Championnats du monde de natation", 1L);
+        Epreuve epreuve = createEpreuve("100m nage libre", 2L, competition);
+        Lieu lieu = createLieu("Centre Aquatique Olympique Métropole du Grand Saint-Denis", "Saint-Denis", "361-363, Av. du Président Wilson", 3L);
+        Phase phase = createPhase("Finale", 4L, epreuve, lieu);
+
+        PhaseDTO dto = PhaseMapper.toDTO(phase);
+
+        assertNotNull(dto);
+        assertEquals(4L, dto.getIdPhase());
+        assertEquals("Finale", dto.getNomPhase());
+        assertNotNull(dto.getEpreuve());
+        assertEquals("100m nage libre", dto.getEpreuve().getNomEpreuve());
+        assertNotNull(dto.getLieu());
+        assertEquals("Centre Aquatique Olympique Métropole du Grand Saint-Denis", dto.getLieu().getNom());
+    }
+
+    @Test
+    void testToDTO_Null() {
+        assertNull(PhaseMapper.toDTO(null));
+    }
+
+    @Test
+    void testToEntity() {
+        CompetitionDTO competitionDTO = createCompetitionDTO("Championnats du monde de natation", 1L);
+        EpreuveDTO epreuveDTO = createEpreuveDTO("100m nage libre", 2L, competitionDTO);
+        LieuDTO lieuDTO = createLieuDTO("Centre Aquatique Olympique Métropole du Grand Saint-Denis", "Saint-Denis", "361-363, Av. du Président Wilson", 3L);
+        PhaseDTO dto = createPhaseDTO("Finale", 4L, epreuveDTO, lieuDTO);
+
+        Phase phase = PhaseMapper.toEntity(dto);
+
+        assertNotNull(phase);
+        assertEquals("Finale", phase.getNomPhase());
+    }
+
+    @Test
+    void testToEntity_Null() {
+        assertNull(PhaseMapper.toEntity(null));
+    }
+}

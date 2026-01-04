@@ -21,11 +21,13 @@ public class PhaseServiceImpl implements PhaseService {
     public Phase createPhase(String nomPhase, Epreuve epreuve, Lieu lieu) {
         Phase p = new Phase(nomPhase, epreuve, lieu);
         if (epreuve != null) {
-            if (epreuve.getPhases() == null) epreuve.setPhases(new java.util.HashSet<>());
+            if (epreuve.getPhases() == null)
+                epreuve.setPhases(new java.util.HashSet<>());
             epreuve.getPhases().add(p);
         }
         if (lieu != null) {
-            if (lieu.getPhases() == null) lieu.setPhases(new java.util.HashSet<>());
+            if (lieu.getPhases() == null)
+                lieu.setPhases(new java.util.HashSet<>());
             lieu.getPhases().add(p);
         }
         System.out.println("Création phase : " + nomPhase);
@@ -81,5 +83,10 @@ public class PhaseServiceImpl implements PhaseService {
     @Override
     public Optional<Phase> getPhase(Long id) {
         return repository.findById(id);
+    }
+
+    @Override
+    public List<Phase> getPhasesByCompetitionId(Long competitionId) {
+        return repository.findByEpreuveCompetitionIdCompetition(competitionId);
     }
 }

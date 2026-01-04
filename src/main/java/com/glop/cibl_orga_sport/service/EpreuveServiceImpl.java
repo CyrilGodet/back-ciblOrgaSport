@@ -33,7 +33,7 @@ public class EpreuveServiceImpl implements EpreuveService {
         if (existingEpreuve.isPresent()) {
             Epreuve e = existingEpreuve.get();
             e.setNomEpreuve(nomEpreuve);
-            
+
             Competition oldCompetition = e.getCompetition();
             if (oldCompetition != null && !oldCompetition.equals(competition)) {
                 oldCompetition.getEpreuves().remove(e);
@@ -42,7 +42,7 @@ public class EpreuveServiceImpl implements EpreuveService {
             if (competition != null && !competition.getEpreuves().contains(e)) {
                 competition.getEpreuves().add(e);
             }
-            
+
             System.out.println("Modification épreuve : " + id);
             return repository.save(e);
         }
@@ -57,11 +57,12 @@ public class EpreuveServiceImpl implements EpreuveService {
             Epreuve epreuve = e.get();
             boolean hasPhases = epreuve.getPhases() != null && !epreuve.getPhases().isEmpty();
             boolean hasCategories = epreuve.getCategories() != null && !epreuve.getCategories().isEmpty();
-            
+
             if (hasPhases || hasCategories) {
-                throw new IllegalStateException("Impossible de supprimer cette épreuve car elle contient des phases ou des catégories.");
+                throw new IllegalStateException(
+                        "Impossible de supprimer cette épreuve car elle contient des phases ou des catégories.");
             }
-            
+
             repository.deleteById(id);
             System.out.println("Épreuve supprimée : " + id);
             return true;
@@ -78,5 +79,10 @@ public class EpreuveServiceImpl implements EpreuveService {
     @Override
     public Optional<Epreuve> getEpreuve(Long id) {
         return repository.findById(id);
+    }
+
+    @Override
+    public List<Epreuve> getEpreuvesByCompetitionId(Long competitionId) {
+        return repository.findByCompetitionIdCompetition(competitionId);
     }
 }

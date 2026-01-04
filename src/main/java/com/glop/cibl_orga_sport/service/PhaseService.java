@@ -10,8 +10,14 @@ import java.util.Optional;
 public interface PhaseService {
 
     Phase createPhase(String nomPhase, Epreuve epreuve, Lieu lieu);
+
     Phase updatePhase(Long id, String nomPhase, Epreuve epreuve, Lieu lieu);
+
     boolean deletePhase(Long id);
+
     List<Phase> getAllPhases();
+
     Optional<Phase> getPhase(Long id);
+
+    List<Phase> getPhasesByCompetitionId(Long competitionId);
 }

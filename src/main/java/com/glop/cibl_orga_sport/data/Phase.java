@@ -12,7 +12,7 @@ import jakarta.persistence.JoinColumn;
 
 @Entity
 public class Phase {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idPhase;
@@ -29,7 +29,14 @@ public class Phase {
     @JoinColumn(name = "lieu_id")
     private Lieu lieu;
 
-    public Phase() {}
+    @Column
+    private java.sql.Date dateDebut;
+
+    @Column
+    private java.sql.Date dateFin;
+
+    public Phase() {
+    }
 
     public Phase(String nomPhase, Epreuve epreuve) {
         this.nomPhase = nomPhase;
@@ -38,6 +45,14 @@ public class Phase {
 
     public Phase(String nomPhase, Epreuve epreuve, Lieu lieu) {
         this.nomPhase = nomPhase;
+        this.epreuve = epreuve;
+        this.lieu = lieu;
+    }
+
+    public Phase(String nomPhase, java.sql.Date dateDebut, java.sql.Date dateFin, Epreuve epreuve, Lieu lieu) {
+        this.nomPhase = nomPhase;
+        this.dateDebut = dateDebut;
+        this.dateFin = dateFin;
         this.epreuve = epreuve;
         this.lieu = lieu;
     }
@@ -73,5 +88,21 @@ public class Phase {
     public void setLieu(Lieu lieu) {
         this.lieu = lieu;
     }
-    
+
+    public java.sql.Date getDateDebut() {
+        return dateDebut;
+    }
+
+    public void setDateDebut(java.sql.Date dateDebut) {
+        this.dateDebut = dateDebut;
+    }
+
+    public java.sql.Date getDateFin() {
+        return dateFin;
+    }
+
+    public void setDateFin(java.sql.Date dateFin) {
+        this.dateFin = dateFin;
+    }
+
 }

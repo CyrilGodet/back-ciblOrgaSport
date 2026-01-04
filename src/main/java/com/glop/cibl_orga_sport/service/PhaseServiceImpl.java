@@ -11,6 +11,8 @@ import com.glop.cibl_orga_sport.data.Epreuve;
 import com.glop.cibl_orga_sport.data.Lieu;
 import com.glop.cibl_orga_sport.repository.PhaseRepository;
 
+import java.sql.Date;
+
 @Service
 public class PhaseServiceImpl implements PhaseService {
 
@@ -18,8 +20,9 @@ public class PhaseServiceImpl implements PhaseService {
     private PhaseRepository repository;
 
     @Override
-    public Phase createPhase(String nomPhase, Epreuve epreuve, Lieu lieu) {
-        Phase p = new Phase(nomPhase, epreuve, lieu);
+    public Phase createPhase(String nomPhase, Date dateDebut, Date dateFin, Epreuve epreuve,
+            Lieu lieu) {
+        Phase p = new Phase(nomPhase, dateDebut, dateFin, epreuve, lieu);
         if (epreuve != null) {
             if (epreuve.getPhases() == null)
                 epreuve.setPhases(new java.util.HashSet<>());
@@ -35,11 +38,14 @@ public class PhaseServiceImpl implements PhaseService {
     }
 
     @Override
-    public Phase updatePhase(Long id, String nomPhase, Epreuve epreuve, Lieu lieu) {
+    public Phase updatePhase(Long id, String nomPhase, java.sql.Date dateDebut, java.sql.Date dateFin, Epreuve epreuve,
+            Lieu lieu) {
         Optional<Phase> existingPhase = repository.findById(id);
         if (existingPhase.isPresent()) {
             Phase p = existingPhase.get();
             p.setNomPhase(nomPhase);
+            p.setDateDebut(dateDebut);
+            p.setDateFin(dateFin);
             Epreuve oldEpreuve = p.getEpreuve();
             if (oldEpreuve != null && !oldEpreuve.equals(epreuve)) {
                 oldEpreuve.getPhases().remove(p);

@@ -3,14 +3,20 @@ package com.glop.cibl_orga_sport.dto;
 public class PhaseDTO {
     private Long idPhase;
     private String nomPhase;
+    private java.sql.Date dateDebut;
+    private java.sql.Date dateFin;
     private EpreuveDTO epreuve;
     private LieuDTO lieu;
 
-    public PhaseDTO() {}
+    public PhaseDTO() {
+    }
 
-    public PhaseDTO(Long idPhase, String nomPhase, EpreuveDTO epreuve, LieuDTO lieu) {
+    public PhaseDTO(Long idPhase, String nomPhase, java.sql.Date dateDebut, java.sql.Date dateFin, EpreuveDTO epreuve,
+            LieuDTO lieu) {
         this.idPhase = idPhase;
         this.nomPhase = nomPhase;
+        this.dateDebut = dateDebut;
+        this.dateFin = dateFin;
         this.epreuve = epreuve;
         this.lieu = lieu;
     }
@@ -45,5 +51,21 @@ public class PhaseDTO {
 
     public void setLieu(LieuDTO lieu) {
         this.lieu = lieu;
+    }
+
+    public java.sql.Date getDateDebut() {
+        return dateDebut;
+    }
+
+    public void setDateDebut(java.sql.Date dateDebut) {
+        this.dateDebut = dateDebut;
+    }
+
+    public java.sql.Date getDateFin() {
+        return dateFin;
+    }
+
+    public void setDateFin(java.sql.Date dateFin) {
+        this.dateFin = dateFin;
     }
 }

@@ -9,9 +9,10 @@ import java.util.Optional;
 
 public interface PhaseService {
 
-    Phase createPhase(String nomPhase, Epreuve epreuve, Lieu lieu);
+    Phase createPhase(String nomPhase, java.sql.Date dateDebut, java.sql.Date dateFin, Epreuve epreuve, Lieu lieu);
 
-    Phase updatePhase(Long id, String nomPhase, Epreuve epreuve, Lieu lieu);
+    Phase updatePhase(Long id, String nomPhase, java.sql.Date dateDebut, java.sql.Date dateFin, Epreuve epreuve,
+            Lieu lieu);
 
     boolean deletePhase(Long id);
 

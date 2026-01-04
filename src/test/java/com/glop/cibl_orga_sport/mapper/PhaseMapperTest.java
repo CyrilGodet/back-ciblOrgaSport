@@ -36,7 +36,7 @@ class PhaseMapperTest {
     }
 
     private Phase createPhase(String name, Long id, Epreuve epreuve, Lieu lieu) {
-        Phase phase = new Phase(name, epreuve, lieu);
+        Phase phase = new Phase(name, Date.valueOf("2026-01-05"), Date.valueOf("2026-01-06"), epreuve, lieu);
         phase.setIdPhase(id);
         return phase;
     }
@@ -54,14 +54,15 @@ class PhaseMapperTest {
     }
 
     private PhaseDTO createPhaseDTO(String name, Long id, EpreuveDTO epreuveDTO, LieuDTO lieuDTO) {
-        return new PhaseDTO(id, name, epreuveDTO, lieuDTO);
+        return new PhaseDTO(id, name, Date.valueOf("2026-01-05"), Date.valueOf("2026-01-06"), epreuveDTO, lieuDTO);
     }
 
     @Test
     void testToDTO() {
         Competition competition = createCompetition("Championnats du monde de natation", 1L);
         Epreuve epreuve = createEpreuve("100m nage libre", 2L, competition);
-        Lieu lieu = createLieu("Centre Aquatique Olympique Métropole du Grand Saint-Denis", "Saint-Denis", "361-363, Av. du Président Wilson", 3L);
+        Lieu lieu = createLieu("Centre Aquatique Olympique Métropole du Grand Saint-Denis", "Saint-Denis",
+                "361-363, Av. du Président Wilson", 3L);
         Phase phase = createPhase("Finale", 4L, epreuve, lieu);
 
         PhaseDTO dto = PhaseMapper.toDTO(phase);
@@ -69,6 +70,8 @@ class PhaseMapperTest {
         assertNotNull(dto);
         assertEquals(4L, dto.getIdPhase());
         assertEquals("Finale", dto.getNomPhase());
+        assertEquals(Date.valueOf("2026-01-05"), dto.getDateDebut());
+        assertEquals(Date.valueOf("2026-01-06"), dto.getDateFin());
         assertNotNull(dto.getEpreuve());
         assertEquals("100m nage libre", dto.getEpreuve().getNomEpreuve());
         assertNotNull(dto.getLieu());
@@ -84,13 +87,16 @@ class PhaseMapperTest {
     void testToEntity() {
         CompetitionDTO competitionDTO = createCompetitionDTO("Championnats du monde de natation", 1L);
         EpreuveDTO epreuveDTO = createEpreuveDTO("100m nage libre", 2L, competitionDTO);
-        LieuDTO lieuDTO = createLieuDTO("Centre Aquatique Olympique Métropole du Grand Saint-Denis", "Saint-Denis", "361-363, Av. du Président Wilson", 3L);
+        LieuDTO lieuDTO = createLieuDTO("Centre Aquatique Olympique Métropole du Grand Saint-Denis", "Saint-Denis",
+                "361-363, Av. du Président Wilson", 3L);
         PhaseDTO dto = createPhaseDTO("Finale", 4L, epreuveDTO, lieuDTO);
 
         Phase phase = PhaseMapper.toEntity(dto);
 
         assertNotNull(phase);
         assertEquals("Finale", phase.getNomPhase());
+        assertEquals(Date.valueOf("2026-01-05"), phase.getDateDebut());
+        assertEquals(Date.valueOf("2026-01-06"), phase.getDateFin());
     }
 
     @Test

@@ -10,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.sql.Date;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -32,15 +33,17 @@ class PhaseServiceImplTest {
         Epreuve epreuve = new Epreuve("100m nage libre");
         epreuve.setIdEpreuve(1L);
 
-        Lieu lieu = new Lieu("Centre Aquatique Olympique Métropole du Grand Saint-Denis", "Saint-Denis", "361-363, Av. du Président Wilson");
+        Lieu lieu = new Lieu("Centre Aquatique Olympique Métropole du Grand Saint-Denis", "Saint-Denis",
+                "361-363, Av. du Président Wilson");
         lieu.setIdLieu(1L);
 
-        Phase phase = new Phase("Finale", epreuve, lieu);
+        Phase phase = new Phase("Finale", Date.valueOf("2026-01-05"), Date.valueOf("2026-01-06"), epreuve, lieu);
         phase.setIdPhase(1L);
 
         when(phaseRepository.save(any(Phase.class))).thenReturn(phase);
 
-        Phase result = phaseService.createPhase("Finale", epreuve, lieu);
+        Phase result = phaseService.createPhase("Finale", Date.valueOf("2026-01-05"), Date.valueOf("2026-01-06"),
+                epreuve, lieu);
 
         assertNotNull(result);
         assertEquals("Finale", result.getNomPhase());
@@ -50,10 +53,10 @@ class PhaseServiceImplTest {
 
     @Test
     void testGetAllPhases() {
-        Phase phase1 = new Phase("Finale", null, null);
+        Phase phase1 = new Phase("Finale", Date.valueOf("2026-01-05"), Date.valueOf("2026-01-06"), null, null);
         phase1.setIdPhase(1L);
 
-        Phase phase2 = new Phase("Demi-finale", null, null);
+        Phase phase2 = new Phase("Demi-finale", Date.valueOf("2026-01-03"), Date.valueOf("2026-01-04"), null, null);
         phase2.setIdPhase(2L);
 
         when(phaseRepository.findAll()).thenReturn(Arrays.asList(phase1, phase2));
@@ -67,7 +70,7 @@ class PhaseServiceImplTest {
 
     @Test
     void testGetPhase() {
-        Phase phase = new Phase("Finale", null, null);
+        Phase phase = new Phase("Finale", Date.valueOf("2026-01-05"), Date.valueOf("2026-01-06"), null, null);
         phase.setIdPhase(1L);
 
         when(phaseRepository.findById(1L)).thenReturn(Optional.of(phase));
@@ -83,19 +86,23 @@ class PhaseServiceImplTest {
         Epreuve epreuve = new Epreuve("100m nage libre");
         epreuve.setIdEpreuve(1L);
 
-        Lieu lieu = new Lieu("Centre Aquatique Olympique Métropole du Grand Saint-Denis", "Saint-Denis", "361-363, Av. du Président Wilson");
+        Lieu lieu = new Lieu("Centre Aquatique Olympique Métropole du Grand Saint-Denis", "Saint-Denis",
+                "361-363, Av. du Président Wilson");
         lieu.setIdLieu(1L);
 
-        Phase existingPhase = new Phase("Finale", null, null);
+        Phase existingPhase = new Phase("Finale", Date.valueOf("2026-01-05"), Date.valueOf("2026-01-06"), null, null);
         existingPhase.setIdPhase(1L);
 
         when(phaseRepository.findById(1L)).thenReturn(Optional.of(existingPhase));
         when(phaseRepository.save(any(Phase.class))).thenReturn(existingPhase);
 
-        Phase result = phaseService.updatePhase(1L, "Finale modifiée", epreuve, lieu);
+        Phase result = phaseService.updatePhase(1L, "Finale modifiée", Date.valueOf("2026-01-07"),
+                Date.valueOf("2026-01-08"), epreuve, lieu);
 
         assertNotNull(result);
         assertEquals("Finale modifiée", result.getNomPhase());
+        assertEquals(Date.valueOf("2026-01-07"), result.getDateDebut());
+        assertEquals(Date.valueOf("2026-01-08"), result.getDateFin());
         assertEquals(epreuve, result.getEpreuve());
         assertEquals(lieu, result.getLieu());
     }
@@ -104,7 +111,7 @@ class PhaseServiceImplTest {
     void testUpdatePhase_NotFound() {
         when(phaseRepository.findById(999L)).thenReturn(Optional.empty());
 
-        Phase result = phaseService.updatePhase(999L, "Finale", null, null);
+        Phase result = phaseService.updatePhase(999L, "Finale", null, null, null, null);
 
         assertNull(result);
     }

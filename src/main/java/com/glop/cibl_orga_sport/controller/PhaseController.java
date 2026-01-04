@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/phases")
 @CrossOrigin(origins = "http://localhost:4200")
 public class PhaseController {
-    
+
     @Autowired
     private PhaseService phaseService;
 
@@ -42,8 +42,8 @@ public class PhaseController {
     public ResponseEntity<PhaseDTO> getPhase(@PathVariable Long id) {
         Optional<Phase> phase = phaseService.getPhase(id);
         return phase.map(PhaseMapper::toDTO)
-                    .map(ResponseEntity::ok)
-                    .orElse(ResponseEntity.notFound().build());
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
@@ -64,7 +64,8 @@ public class PhaseController {
             }
         }
 
-        Phase created = phaseService.createPhase(phase.getNomPhase(), epreuve, lieu);
+        Phase created = phaseService.createPhase(phase.getNomPhase(), phase.getDateDebut(), phase.getDateFin(), epreuve,
+                lieu);
         return PhaseMapper.toDTO(created);
     }
 
@@ -86,7 +87,8 @@ public class PhaseController {
             }
         }
 
-        Phase updated = phaseService.updatePhase(id, phase.getNomPhase(), epreuve, lieu);
+        Phase updated = phaseService.updatePhase(id, phase.getNomPhase(), phase.getDateDebut(), phase.getDateFin(),
+                epreuve, lieu);
         if (updated != null) {
             return ResponseEntity.ok(PhaseMapper.toDTO(updated));
         }

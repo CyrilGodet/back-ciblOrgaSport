@@ -1,84 +1,110 @@
 package com.glop.cibl_orga_sport.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import com.glop.cibl_orga_sport.data.Phase;
 import com.glop.cibl_orga_sport.data.Epreuve;
+import com.glop.cibl_orga_sport.data.Lieu;
+import com.glop.cibl_orga_sport.dto.PhaseDTO;
+import com.glop.cibl_orga_sport.mapper.PhaseMapper;
 import com.glop.cibl_orga_sport.service.PhaseService;
 import com.glop.cibl_orga_sport.service.EpreuveService;
+import com.glop.cibl_orga_sport.service.LieuService;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-@Controller
-@RequestMapping("/phases")
+@RestController
+@RequestMapping("/api/phases")
+@CrossOrigin(origins = "http://localhost:4200")
 public class PhaseController {
-    
+
     @Autowired
     private PhaseService phaseService;
 
     @Autowired
     private EpreuveService epreuveService;
 
+    @Autowired
+    private LieuService lieuService;
+
     @GetMapping
-    public ModelAndView listPhases() {
-        ModelAndView model = new ModelAndView("phase/list");
-        model.addObject("phases", phaseService.getAllPhases());
-        return model;
+    public List<PhaseDTO> getAllPhases() {
+        return phaseService.getAllPhases().stream()
+                .map(PhaseMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
-    @GetMapping("/new")
-    public ModelAndView showForm() {
-        ModelAndView model = new ModelAndView("phase/form");
-        model.addObject("phase", new Phase());
-        model.addObject("epreuves", epreuveService.getAllEpreuves());
-        model.addObject("isEdit", false);
-        return model;
-    }
-
-    @GetMapping("/edit/{id}")
-    public ModelAndView showEditForm(@PathVariable Long id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<PhaseDTO> getPhase(@PathVariable Long id) {
         Optional<Phase> phase = phaseService.getPhase(id);
-        if (phase.isPresent()) {
-            ModelAndView model = new ModelAndView("phase/form");
-            model.addObject("phase", phase.get());
-            model.addObject("epreuves", epreuveService.getAllEpreuves());
-            model.addObject("isEdit", true);
-            return model;
-        }
-        return new ModelAndView("redirect:/phases");
+        return phase.map(PhaseMapper::toDTO)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/save")
-    public RedirectView savePhase(@ModelAttribute Phase phase, @RequestParam(required = false) Long epreuveId) {
+    @PostMapping
+    public PhaseDTO createPhase(@RequestBody Phase phase) {
         Epreuve epreuve = null;
-        if (epreuveId != null) {
-            Optional<Epreuve> epreuveOpt = epreuveService.getEpreuve(epreuveId);
+        if (phase.getEpreuve() != null && phase.getEpreuve().getIdEpreuve() != null) {
+            Optional<Epreuve> epreuveOpt = epreuveService.getEpreuve(phase.getEpreuve().getIdEpreuve());
             if (epreuveOpt.isPresent()) {
                 epreuve = epreuveOpt.get();
             }
         }
 
-        if (phase.getIdPhase() != null) {
-            phaseService.updatePhase(phase.getIdPhase(), phase.getNomPhase(), epreuve);
-        } 
-        else {
-            phaseService.createPhase(phase.getNomPhase(), epreuve);
+        Lieu lieu = null;
+        if (phase.getLieu() != null && phase.getLieu().getIdLieu() != null) {
+            Optional<Lieu> lieuOpt = lieuService.getLieu(phase.getLieu().getIdLieu());
+            if (lieuOpt.isPresent()) {
+                lieu = lieuOpt.get();
+            }
         }
-        return new RedirectView("/phases");
+
+        Phase created = phaseService.createPhase(phase.getNomPhase(), phase.getDateDebut(), phase.getDateFin(), epreuve,
+                lieu);
+        return PhaseMapper.toDTO(created);
     }
 
-    @GetMapping("/delete/{id}")
-    public RedirectView deletePhase(@PathVariable Long id) {
-        phaseService.deletePhase(id);
-        return new RedirectView("/phases");
+    @PutMapping("/{id}")
+    public ResponseEntity<PhaseDTO> updatePhase(@PathVariable Long id, @RequestBody Phase phase) {
+        Epreuve epreuve = null;
+        if (phase.getEpreuve() != null && phase.getEpreuve().getIdEpreuve() != null) {
+            Optional<Epreuve> epreuveOpt = epreuveService.getEpreuve(phase.getEpreuve().getIdEpreuve());
+            if (epreuveOpt.isPresent()) {
+                epreuve = epreuveOpt.get();
+            }
+        }
+
+        Lieu lieu = null;
+        if (phase.getLieu() != null && phase.getLieu().getIdLieu() != null) {
+            Optional<Lieu> lieuOpt = lieuService.getLieu(phase.getLieu().getIdLieu());
+            if (lieuOpt.isPresent()) {
+                lieu = lieuOpt.get();
+            }
+        }
+
+        Phase updated = phaseService.updatePhase(id, phase.getNomPhase(), phase.getDateDebut(), phase.getDateFin(),
+                epreuve, lieu);
+        if (updated != null) {
+            return ResponseEntity.ok(PhaseMapper.toDTO(updated));
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletePhase(@PathVariable Long id) {
+        try {
+            boolean deleted = phaseService.deletePhase(id);
+            if (deleted) {
+                return ResponseEntity.noContent().build();
+            }
+            return ResponseEntity.notFound().build();
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(409).body("{\"error\":\"" + e.getMessage() + "\"}");
+        }
     }
 }

@@ -18,6 +18,9 @@ public class CompetitionServiceImpl implements CompetitionService {
 
     @Override
     public Competition createCompetition(String name, Date dateDebut, Date dateFin) {
+        if (dateDebut != null && dateFin != null && dateDebut.after(dateFin)) {
+            throw new IllegalArgumentException("La date de début doit être avant la date de fin");
+        }
         Competition c = new Competition(name, dateDebut, dateFin);
         System.out.println("Création compétition : " + name);
         return repository.save(c);
@@ -25,6 +28,9 @@ public class CompetitionServiceImpl implements CompetitionService {
 
     @Override
     public Competition updateCompetition(Long id, String name, Date dateDebut, Date dateFin) {
+        if (dateDebut != null && dateFin != null && dateDebut.after(dateFin)) {
+            throw new IllegalArgumentException("La date de début doit être avant la date de fin");
+        }
         Optional<Competition> existingCompetition = repository.findById(id);
         if (existingCompetition.isPresent()) {
             Competition c = existingCompetition.get();
@@ -42,6 +48,11 @@ public class CompetitionServiceImpl implements CompetitionService {
     public boolean deleteCompetition(Long id) {
         Optional<Competition> c = repository.findById(id);
         if (c.isPresent()) {
+            Competition competition = c.get();
+            if (competition.getEpreuves() != null && !competition.getEpreuves().isEmpty()) {
+                throw new IllegalStateException("Impossible de supprimer cette compétition car elle est liée à " + 
+                    competition.getEpreuves().size() + " épreuve(s) existante(s).");
+            }
             repository.deleteById(id);
             System.out.println("Compétition supprimée : " + id);
             return true;

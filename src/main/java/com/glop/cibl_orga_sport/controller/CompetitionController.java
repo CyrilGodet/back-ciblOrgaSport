@@ -1,73 +1,93 @@
 package com.glop.cibl_orga_sport.controller;
 
-import java.time.LocalDate;
-import java.sql.Date;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import com.glop.cibl_orga_sport.data.Competition;
+import com.glop.cibl_orga_sport.dto.EpreuveDTO;
+import com.glop.cibl_orga_sport.dto.PhaseDTO;
+import com.glop.cibl_orga_sport.mapper.EpreuveMapper;
+import com.glop.cibl_orga_sport.mapper.PhaseMapper;
 import com.glop.cibl_orga_sport.service.CompetitionService;
+import com.glop.cibl_orga_sport.service.EpreuveService;
+import com.glop.cibl_orga_sport.service.PhaseService;
 
-@Controller
-@RequestMapping("/competitions")
+@RestController
+@RequestMapping("/api/competitions")
+@CrossOrigin(origins = "http://localhost:4200")
 public class CompetitionController {
-    
+
     @Autowired
     private CompetitionService service;
 
+    @Autowired
+    private EpreuveService epreuveService;
+
+    @Autowired
+    private PhaseService phaseService;
+
     @GetMapping
-    public ModelAndView listCompetitions() {
-        ModelAndView model = new ModelAndView("competition/list");
-        model.addObject("competitions", service.getAllCompetitions());
-        return model;
+    public List<Competition> getAllCompetitions() {
+        return service.getAllCompetitions();
     }
 
-    @GetMapping("/new")
-    public ModelAndView showForm() {
-        ModelAndView model = new ModelAndView("competition/form");
-        model.addObject("competition", new Competition());
-        return model;
-    }
-
-    @GetMapping("/edit/{id}")
-    public ModelAndView showEditForm(@PathVariable Long id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<Competition> getCompetition(@PathVariable Long id) {
         Optional<Competition> competition = service.getCompetition(id);
-        if (competition.isPresent()) {
-            ModelAndView model = new ModelAndView("competition/form");
-            model.addObject("competition", competition.get());
-            return model;
-        }
-        return new ModelAndView("redirect:/competitions");
+        return competition.map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/save")
-    public RedirectView saveCompetition(@ModelAttribute Competition competition, @RequestParam String dateDebutStr, @RequestParam String dateFinStr) {
-
-        Date dateDebut = Date.valueOf(LocalDate.parse(dateDebutStr));
-        Date dateFin = Date.valueOf(LocalDate.parse(dateFinStr));
-
-        if (competition.getIdCompetition() != null) {
-            service.updateCompetition(competition.getIdCompetition(), competition.getNameCompetition(), dateDebut, dateFin);
-        } 
-        else {
-            service.createCompetition(competition.getNameCompetition(), dateDebut, dateFin);
-        }
-        return new RedirectView("/competitions");
+    @GetMapping("/{id}/epreuves")
+    public List<EpreuveDTO> getEpreuvesByCompetition(@PathVariable Long id) {
+        return epreuveService.getEpreuvesByCompetitionId(id).stream()
+                .map(EpreuveMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
-    @GetMapping("/delete/{id}")
-    public RedirectView deleteCompetition(@PathVariable Long id) {
-        service.deleteCompetition(id);
-        return new RedirectView("/competitions");
+    @GetMapping("/{id}/phases")
+    public List<PhaseDTO> getPhasesByCompetition(@PathVariable Long id) {
+        return phaseService.getPhasesByCompetitionId(id).stream()
+                .map(PhaseMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    @PostMapping
+    public Competition createCompetition(@RequestBody Competition competition) {
+        return service.createCompetition(
+                competition.getNameCompetition(),
+                competition.getDateDebut(),
+                competition.getDateFin());
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Competition> updateCompetition(@PathVariable Long id, @RequestBody Competition competition) {
+        Competition updated = service.updateCompetition(
+                id,
+                competition.getNameCompetition(),
+                competition.getDateDebut(),
+                competition.getDateFin());
+        if (updated != null) {
+            return ResponseEntity.ok(updated);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteCompetition(@PathVariable Long id) {
+        try {
+            boolean deleted = service.deleteCompetition(id);
+            if (deleted) {
+                return ResponseEntity.noContent().build();
+            }
+            return ResponseEntity.notFound().build();
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(409).body("{\"error\":\"" + e.getMessage() + "\"}");
+        }
     }
 }

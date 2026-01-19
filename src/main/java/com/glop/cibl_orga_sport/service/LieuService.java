@@ -1,0 +1,14 @@
+package com.glop.cibl_orga_sport.service;
+
+import com.glop.cibl_orga_sport.data.Lieu;
+import java.util.List;
+import java.util.Optional;
+
+public interface LieuService {
+
+    Lieu createLieu(String nom, String ville, String adresse);
+    Lieu updateLieu(Long id, String nom, String ville, String adresse);
+    boolean deleteLieu(Long id);
+    List<Lieu> getAllLieux();
+    Optional<Lieu> getLieu(Long id);
+}

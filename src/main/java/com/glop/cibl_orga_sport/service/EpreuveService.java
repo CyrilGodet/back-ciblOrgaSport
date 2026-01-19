@@ -8,8 +8,14 @@ import java.util.Optional;
 public interface EpreuveService {
 
     Epreuve createEpreuve(String nomEpreuve, Competition competition);
+
     Epreuve updateEpreuve(Long id, String nomEpreuve, Competition competition);
+
     boolean deleteEpreuve(Long id);
+
     List<Epreuve> getAllEpreuves();
+
     Optional<Epreuve> getEpreuve(Long id);
+
+    List<Epreuve> getEpreuvesByCompetitionId(Long competitionId);
 }

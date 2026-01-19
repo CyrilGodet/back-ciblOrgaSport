@@ -1,5 +1,7 @@
 package com.glop.cibl_orga_sport.data;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,6 +20,7 @@ public class Category {
     private String nameCategory;
 
     @ManyToOne
+    @JsonBackReference("epreuve-categories")
     private Epreuve epreuve;
 
     public Category() {}

@@ -1,25 +1,23 @@
 package com.glop.cibl_orga_sport.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import com.glop.cibl_orga_sport.data.Category;
 import com.glop.cibl_orga_sport.data.Epreuve;
+import com.glop.cibl_orga_sport.dto.CategoryDTO;
+import com.glop.cibl_orga_sport.mapper.CategoryMapper;
 import com.glop.cibl_orga_sport.service.CategoryService;
 import com.glop.cibl_orga_sport.service.EpreuveService;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-@Controller
-@RequestMapping("/categories")
+@RestController
+@RequestMapping("/api/categories")
+@CrossOrigin(origins = "http://localhost:4200")
 public class CategoryController {
     
     @Autowired
@@ -29,56 +27,59 @@ public class CategoryController {
     private EpreuveService epreuveService;
 
     @GetMapping
-    public ModelAndView listCategories() {
-        ModelAndView model = new ModelAndView("category/list");
-        model.addObject("categories", categoryService.getAllCategories());
-        return model;
+    public List<CategoryDTO> getAllCategories() {
+        return categoryService.getAllCategories().stream()
+                .map(CategoryMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
-    @GetMapping("/new")
-    public ModelAndView showForm() {
-        ModelAndView model = new ModelAndView("category/form");
-        model.addObject("category", new Category());
-        model.addObject("epreuves", epreuveService.getAllEpreuves());
-        model.addObject("isEdit", false);
-        return model;
-    }
-
-    @GetMapping("/edit/{id}")
-    public ModelAndView showEditForm(@PathVariable Long id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<CategoryDTO> getCategory(@PathVariable Long id) {
         Optional<Category> category = categoryService.getCategory(id);
-        if (category.isPresent()) {
-            ModelAndView model = new ModelAndView("category/form");
-            model.addObject("category", category.get());
-            model.addObject("epreuves", epreuveService.getAllEpreuves());
-            model.addObject("isEdit", true);
-            return model;
-        }
-        return new ModelAndView("redirect:/categories");
+        return category.map(CategoryMapper::toDTO)
+                       .map(ResponseEntity::ok)
+                       .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/save")
-    public RedirectView saveCategory(@ModelAttribute Category category, @RequestParam(required = false) Long epreuveId) {
+    @PostMapping
+    public CategoryDTO createCategory(@RequestBody Category category) {
         Epreuve epreuve = null;
-        if (epreuveId != null) {
-            Optional<Epreuve> epreuveOpt = epreuveService.getEpreuve(epreuveId);
+        if (category.getEpreuve() != null && category.getEpreuve().getIdEpreuve() != null) {
+            Optional<Epreuve> epreuveOpt = epreuveService.getEpreuve(category.getEpreuve().getIdEpreuve());
             if (epreuveOpt.isPresent()) {
                 epreuve = epreuveOpt.get();
             }
         }
-
-        if (category.getIdCategory() != null) {
-            categoryService.updateCategory(category.getIdCategory(), category.getNameCategory(), epreuve);
-        } 
-        else {
-            categoryService.createCategory(category.getNameCategory(), epreuve);
-        }
-        return new RedirectView("/categories");
+        Category created = categoryService.createCategory(category.getNameCategory(), epreuve);
+        return CategoryMapper.toDTO(created);
     }
 
-    @GetMapping("/delete/{id}")
-    public RedirectView deleteCategory(@PathVariable Long id) {
-        categoryService.deleteCategory(id);
-        return new RedirectView("/categories");
+    @PutMapping("/{id}")
+    public ResponseEntity<CategoryDTO> updateCategory(@PathVariable Long id, @RequestBody Category category) {
+        Epreuve epreuve = null;
+        if (category.getEpreuve() != null && category.getEpreuve().getIdEpreuve() != null) {
+            Optional<Epreuve> epreuveOpt = epreuveService.getEpreuve(category.getEpreuve().getIdEpreuve());
+            if (epreuveOpt.isPresent()) {
+                epreuve = epreuveOpt.get();
+            }
+        }
+        Category updated = categoryService.updateCategory(id, category.getNameCategory(), epreuve);
+        if (updated != null) {
+            return ResponseEntity.ok(CategoryMapper.toDTO(updated));
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteCategory(@PathVariable Long id) {
+        try {
+            boolean deleted = categoryService.deleteCategory(id);
+            if (deleted) {
+                return ResponseEntity.noContent().build();
+            }
+            return ResponseEntity.notFound().build();
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(409).body("{\"error\":\"" + e.getMessage() + "\"}");
+        }
     }
 }

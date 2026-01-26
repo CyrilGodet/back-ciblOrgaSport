@@ -23,32 +23,32 @@ public class Competition {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idCompetition;
 
-    @Column
+    @Column(unique = true, nullable = false)
     private String nameCompetition;
 
-    @Column
+    @Column(nullable = false)
     private String description;
 
-    @Column
+    @Column(nullable = false)
     private SportEnum sport;
 
     @OneToMany(mappedBy = "competition")
     @JsonManagedReference("competition-epreuves")
     private Set<Epreuve> epreuves;
 
-    @Column
+    @Column(nullable = false)
     private Date dateDebut;
     
-    @Column
+    @Column(nullable = false)
     private Date dateFin;
 
-    @Column
+    @Column(nullable = false)
     private String pays;
 
-    @Column
+    @Column(nullable = false)
     private boolean estEnFrance;
 
-    @Column
+    @Column(nullable = false)
     private String adresse;
     
     @Column
@@ -57,16 +57,16 @@ public class Competition {
     @Column
     private String ville;
 
-    @Column
+    @Column(nullable = false)
     private GenreEnum genre;
 
-    @Column
+    @Column(nullable = true)
     private int ageMin;
 
-    @Column
+    @Column(nullable = true)
     private int ageMax;
 
-    @Column
+    @Column(nullable = false)
     private CompetitionStatusEnum statut;
 
     public Competition() {}

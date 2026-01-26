@@ -25,7 +25,7 @@ public class Epreuve {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idEpreuve;
 
-    @Column
+    @Column(nullable = false)
     private String nomEpreuve;
 
     @ManyToOne
@@ -40,19 +40,19 @@ public class Epreuve {
     @JsonManagedReference("epreuve-categories")
     private Set<Category> categories;
 
-    @Column
+    @Column(nullable = false)
     private DisciplineEnum discipline;
 
-    @Column
+    @Column(nullable = false)
     private GenreEnum genre;
 
-    @Column
+    @Column(nullable = false)
     private Date dateDebut;
 
-    @Column
+    @Column(nullable = false)
     private Date dateFin;
 
-    @Column
+    @Column(nullable = false)
     private CompetitionStatusEnum statut;
 
     public Epreuve() {}

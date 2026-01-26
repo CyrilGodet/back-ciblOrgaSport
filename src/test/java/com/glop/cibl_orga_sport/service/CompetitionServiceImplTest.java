@@ -1,6 +1,9 @@
 package com.glop.cibl_orga_sport.service;
 
 import com.glop.cibl_orga_sport.data.Competition;
+import com.glop.cibl_orga_sport.data.enumType.CompetitionStatusEnum;
+import com.glop.cibl_orga_sport.data.enumType.GenreEnum;
+import com.glop.cibl_orga_sport.data.enumType.SportEnum;
 import com.glop.cibl_orga_sport.repository.CompetitionRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,10 +33,27 @@ class CompetitionServiceImplTest {
     void testCreateCompetition() {
         Competition competition = new Competition("Championnats du monde de natation", Date.valueOf("2026-01-01"), Date.valueOf("2026-01-10"));
         competition.setIdCompetition(1L);
+        competition.setDescription("Description test");
+        competition.setSport(SportEnum.NATATION);
+        competition.setStatut(CompetitionStatusEnum.DRAFT);
 
         when(competitionRepository.save(any(Competition.class))).thenReturn(competition);
 
-        Competition result = competitionService.createCompetition("Championnats du monde de natation", Date.valueOf("2026-01-01"), Date.valueOf("2026-01-10"));
+        Competition result = competitionService.createCompetition(
+                "Championnats du monde de natation",
+                "Description test",
+                SportEnum.NATATION,
+                Date.valueOf("2026-01-01"),
+                Date.valueOf("2026-01-10"),
+                "France",
+                true,
+                "test",
+                "01000",
+                "Ville",
+                GenreEnum.HOMME,
+                18,
+                99
+        );
 
         assertNotNull(result);
         assertEquals("Championnats du monde de natation", result.getNameCompetition());
@@ -79,7 +99,23 @@ class CompetitionServiceImplTest {
         when(competitionRepository.findById(1L)).thenReturn(Optional.of(existingCompetition));
         when(competitionRepository.save(any(Competition.class))).thenReturn(existingCompetition);
 
-        Competition result = competitionService.updateCompetition(1L, "Championnats du monde de natation Modifié", Date.valueOf("2026-02-01"), Date.valueOf("2026-02-10"));
+        Competition result = competitionService.updateCompetition(
+                1L,
+                "Championnats du monde de natation Modifié",
+                "Description modifiée",
+                SportEnum.NATATION,
+                Date.valueOf("2026-02-01"),
+                Date.valueOf("2026-02-10"),
+                "France",
+                true,
+                "1 rue test",
+                "01000",
+                "Ville",
+                GenreEnum.MIXTE,
+                18,
+                99,
+                CompetitionStatusEnum.IN_PROGRESS
+        );
 
         assertNotNull(result);
         assertEquals("Championnats du monde de natation Modifié", result.getNameCompetition());
@@ -90,7 +126,23 @@ class CompetitionServiceImplTest {
     void testUpdateCompetition_NotFound() {
         when(competitionRepository.findById(999L)).thenReturn(Optional.empty());
 
-        Competition result = competitionService.updateCompetition(999L, "Championnats du monde de natation", Date.valueOf("2026-01-01"), Date.valueOf("2026-01-10"));
+        Competition result = competitionService.updateCompetition(
+                999L,
+                "Championnats du monde de natation",
+                "Description",
+                SportEnum.NATATION,
+                Date.valueOf("2026-01-01"),
+                Date.valueOf("2026-01-10"),
+                "France",
+                true,
+                "1 rue test",
+                "01000",
+                "Ville",
+                GenreEnum.HOMME,
+                18,
+                99,
+                CompetitionStatusEnum.DRAFT
+        );
 
         assertNull(result);
     }

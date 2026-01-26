@@ -10,8 +10,19 @@ public class CompetitionMapper {
         return new CompetitionDTO(
             competition.getIdCompetition(),
             competition.getNameCompetition(),
+            competition.getDescription(),
+            competition.getSport(),
             competition.getDateDebut(),
-            competition.getDateFin()
+            competition.getDateFin(),
+            competition.getPays(),
+            competition.isEstEnFrance(),
+            competition.getAdresse(),
+            competition.getCodePostal(),
+            competition.getVille(),
+            competition.getGenre(),
+            competition.getAgeMin(),
+            competition.getAgeMax(),
+            competition.getStatut()
         );
     }
 
@@ -22,6 +33,17 @@ public class CompetitionMapper {
             dto.getDateDebut(),
             dto.getDateFin()
         );
+        competition.setDescription(dto.getDescription());
+        competition.setSport(dto.getSport());
+        competition.setPays(dto.getPays());
+        competition.setEstEnFrance(dto.isEstEnFrance());
+        competition.setAdresse(dto.getAdresse());
+        competition.setCodePostal(dto.getCodePostal());
+        competition.setVille(dto.getVille());
+        competition.setGenre(dto.getGenre());
+        competition.setAgeMin(dto.getAgeMin());
+        competition.setAgeMax(dto.getAgeMax());
+        competition.setStatut(dto.getStatut());
         return competition;
     }
 }

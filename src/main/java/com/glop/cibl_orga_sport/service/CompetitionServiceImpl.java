@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.glop.cibl_orga_sport.data.Competition;
+import com.glop.cibl_orga_sport.data.enumType.CompetitionStatusEnum;
+import com.glop.cibl_orga_sport.data.enumType.GenreEnum;
+import com.glop.cibl_orga_sport.data.enumType.SportEnum;
 import com.glop.cibl_orga_sport.repository.CompetitionRepository;
 
 @Service
@@ -17,17 +20,32 @@ public class CompetitionServiceImpl implements CompetitionService {
     private CompetitionRepository repository;
 
     @Override
-    public Competition createCompetition(String name, Date dateDebut, Date dateFin) {
+    public Competition createCompetition(String name, String description, SportEnum sport, Date dateDebut, Date dateFin, 
+                                        String pays, boolean estEnFrance, String adresse, String codePostal, String ville, 
+                                        GenreEnum genre, int ageMin, int ageMax) {
         if (dateDebut != null && dateFin != null && dateDebut.after(dateFin)) {
             throw new IllegalArgumentException("La date de début doit être avant la date de fin");
         }
         Competition c = new Competition(name, dateDebut, dateFin);
+        c.setDescription(description);
+        c.setSport(sport);
+        c.setPays(pays);
+        c.setEstEnFrance(estEnFrance);
+        c.setAdresse(adresse);
+        c.setCodePostal(codePostal);
+        c.setVille(ville);
+        c.setGenre(genre);
+        c.setAgeMin(ageMin);
+        c.setAgeMax(ageMax);
+        c.setStatut(CompetitionStatusEnum.DRAFT);
         System.out.println("Création compétition : " + name);
         return repository.save(c);
     }
 
     @Override
-    public Competition updateCompetition(Long id, String name, Date dateDebut, Date dateFin) {
+    public Competition updateCompetition(Long id, String name, String description, SportEnum sport, Date dateDebut, Date dateFin, 
+                                        String pays, boolean estEnFrance, String adresse, String codePostal, String ville, 
+                                        GenreEnum genre, int ageMin, int ageMax, CompetitionStatusEnum statut) {
         if (dateDebut != null && dateFin != null && dateDebut.after(dateFin)) {
             throw new IllegalArgumentException("La date de début doit être avant la date de fin");
         }
@@ -35,8 +53,19 @@ public class CompetitionServiceImpl implements CompetitionService {
         if (existingCompetition.isPresent()) {
             Competition c = existingCompetition.get();
             c.setNameCompetition(name);
+            c.setDescription(description);
+            c.setSport(sport);
             c.setDateDebut(dateDebut);
             c.setDateFin(dateFin);
+            c.setPays(pays);
+            c.setEstEnFrance(estEnFrance);
+            c.setAdresse(adresse);
+            c.setCodePostal(codePostal);
+            c.setVille(ville);
+            c.setGenre(genre);
+            c.setAgeMin(ageMin);
+            c.setAgeMax(ageMax);
+            c.setStatut(statut);
             System.out.println("Modification compétition : " + id);
             return repository.save(c);
         }

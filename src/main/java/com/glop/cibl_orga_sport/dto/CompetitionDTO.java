@@ -1,20 +1,45 @@
 package com.glop.cibl_orga_sport.dto;
 
 import java.sql.Date;
+import com.glop.cibl_orga_sport.data.enumType.CompetitionStatusEnum;
+import com.glop.cibl_orga_sport.data.enumType.GenreEnum;
+import com.glop.cibl_orga_sport.data.enumType.SportEnum;
 
 public class CompetitionDTO {
     private Long idCompetition;
     private String nameCompetition;
+    private String description;
+    private SportEnum sport;
     private Date dateDebut;
     private Date dateFin;
+    private String pays;
+    private boolean estEnFrance;
+    private String adresse;
+    private String codePostal;
+    private String ville;
+    private GenreEnum genre;
+    private int ageMin;
+    private int ageMax;
+    private CompetitionStatusEnum statut;
 
     public CompetitionDTO() {}
 
-    public CompetitionDTO(Long idCompetition, String nameCompetition, Date dateDebut, Date dateFin) {
+    public CompetitionDTO(Long idCompetition, String nameCompetition, String description, SportEnum sport, Date dateDebut, Date dateFin, String pays, boolean estEnFrance, String adresse, String codePostal, String ville, GenreEnum genre, int ageMin, int ageMax, CompetitionStatusEnum statut) {
         this.idCompetition = idCompetition;
         this.nameCompetition = nameCompetition;
+        this.description = description;
+        this.sport = sport;
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
+        this.pays = pays;
+        this.estEnFrance = estEnFrance;
+        this.adresse = adresse;
+        this.codePostal = codePostal;
+        this.ville = ville;
+        this.genre = genre;
+        this.ageMin = ageMin;
+        this.ageMax = ageMax;
+        this.statut = statut;
     }
 
     public Long getIdCompetition() {
@@ -47,5 +72,93 @@ public class CompetitionDTO {
 
     public void setDateFin(Date dateFin) {
         this.dateFin = dateFin;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public SportEnum getSport() {
+        return sport;
+    }
+
+    public void setSport(SportEnum sport) {
+        this.sport = sport;
+    }
+
+    public String getPays() {
+        return pays;
+    }
+
+    public void setPays(String pays) {
+        this.pays = pays;
+    }
+
+    public boolean isEstEnFrance() {
+        return estEnFrance;
+    }
+
+    public void setEstEnFrance(boolean estEnFrance) {
+        this.estEnFrance = estEnFrance;
+    }
+
+    public String getAdresse() {
+        return adresse;
+    }
+
+    public void setAdresse(String adresse) {
+        this.adresse = adresse;
+    }
+
+    public String getCodePostal() {
+        return codePostal;
+    }
+
+    public void setCodePostal(String codePostal) {
+        this.codePostal = codePostal;
+    }
+
+    public String getVille() {
+        return ville;
+    }
+
+    public void setVille(String ville) {
+        this.ville = ville;
+    }
+
+    public GenreEnum getGenre() {
+        return genre;
+    }
+
+    public void setGenre(GenreEnum genre) {
+        this.genre = genre;
+    }
+
+    public int getAgeMin() {
+        return ageMin;
+    }
+
+    public void setAgeMin(int ageMin) {
+        this.ageMin = ageMin;
+    }
+
+    public int getAgeMax() {
+        return ageMax;
+    }
+
+    public void setAgeMax(int ageMax) {
+        this.ageMax = ageMax;
+    }
+
+    public CompetitionStatusEnum getStatut() {
+        return statut;
+    }
+
+    public void setStatut(CompetitionStatusEnum statut) {
+        this.statut = statut;
     }
 }

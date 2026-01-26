@@ -2,14 +2,20 @@ package com.glop.cibl_orga_sport.service;
 
 import com.glop.cibl_orga_sport.data.Competition;
 import com.glop.cibl_orga_sport.data.Epreuve;
+import com.glop.cibl_orga_sport.data.enumType.CompetitionStatusEnum;
+import com.glop.cibl_orga_sport.data.enumType.DisciplineEnum;
+import com.glop.cibl_orga_sport.data.enumType.GenreEnum;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 public interface EpreuveService {
 
-    Epreuve createEpreuve(String nomEpreuve, Competition competition);
+    Epreuve createEpreuve(String nomEpreuve, DisciplineEnum discipline, GenreEnum genre, 
+                         Date dateDebut, Date dateFin, Competition competition);
 
-    Epreuve updateEpreuve(Long id, String nomEpreuve, Competition competition);
+    Epreuve updateEpreuve(Long id, String nomEpreuve, DisciplineEnum discipline, GenreEnum genre, 
+                         Date dateDebut, Date dateFin, CompetitionStatusEnum statut, Competition competition);
 
     boolean deleteEpreuve(Long id);
 

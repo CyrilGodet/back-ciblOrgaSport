@@ -1,10 +1,14 @@
 package com.glop.cibl_orga_sport.data;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.glop.cibl_orga_sport.data.enumType.CompetitionStatusEnum;
+import com.glop.cibl_orga_sport.data.enumType.DisciplineEnum;
+import com.glop.cibl_orga_sport.data.enumType.GenreEnum;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -35,6 +39,21 @@ public class Epreuve {
     @OneToMany(mappedBy = "epreuve", cascade = jakarta.persistence.CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference("epreuve-categories")
     private Set<Category> categories;
+
+    @Column
+    private DisciplineEnum discipline;
+
+    @Column
+    private GenreEnum genre;
+
+    @Column
+    private Date dateDebut;
+
+    @Column
+    private Date dateFin;
+
+    @Column
+    private CompetitionStatusEnum statut;
 
     public Epreuve() {}
 
@@ -106,6 +125,46 @@ public class Epreuve {
             throw new IllegalArgumentException("La catégorie n'est pas associée à cette épreuve");
         }
         category.setEpreuve(null);
+    }
+
+    public DisciplineEnum getDiscipline() {
+        return discipline;
+    }
+
+    public void setDiscipline(DisciplineEnum discipline) {
+        this.discipline = discipline;
+    }
+
+    public GenreEnum getGenre() {
+        return genre;
+    }
+
+    public void setGenre(GenreEnum genre) {
+        this.genre = genre;
+    }
+
+    public Date getDateDebut() {
+        return dateDebut;
+    }
+
+    public void setDateDebut(Date dateDebut) {
+        this.dateDebut = dateDebut;
+    }
+
+    public Date getDateFin() {
+        return dateFin;
+    }
+
+    public void setDateFin(Date dateFin) {
+        this.dateFin = dateFin;
+    }
+
+    public CompetitionStatusEnum getStatut() {
+        return statut;
+    }
+
+    public void setStatut(CompetitionStatusEnum statut) {
+        this.statut = statut;
     }
 
 }

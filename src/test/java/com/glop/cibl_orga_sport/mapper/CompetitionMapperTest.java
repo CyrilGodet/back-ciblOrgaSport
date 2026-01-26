@@ -1,6 +1,9 @@
 package com.glop.cibl_orga_sport.mapper;
 
 import com.glop.cibl_orga_sport.data.Competition;
+import com.glop.cibl_orga_sport.data.enumType.CompetitionStatusEnum;
+import com.glop.cibl_orga_sport.data.enumType.GenreEnum;
+import com.glop.cibl_orga_sport.data.enumType.SportEnum;
 import com.glop.cibl_orga_sport.dto.CompetitionDTO;
 import org.junit.jupiter.api.Test;
 
@@ -13,11 +16,38 @@ class CompetitionMapperTest {
     private Competition createCompetition(String name, Long id) {
         Competition competition = new Competition(name, Date.valueOf("2026-01-01"), Date.valueOf("2026-01-10"));
         competition.setIdCompetition(id);
+        competition.setDescription("Description test");
+        competition.setSport(SportEnum.NATATION);
+        competition.setPays("France");
+        competition.setEstEnFrance(true);
+        competition.setAdresse("1 rue test");
+        competition.setCodePostal("01000");
+        competition.setVille("Ville");
+        competition.setGenre(GenreEnum.HOMME);
+        competition.setAgeMin(18);
+        competition.setAgeMax(99);
+        competition.setStatut(CompetitionStatusEnum.DRAFT);
         return competition;
     }
 
     private CompetitionDTO createCompetitionDTO(String name, Long id) {
-        return new CompetitionDTO(id, name, Date.valueOf("2026-01-01"), Date.valueOf("2026-01-10"));
+        return new CompetitionDTO(
+                id,
+                name,
+                "Description test",
+                SportEnum.NATATION,
+                Date.valueOf("2026-01-01"),
+                Date.valueOf("2026-01-10"),
+                "France",
+                true,
+                "1 rue test",
+                "01000",
+                "Ville",
+                GenreEnum.HOMME,
+                18,
+                99,
+                CompetitionStatusEnum.DRAFT
+        );
     }
 
     @Test
@@ -31,6 +61,11 @@ class CompetitionMapperTest {
         assertEquals("Championnats du monde de natation", dto.getNameCompetition());
         assertEquals(Date.valueOf("2026-01-01"), dto.getDateDebut());
         assertEquals(Date.valueOf("2026-01-10"), dto.getDateFin());
+        assertEquals("Description test", dto.getDescription());
+        assertEquals(SportEnum.NATATION, dto.getSport());
+        assertEquals("France", dto.getPays());
+        assertTrue(dto.isEstEnFrance());
+        assertEquals(CompetitionStatusEnum.DRAFT, dto.getStatut());
     }
 
     @Test
@@ -48,6 +83,11 @@ class CompetitionMapperTest {
         assertEquals("Championnats du monde de natation", competition.getNameCompetition());
         assertEquals(Date.valueOf("2026-01-01"), competition.getDateDebut());
         assertEquals(Date.valueOf("2026-01-10"), competition.getDateFin());
+        assertEquals("Description test", competition.getDescription());
+        assertEquals(SportEnum.NATATION, competition.getSport());
+        assertEquals("France", competition.getPays());
+        assertTrue(competition.isEstEnFrance());
+        assertEquals(CompetitionStatusEnum.DRAFT, competition.getStatut());
     }
 
     @Test

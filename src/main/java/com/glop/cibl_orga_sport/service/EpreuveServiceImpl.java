@@ -1,5 +1,6 @@
 package com.glop.cibl_orga_sport.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,6 +9,9 @@ import org.springframework.stereotype.Service;
 
 import com.glop.cibl_orga_sport.data.Competition;
 import com.glop.cibl_orga_sport.data.Epreuve;
+import com.glop.cibl_orga_sport.data.enumType.CompetitionStatusEnum;
+import com.glop.cibl_orga_sport.data.enumType.DisciplineEnum;
+import com.glop.cibl_orga_sport.data.enumType.GenreEnum;
 import com.glop.cibl_orga_sport.repository.EpreuveRepository;
 
 @Service
@@ -17,8 +21,14 @@ public class EpreuveServiceImpl implements EpreuveService {
     private EpreuveRepository repository;
 
     @Override
-    public Epreuve createEpreuve(String nomEpreuve, Competition competition) {
+    public Epreuve createEpreuve(String nomEpreuve, DisciplineEnum discipline, GenreEnum genre, 
+                                Date dateDebut, Date dateFin, Competition competition) {
         Epreuve e = new Epreuve(nomEpreuve);
+        e.setDiscipline(discipline);
+        e.setGenre(genre);
+        e.setDateDebut(dateDebut);
+        e.setDateFin(dateFin);
+        e.setStatut(CompetitionStatusEnum.DRAFT);
         e.setCompetition(competition);
         if (competition != null && !competition.getEpreuves().contains(e)) {
             competition.getEpreuves().add(e);
@@ -28,11 +38,17 @@ public class EpreuveServiceImpl implements EpreuveService {
     }
 
     @Override
-    public Epreuve updateEpreuve(Long id, String nomEpreuve, Competition competition) {
+    public Epreuve updateEpreuve(Long id, String nomEpreuve, DisciplineEnum discipline, GenreEnum genre, 
+                                Date dateDebut, Date dateFin, CompetitionStatusEnum statut, Competition competition) {
         Optional<Epreuve> existingEpreuve = repository.findById(id);
         if (existingEpreuve.isPresent()) {
             Epreuve e = existingEpreuve.get();
             e.setNomEpreuve(nomEpreuve);
+            e.setDiscipline(discipline);
+            e.setGenre(genre);
+            e.setDateDebut(dateDebut);
+            e.setDateFin(dateFin);
+            e.setStatut(statut);
 
             Competition oldCompetition = e.getCompetition();
             if (oldCompetition != null && !oldCompetition.equals(competition)) {

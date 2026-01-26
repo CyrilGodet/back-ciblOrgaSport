@@ -5,6 +5,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.glop.cibl_orga_sport.data.enumType.CompetitionStatusEnum;
+import com.glop.cibl_orga_sport.data.enumType.GenreEnum;
+import com.glop.cibl_orga_sport.data.enumType.SportEnum;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -23,6 +26,12 @@ public class Competition {
     @Column
     private String nameCompetition;
 
+    @Column
+    private String description;
+
+    @Column
+    private SportEnum sport;
+
     @OneToMany(mappedBy = "competition")
     @JsonManagedReference("competition-epreuves")
     private Set<Epreuve> epreuves;
@@ -32,6 +41,33 @@ public class Competition {
     
     @Column
     private Date dateFin;
+
+    @Column
+    private String pays;
+
+    @Column
+    private boolean estEnFrance;
+
+    @Column
+    private String adresse;
+    
+    @Column
+    private String codePostal;
+
+    @Column
+    private String ville;
+
+    @Column
+    private GenreEnum genre;
+
+    @Column
+    private int ageMin;
+
+    @Column
+    private int ageMax;
+
+    @Column
+    private CompetitionStatusEnum statut;
 
     public Competition() {}
 
@@ -93,4 +129,93 @@ public class Competition {
         }
         epreuve.setCompetition(null);
     }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public SportEnum getSport() {
+        return sport;
+    }
+
+    public void setSport(SportEnum sport) {
+        this.sport = sport;
+    }
+
+    public String getPays() {
+        return pays;
+    }
+
+    public void setPays(String pays) {
+        this.pays = pays;
+    }
+
+    public boolean isEstEnFrance() {
+        return estEnFrance;
+    }
+
+    public void setEstEnFrance(boolean estEnFrance) {
+        this.estEnFrance = estEnFrance;
+    }
+
+    public String getAdresse() {
+        return adresse;
+    }
+
+    public void setAdresse(String adresse) {
+        this.adresse = adresse;
+    }
+
+    public String getCodePostal() {
+        return codePostal;
+    }
+
+    public void setCodePostal(String codePostal) {
+        this.codePostal = codePostal;
+    }
+
+    public String getVille() {
+        return ville;
+    }
+
+    public void setVille(String ville) {
+        this.ville = ville;
+    }
+
+    public GenreEnum getGenre() {
+        return genre;
+    }
+
+    public void setGenre(GenreEnum genre) {
+        this.genre = genre;
+    }
+
+    public int getAgeMin() {
+        return ageMin;
+    }
+
+    public void setAgeMin(int ageMin) {
+        this.ageMin = ageMin;
+    }
+
+    public int getAgeMax() {
+        return ageMax;
+    }
+
+    public void setAgeMax(int ageMax) {
+        this.ageMax = ageMax;
+    }
+
+    public CompetitionStatusEnum getStatut() {
+        return statut;
+    }
+
+    public void setStatut(CompetitionStatusEnum statut) {
+        this.statut = statut;
+    }
+    
 }

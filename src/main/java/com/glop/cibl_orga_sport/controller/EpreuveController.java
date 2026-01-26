@@ -42,28 +42,44 @@ public class EpreuveController {
     }
 
     @PostMapping
-    public EpreuveDTO createEpreuve(@RequestBody Epreuve epreuve) {
+    public ResponseEntity<EpreuveDTO> createEpreuve(@RequestBody EpreuveDTO epreuveDTO) {
         Competition competition = null;
-        if (epreuve.getCompetition() != null && epreuve.getCompetition().getIdCompetition() != null) {
-            Optional<Competition> competitionOpt = competitionService.getCompetition(epreuve.getCompetition().getIdCompetition());
+        if (epreuveDTO.getCompetition() != null && epreuveDTO.getCompetition().getIdCompetition() != null) {
+            Optional<Competition> competitionOpt = competitionService.getCompetition(epreuveDTO.getCompetition().getIdCompetition());
             if (competitionOpt.isPresent()) {
                 competition = competitionOpt.get();
             }
         }
-        Epreuve created = epreuveService.createEpreuve(epreuve.getNomEpreuve(), competition);
-        return EpreuveMapper.toDTO(created);
+        Epreuve created = epreuveService.createEpreuve(
+                epreuveDTO.getNomEpreuve(),
+                epreuveDTO.getDiscipline(),
+                epreuveDTO.getGenre(),
+                epreuveDTO.getDateDebut(),
+                epreuveDTO.getDateFin(),
+                competition
+        );
+        return ResponseEntity.status(201).body(EpreuveMapper.toDTO(created));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EpreuveDTO> updateEpreuve(@PathVariable Long id, @RequestBody Epreuve epreuve) {
+    public ResponseEntity<EpreuveDTO> updateEpreuve(@PathVariable Long id, @RequestBody EpreuveDTO epreuveDTO) {
         Competition competition = null;
-        if (epreuve.getCompetition() != null && epreuve.getCompetition().getIdCompetition() != null) {
-            Optional<Competition> competitionOpt = competitionService.getCompetition(epreuve.getCompetition().getIdCompetition());
+        if (epreuveDTO.getCompetition() != null && epreuveDTO.getCompetition().getIdCompetition() != null) {
+            Optional<Competition> competitionOpt = competitionService.getCompetition(epreuveDTO.getCompetition().getIdCompetition());
             if (competitionOpt.isPresent()) {
                 competition = competitionOpt.get();
             }
         }
-        Epreuve updated = epreuveService.updateEpreuve(id, epreuve.getNomEpreuve(), competition);
+        Epreuve updated = epreuveService.updateEpreuve(
+                id,
+                epreuveDTO.getNomEpreuve(),
+                epreuveDTO.getDiscipline(),
+                epreuveDTO.getGenre(),
+                epreuveDTO.getDateDebut(),
+                epreuveDTO.getDateFin(),
+                epreuveDTO.getStatut(),
+                competition
+        );
         if (updated != null) {
             return ResponseEntity.ok(EpreuveMapper.toDTO(updated));
         }

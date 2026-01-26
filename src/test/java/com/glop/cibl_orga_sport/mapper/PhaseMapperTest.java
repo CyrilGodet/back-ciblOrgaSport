@@ -42,11 +42,36 @@ class PhaseMapperTest {
     }
 
     private CompetitionDTO createCompetitionDTO(String name, Long id) {
-        return new CompetitionDTO(id, name, Date.valueOf("2026-01-01"), Date.valueOf("2026-01-10"));
+        return new CompetitionDTO(
+                id,
+                name,
+                "Description",
+                com.glop.cibl_orga_sport.data.enumType.SportEnum.NATATION,
+                Date.valueOf("2026-01-01"),
+                Date.valueOf("2026-01-10"),
+                "France",
+                true,
+                "123 rue test",
+                "75001",
+                "Paris",
+                com.glop.cibl_orga_sport.data.enumType.GenreEnum.HOMME,
+                18,
+                99,
+                com.glop.cibl_orga_sport.data.enumType.CompetitionStatusEnum.DRAFT
+        );
     }
 
     private EpreuveDTO createEpreuveDTO(String name, Long id, CompetitionDTO competitionDTO) {
-        return new EpreuveDTO(id, name, competitionDTO);
+        return new EpreuveDTO(
+                id,
+                name,
+                competitionDTO,
+                com.glop.cibl_orga_sport.data.enumType.DisciplineEnum.NAGE_LIBRE,
+                com.glop.cibl_orga_sport.data.enumType.GenreEnum.HOMME,
+                new java.util.Date(),
+                new java.util.Date(),
+                com.glop.cibl_orga_sport.data.enumType.CompetitionStatusEnum.DRAFT
+        );
     }
 
     private LieuDTO createLieuDTO(String nom, String ville, String adresse, Long id) {

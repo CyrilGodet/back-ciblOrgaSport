@@ -4,11 +4,11 @@
 
 ### Lancement de Docker
 
-docker-compose up -d
+docker compose up -d
 
 ### Arrêt de Docker
 
-docker-compose down
+docker compose down
 
 ### Accès à la base de données
 
@@ -37,4 +37,5 @@ Les identifiants par défaut sont :
 3. Mettre l'id pour avoir les metrics de springboot : 12900 et cliquer sur "Load"
 4. Sélectionner la data source Prometheus créée précédemment.
 5. Cliquer sur "Import" pour ajouter le dashboard.
+
 

@@ -43,7 +43,7 @@ class LieuMapperTest {
         Lieu lieu = LieuMapper.toEntity(dto);
 
         assertNotNull(lieu);
-        assertEquals("Centre Aquatique Olympique Métropole du Grand Saint-Denis", lieu.getNom());
+        assertEquals("Centre Aquatique Olympique Métropole du Grand Saint-Denis", lieu.getNomLieu());
         assertEquals("Saint-Denis", lieu.getVille());
         assertEquals("361-363, Av. du Président Wilson", lieu.getAdresse());
     }

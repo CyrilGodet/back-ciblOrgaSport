@@ -20,10 +20,10 @@ public class Lieu {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idLieu;
 
-    @Column
-    private String nom;
+    @Column(nullable = false)
+    private String nomLieu;
 
-    @Column
+    @Column(nullable = false)
     private String ville;
 
     @Column
@@ -35,8 +35,8 @@ public class Lieu {
 
     public Lieu() {}
 
-    public Lieu(String nom, String ville, String adresse) {
-        this.nom = nom;
+    public Lieu(String nomLieu, String ville, String adresse) {
+        this.nomLieu = nomLieu;
         this.ville = ville;
         this.adresse = adresse;
         this.phases = new HashSet<>();
@@ -50,12 +50,12 @@ public class Lieu {
         this.idLieu = idLieu;
     }
 
-    public String getNom() {
-        return nom;
+    public String getNomLieu() {
+        return nomLieu;
     }
 
-    public void setNom(String nom) {
-        this.nom = nom;
+    public void setNomLieu(String nomLieu) {
+        this.nomLieu = nomLieu;
     }
 
     public String getVille() {

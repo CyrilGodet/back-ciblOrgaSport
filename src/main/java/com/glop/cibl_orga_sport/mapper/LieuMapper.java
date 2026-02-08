@@ -9,7 +9,7 @@ public class LieuMapper {
         if (lieu == null) return null;
         return new LieuDTO(
             lieu.getIdLieu(),
-            lieu.getNom(),
+            lieu.getNomLieu(),
             lieu.getVille(),
             lieu.getAdresse()
         );

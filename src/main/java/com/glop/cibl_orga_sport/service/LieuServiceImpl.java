@@ -27,7 +27,7 @@ public class LieuServiceImpl implements LieuService {
         Optional<Lieu> existingLieu = repository.findById(id);
         if (existingLieu.isPresent()) {
             Lieu l = existingLieu.get();
-            l.setNom(nom);
+            l.setNomLieu(nom);
             l.setVille(ville);
             l.setAdresse(adresse);
             System.out.println("Modification lieu : " + id);

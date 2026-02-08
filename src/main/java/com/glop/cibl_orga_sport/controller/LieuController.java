@@ -32,12 +32,12 @@ public class LieuController {
 
     @PostMapping
     public Lieu createLieu(@RequestBody Lieu lieu) {
-        return lieuService.createLieu(lieu.getNom(), lieu.getVille(), lieu.getAdresse());
+        return lieuService.createLieu(lieu.getNomLieu(), lieu.getVille(), lieu.getAdresse());
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Lieu> updateLieu(@PathVariable Long id, @RequestBody Lieu lieu) {
-        Lieu updated = lieuService.updateLieu(id, lieu.getNom(), lieu.getVille(), lieu.getAdresse());
+        Lieu updated = lieuService.updateLieu(id, lieu.getNomLieu(), lieu.getVille(), lieu.getAdresse());
         if (updated != null) {
             return ResponseEntity.ok(updated);
         }

@@ -35,7 +35,7 @@ class LieuServiceImplTest {
         Lieu result = lieuService.createLieu("Centre Aquatique Olympique Métropole du Grand Saint-Denis", "Saint-Denis", "361-363, Av. du Président Wilson");
 
         assertNotNull(result);
-        assertEquals("Centre Aquatique Olympique Métropole du Grand Saint-Denis", result.getNom());
+        assertEquals("Centre Aquatique Olympique Métropole du Grand Saint-Denis", result.getNomLieu());
         assertEquals("Saint-Denis", result.getVille());
         assertEquals("361-363, Av. du Président Wilson", result.getAdresse());
     }
@@ -53,8 +53,8 @@ class LieuServiceImplTest {
         List<Lieu> result = lieuService.getAllLieux();
 
         assertEquals(2, result.size());
-        assertEquals("Centre Aquatique Olympique Métropole du Grand Saint-Denis", result.get(0).getNom());
-        assertEquals("Stade Nautique", result.get(1).getNom());
+        assertEquals("Centre Aquatique Olympique Métropole du Grand Saint-Denis", result.get(0).getNomLieu());
+        assertEquals("Stade Nautique", result.get(1).getNomLieu());
     }
 
     @Test
@@ -67,7 +67,7 @@ class LieuServiceImplTest {
         Optional<Lieu> result = lieuService.getLieu(1L);
 
         assertTrue(result.isPresent());
-        assertEquals("Centre Aquatique Olympique Métropole du Grand Saint-Denis", result.get().getNom());
+        assertEquals("Centre Aquatique Olympique Métropole du Grand Saint-Denis", result.get().getNomLieu());
     }
 
     @Test
@@ -81,7 +81,7 @@ class LieuServiceImplTest {
         Lieu result = lieuService.updateLieu(1L, "Piscine Modifiée", "Marseille", "789 Boulevard Natation");
 
         assertNotNull(result);
-        assertEquals("Piscine Modifiée", result.getNom());
+        assertEquals("Piscine Modifiée", result.getNomLieu());
         assertEquals("Marseille", result.getVille());
         assertEquals("789 Boulevard Natation", result.getAdresse());
     }

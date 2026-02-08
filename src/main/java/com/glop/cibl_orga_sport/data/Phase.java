@@ -1,5 +1,7 @@
 package com.glop.cibl_orga_sport.data;
 
+import java.sql.Date;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Column;
@@ -17,7 +19,7 @@ public class Phase {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idPhase;
 
-    @Column
+    @Column(nullable = false)
     private String nomPhase;
 
     @ManyToOne
@@ -29,11 +31,11 @@ public class Phase {
     @JoinColumn(name = "lieu_id")
     private Lieu lieu;
 
-    @Column
-    private java.sql.Date dateDebut;
+    @Column(nullable = false)
+    private Date dateDebut;
 
-    @Column
-    private java.sql.Date dateFin;
+    @Column(nullable = false)
+    private Date dateFin;
 
     public Phase() {
     }

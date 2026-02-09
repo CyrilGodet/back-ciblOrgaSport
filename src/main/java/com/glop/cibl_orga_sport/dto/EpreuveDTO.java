@@ -3,21 +3,21 @@ package com.glop.cibl_orga_sport.dto;
 import java.util.Date;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionStatusEnum;
 import com.glop.cibl_orga_sport.data.enumType.DisciplineEnum;
-import com.glop.cibl_orga_sport.data.enumType.GenreEnum;
+import com.glop.cibl_orga_sport.data.enumType.CompetitionGenreEnum;
 
 public class EpreuveDTO {
     private Long idEpreuve;
     private String nomEpreuve;
     private CompetitionDTO competition;
     private DisciplineEnum discipline;
-    private GenreEnum genre;
+    private CompetitionGenreEnum genre;
     private Date dateDebut;
     private Date dateFin;
     private CompetitionStatusEnum statut;
 
     public EpreuveDTO() {}
 
-    public EpreuveDTO(Long idEpreuve, String nomEpreuve, CompetitionDTO competition, DisciplineEnum discipline, GenreEnum genre, Date dateDebut, Date dateFin, CompetitionStatusEnum statut) {
+    public EpreuveDTO(Long idEpreuve, String nomEpreuve, CompetitionDTO competition, DisciplineEnum discipline, CompetitionGenreEnum genre, Date dateDebut, Date dateFin, CompetitionStatusEnum statut) {
         this.idEpreuve = idEpreuve;
         this.nomEpreuve = nomEpreuve;
         this.competition = competition;
@@ -60,11 +60,11 @@ public class EpreuveDTO {
         this.discipline = discipline;
     }
 
-    public GenreEnum getGenre() {
+    public CompetitionGenreEnum getGenre() {
         return genre;
     }
 
-    public void setGenre(GenreEnum genre) {
+    public void setGenre(CompetitionGenreEnum genre) {
         this.genre = genre;
     }
 

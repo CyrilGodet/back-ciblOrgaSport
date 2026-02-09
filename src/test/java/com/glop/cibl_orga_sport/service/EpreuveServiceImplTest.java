@@ -4,7 +4,7 @@ import com.glop.cibl_orga_sport.data.Competition;
 import com.glop.cibl_orga_sport.data.Epreuve;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionStatusEnum;
 import com.glop.cibl_orga_sport.data.enumType.DisciplineEnum;
-import com.glop.cibl_orga_sport.data.enumType.GenreEnum;
+import com.glop.cibl_orga_sport.data.enumType.CompetitionGenreEnum;
 import com.glop.cibl_orga_sport.repository.EpreuveRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -45,7 +45,7 @@ class EpreuveServiceImplTest {
         Epreuve result = epreuveService.createEpreuve(
                 "100m nage libre",
                 DisciplineEnum.NAGE_LIBRE,
-                GenreEnum.HOMME,
+                CompetitionGenreEnum.HOMME,
                 new java.util.Date(),
                 new java.util.Date(),
                 competition
@@ -101,7 +101,7 @@ class EpreuveServiceImplTest {
                 1L,
                 "200m nage libre",
                 DisciplineEnum.NAGE_LIBRE,
-                GenreEnum.FEMME,
+                CompetitionGenreEnum.FEMME,
                 new java.util.Date(),
                 new java.util.Date(),
                 CompetitionStatusEnum.IN_PROGRESS,
@@ -121,7 +121,7 @@ class EpreuveServiceImplTest {
                 999L,
                 "100m nage libre",
                 DisciplineEnum.NAGE_LIBRE,
-                GenreEnum.HOMME,
+                CompetitionGenreEnum.HOMME,
                 null,
                 null,
                 CompetitionStatusEnum.DRAFT,

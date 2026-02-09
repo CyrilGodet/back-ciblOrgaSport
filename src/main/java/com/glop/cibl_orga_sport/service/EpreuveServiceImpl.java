@@ -11,7 +11,7 @@ import com.glop.cibl_orga_sport.data.Competition;
 import com.glop.cibl_orga_sport.data.Epreuve;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionStatusEnum;
 import com.glop.cibl_orga_sport.data.enumType.DisciplineEnum;
-import com.glop.cibl_orga_sport.data.enumType.GenreEnum;
+import com.glop.cibl_orga_sport.data.enumType.CompetitionGenreEnum;
 import com.glop.cibl_orga_sport.repository.EpreuveRepository;
 
 @Service
@@ -21,7 +21,7 @@ public class EpreuveServiceImpl implements EpreuveService {
     private EpreuveRepository repository;
 
     @Override
-    public Epreuve createEpreuve(String nomEpreuve, DisciplineEnum discipline, GenreEnum genre, 
+    public Epreuve createEpreuve(String nomEpreuve, DisciplineEnum discipline, CompetitionGenreEnum genre, 
                                 Date dateDebut, Date dateFin, Competition competition) {
         Epreuve e = new Epreuve(nomEpreuve);
         e.setDiscipline(discipline);
@@ -38,7 +38,7 @@ public class EpreuveServiceImpl implements EpreuveService {
     }
 
     @Override
-    public Epreuve updateEpreuve(Long id, String nomEpreuve, DisciplineEnum discipline, GenreEnum genre, 
+    public Epreuve updateEpreuve(Long id, String nomEpreuve, DisciplineEnum discipline, CompetitionGenreEnum genre, 
                                 Date dateDebut, Date dateFin, CompetitionStatusEnum statut, Competition competition) {
         Optional<Epreuve> existingEpreuve = repository.findById(id);
         if (existingEpreuve.isPresent()) {
@@ -71,7 +71,7 @@ public class EpreuveServiceImpl implements EpreuveService {
         Optional<Epreuve> e = repository.findById(id);
         if (e.isPresent()) {
             Epreuve epreuve = e.get();
-            boolean hasPhases = epreuve.getPhases() != null && !epreuve.getPhases().isEmpty();
+            boolean hasPhases = epreuve.getEtapesEpreuves() != null && !epreuve.getEtapesEpreuves().isEmpty();
             boolean hasCategories = epreuve.getCategories() != null && !epreuve.getCategories().isEmpty();
 
             if (hasPhases || hasCategories) {

@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.glop.cibl_orga_sport.data.Phase;
+import com.glop.cibl_orga_sport.data.EtapeEpreuve;
 import com.glop.cibl_orga_sport.data.Epreuve;
 import com.glop.cibl_orga_sport.data.Lieu;
 import com.glop.cibl_orga_sport.repository.PhaseRepository;
@@ -20,13 +20,13 @@ public class PhaseServiceImpl implements PhaseService {
     private PhaseRepository repository;
 
     @Override
-    public Phase createPhase(String nomPhase, Date dateDebut, Date dateFin, Epreuve epreuve,
+    public EtapeEpreuve createPhase(String nomPhase, Date dateDebut, Date dateFin, Epreuve epreuve,
             Lieu lieu) {
-        Phase p = new Phase(nomPhase, dateDebut, dateFin, epreuve, lieu);
+        EtapeEpreuve p = new EtapeEpreuve(nomPhase, dateDebut, dateFin, epreuve, lieu);
         if (epreuve != null) {
-            if (epreuve.getPhases() == null)
+            if (epreuve.getEtapesEpreuves() == null)
                 epreuve.setPhases(new java.util.HashSet<>());
-            epreuve.getPhases().add(p);
+            epreuve.getEtapesEpreuves().add(p);
         }
         if (lieu != null) {
             if (lieu.getPhases() == null)
@@ -38,21 +38,21 @@ public class PhaseServiceImpl implements PhaseService {
     }
 
     @Override
-    public Phase updatePhase(Long id, String nomPhase, java.sql.Date dateDebut, java.sql.Date dateFin, Epreuve epreuve,
+    public EtapeEpreuve updatePhase(Long id, String nomPhase, java.sql.Date dateDebut, java.sql.Date dateFin, Epreuve epreuve,
             Lieu lieu) {
-        Optional<Phase> existingPhase = repository.findById(id);
+        Optional<EtapeEpreuve> existingPhase = repository.findById(id);
         if (existingPhase.isPresent()) {
-            Phase p = existingPhase.get();
+            EtapeEpreuve p = existingPhase.get();
             p.setNomPhase(nomPhase);
             p.setDateDebut(dateDebut);
             p.setDateFin(dateFin);
             Epreuve oldEpreuve = p.getEpreuve();
             if (oldEpreuve != null && !oldEpreuve.equals(epreuve)) {
-                oldEpreuve.getPhases().remove(p);
+                oldEpreuve.getEtapesEpreuves().remove(p);
             }
             p.setEpreuve(epreuve);
-            if (epreuve != null && !epreuve.getPhases().contains(p)) {
-                epreuve.getPhases().add(p);
+            if (epreuve != null && !epreuve.getEtapesEpreuves().contains(p)) {
+                epreuve.getEtapesEpreuves().add(p);
             }
             Lieu oldLieu = p.getLieu();
             if (oldLieu != null && !oldLieu.equals(lieu)) {
@@ -71,7 +71,7 @@ public class PhaseServiceImpl implements PhaseService {
 
     @Override
     public boolean deletePhase(Long id) {
-        Optional<Phase> p = repository.findById(id);
+        Optional<EtapeEpreuve> p = repository.findById(id);
         if (p.isPresent()) {
             repository.deleteById(id);
             System.out.println("Phase supprimée : " + id);
@@ -82,17 +82,17 @@ public class PhaseServiceImpl implements PhaseService {
     }
 
     @Override
-    public List<Phase> getAllPhases() {
+    public List<EtapeEpreuve> getAllPhases() {
         return repository.findAll();
     }
 
     @Override
-    public Optional<Phase> getPhase(Long id) {
+    public Optional<EtapeEpreuve> getPhase(Long id) {
         return repository.findById(id);
     }
 
     @Override
-    public List<Phase> getPhasesByCompetitionId(Long competitionId) {
+    public List<EtapeEpreuve> getPhasesByCompetitionId(Long competitionId) {
         return repository.findByEpreuveCompetitionIdCompetition(competitionId);
     }
 }

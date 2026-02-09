@@ -2,8 +2,8 @@ package com.glop.cibl_orga_sport.mapper;
 
 import com.glop.cibl_orga_sport.data.Competition;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionStatusEnum;
-import com.glop.cibl_orga_sport.data.enumType.GenreEnum;
-import com.glop.cibl_orga_sport.data.enumType.SportEnum;
+import com.glop.cibl_orga_sport.data.enumType.CompetitionGenreEnum;
+import com.glop.cibl_orga_sport.data.enumType.CompetitionSportEnum;
 import com.glop.cibl_orga_sport.dto.CompetitionDTO;
 import org.junit.jupiter.api.Test;
 
@@ -17,13 +17,13 @@ class CompetitionMapperTest {
         Competition competition = new Competition(name, Date.valueOf("2026-01-01"), Date.valueOf("2026-01-10"));
         competition.setIdCompetition(id);
         competition.setDescription("Description test");
-        competition.setSport(SportEnum.NATATION);
+        competition.setSport(CompetitionSportEnum.NATATION);
         competition.setPays("France");
         competition.setEstEnFrance(true);
         competition.setAdresse("1 rue test");
         competition.setCodePostal("01000");
         competition.setVille("Ville");
-        competition.setGenre(GenreEnum.HOMME);
+        competition.setGenre(CompetitionGenreEnum.HOMME);
         competition.setAgeMin(18);
         competition.setAgeMax(99);
         competition.setStatut(CompetitionStatusEnum.DRAFT);
@@ -35,7 +35,7 @@ class CompetitionMapperTest {
                 id,
                 name,
                 "Description test",
-                SportEnum.NATATION,
+                CompetitionSportEnum.NATATION,
                 Date.valueOf("2026-01-01"),
                 Date.valueOf("2026-01-10"),
                 "France",
@@ -43,7 +43,7 @@ class CompetitionMapperTest {
                 "1 rue test",
                 "01000",
                 "Ville",
-                GenreEnum.HOMME,
+                CompetitionGenreEnum.HOMME,
                 18,
                 99,
                 CompetitionStatusEnum.DRAFT
@@ -62,7 +62,7 @@ class CompetitionMapperTest {
         assertEquals(Date.valueOf("2026-01-01"), dto.getDateDebut());
         assertEquals(Date.valueOf("2026-01-10"), dto.getDateFin());
         assertEquals("Description test", dto.getDescription());
-        assertEquals(SportEnum.NATATION, dto.getSport());
+        assertEquals(CompetitionSportEnum.NATATION, dto.getSport());
         assertEquals("France", dto.getPays());
         assertTrue(dto.isEstEnFrance());
         assertEquals(CompetitionStatusEnum.DRAFT, dto.getStatut());
@@ -84,7 +84,7 @@ class CompetitionMapperTest {
         assertEquals(Date.valueOf("2026-01-01"), competition.getDateDebut());
         assertEquals(Date.valueOf("2026-01-10"), competition.getDateFin());
         assertEquals("Description test", competition.getDescription());
-        assertEquals(SportEnum.NATATION, competition.getSport());
+        assertEquals(CompetitionSportEnum.NATATION, competition.getSport());
         assertEquals("France", competition.getPays());
         assertTrue(competition.isEstEnFrance());
         assertEquals(CompetitionStatusEnum.DRAFT, competition.getStatut());

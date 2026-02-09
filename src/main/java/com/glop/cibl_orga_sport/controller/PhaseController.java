@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.glop.cibl_orga_sport.data.Phase;
+import com.glop.cibl_orga_sport.data.EtapeEpreuve;
 import com.glop.cibl_orga_sport.data.Epreuve;
 import com.glop.cibl_orga_sport.data.Lieu;
 import com.glop.cibl_orga_sport.dto.PhaseDTO;
@@ -40,14 +40,14 @@ public class PhaseController {
 
     @GetMapping("/{id}")
     public ResponseEntity<PhaseDTO> getPhase(@PathVariable Long id) {
-        Optional<Phase> phase = phaseService.getPhase(id);
+        Optional<EtapeEpreuve> phase = phaseService.getPhase(id);
         return phase.map(PhaseMapper::toDTO)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public PhaseDTO createPhase(@RequestBody Phase phase) {
+    public PhaseDTO createPhase(@RequestBody EtapeEpreuve phase) {
         Epreuve epreuve = null;
         if (phase.getEpreuve() != null && phase.getEpreuve().getIdEpreuve() != null) {
             Optional<Epreuve> epreuveOpt = epreuveService.getEpreuve(phase.getEpreuve().getIdEpreuve());
@@ -64,13 +64,13 @@ public class PhaseController {
             }
         }
 
-        Phase created = phaseService.createPhase(phase.getNomPhase(), phase.getDateDebut(), phase.getDateFin(), epreuve,
+        EtapeEpreuve created = phaseService.createPhase(phase.getNomPhase(), phase.getDateDebut(), phase.getDateFin(), epreuve,
                 lieu);
         return PhaseMapper.toDTO(created);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PhaseDTO> updatePhase(@PathVariable Long id, @RequestBody Phase phase) {
+    public ResponseEntity<PhaseDTO> updatePhase(@PathVariable Long id, @RequestBody EtapeEpreuve phase) {
         Epreuve epreuve = null;
         if (phase.getEpreuve() != null && phase.getEpreuve().getIdEpreuve() != null) {
             Optional<Epreuve> epreuveOpt = epreuveService.getEpreuve(phase.getEpreuve().getIdEpreuve());
@@ -87,7 +87,7 @@ public class PhaseController {
             }
         }
 
-        Phase updated = phaseService.updatePhase(id, phase.getNomPhase(), phase.getDateDebut(), phase.getDateFin(),
+        EtapeEpreuve updated = phaseService.updatePhase(id, phase.getNomPhase(), phase.getDateDebut(), phase.getDateFin(),
                 epreuve, lieu);
         if (updated != null) {
             return ResponseEntity.ok(PhaseMapper.toDTO(updated));

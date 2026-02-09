@@ -1,6 +1,6 @@
 package com.glop.cibl_orga_sport.service;
 
-import com.glop.cibl_orga_sport.data.Phase;
+import com.glop.cibl_orga_sport.data.EtapeEpreuve;
 import com.glop.cibl_orga_sport.data.Epreuve;
 import com.glop.cibl_orga_sport.data.Lieu;
 
@@ -9,16 +9,16 @@ import java.util.Optional;
 
 public interface PhaseService {
 
-    Phase createPhase(String nomPhase, java.sql.Date dateDebut, java.sql.Date dateFin, Epreuve epreuve, Lieu lieu);
+    EtapeEpreuve createPhase(String nomPhase, java.sql.Date dateDebut, java.sql.Date dateFin, Epreuve epreuve, Lieu lieu);
 
-    Phase updatePhase(Long id, String nomPhase, java.sql.Date dateDebut, java.sql.Date dateFin, Epreuve epreuve,
+    EtapeEpreuve updatePhase(Long id, String nomPhase, java.sql.Date dateDebut, java.sql.Date dateFin, Epreuve epreuve,
             Lieu lieu);
 
     boolean deletePhase(Long id);
 
-    List<Phase> getAllPhases();
+    List<EtapeEpreuve> getAllPhases();
 
-    Optional<Phase> getPhase(Long id);
+    Optional<EtapeEpreuve> getPhase(Long id);
 
-    List<Phase> getPhasesByCompetitionId(Long competitionId);
+    List<EtapeEpreuve> getPhasesByCompetitionId(Long competitionId);
 }

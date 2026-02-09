@@ -1,13 +1,12 @@
 package com.glop.cibl_orga_sport.data;
 
-import java.sql.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionStatusEnum;
-import com.glop.cibl_orga_sport.data.enumType.GenreEnum;
-import com.glop.cibl_orga_sport.data.enumType.SportEnum;
+import com.glop.cibl_orga_sport.data.enumType.CompetitionGenreEnum;
+import com.glop.cibl_orga_sport.data.enumType.CompetitionSportEnum;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -26,57 +25,52 @@ public class Competition {
     @Column(unique = true, nullable = false)
     private String nameCompetition;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String description;
-
-    @Column(nullable = false)
-    private SportEnum sport;
 
     @OneToMany(mappedBy = "competition")
     @JsonManagedReference("competition-epreuves")
-    private Set<Epreuve> epreuves;
+    private List<Equipe> equipes;
+
+    @OneToMany(mappedBy = "competition")
+    @JsonManagedReference("competition-epreuves")
+    private List<Epreuve> epreuves;
 
     @Column(nullable = false)
-    private Date dateDebut;
-    
-    @Column(nullable = false)
-    private Date dateFin;
+    private Periode periode;
 
     @Column(nullable = false)
-    private String pays;
+    private Lieu lieu;
 
     @Column(nullable = false)
-    private boolean estEnFrance;
+    private ConditionAge conditionAge;
 
     @Column(nullable = false)
-    private String adresse;
-    
-    @Column
-    private String codePostal;
-
-    @Column
-    private String ville;
-
-    @Column(nullable = false)
-    private GenreEnum genre;
-
-    @Column(nullable = true)
-    private int ageMin;
-
-    @Column(nullable = true)
-    private int ageMax;
+    private CompetitionGenreEnum genre;
 
     @Column(nullable = false)
     private CompetitionStatusEnum statut;
 
+    @Column(nullable = false)
+    private CompetitionSportEnum sport;
+
     public Competition() {}
 
-    public Competition(String name, Date dateDebut, Date dateFin) {
-        this.nameCompetition = name;
-        this.dateDebut = dateDebut;
-        this.dateFin = dateFin;
-        this.epreuves = new HashSet<>();
+    public Competition(String nameCompetition, String description, Periode periode, Lieu lieu,
+            ConditionAge conditionAge, CompetitionGenreEnum genre, CompetitionStatusEnum statut, CompetitionSportEnum sport) {
+        this.nameCompetition = nameCompetition;
+        this.description = description;
+        this.periode = periode;
+        this.lieu = lieu;
+        this.conditionAge = conditionAge;
+        this.genre = genre;
+        this.statut = statut;
+        this.sport = sport;
+        this.epreuves = new ArrayList<>();
+        this.equipes = new ArrayList<>();
     }
+
+
 
     public Long getIdCompetition() {
         return idCompetition;
@@ -94,27 +88,11 @@ public class Competition {
         this.nameCompetition = name;
     }
 
-    public Date getDateDebut() {
-        return dateDebut;
-    }
-
-    public void setDateDebut(Date dateDebut) {
-        this.dateDebut = dateDebut;
-    }
-
-    public Date getDateFin() {
-        return dateFin;
-    }
-
-    public void setDateFin(Date dateFin) {
-        this.dateFin = dateFin;
-    }
-
-    public Set<Epreuve> getEpreuves() {
+    public List<Epreuve> getEpreuves() {
         return epreuves;
     }
 
-    public void setEpreuves(Set<Epreuve> epreuves) {
+    public void setEpreuves(List<Epreuve> epreuves) {
         this.epreuves = epreuves;
     }
 
@@ -138,76 +116,20 @@ public class Competition {
         this.description = description;
     }
 
-    public SportEnum getSport() {
+    public CompetitionSportEnum getSport() {
         return sport;
     }
 
-    public void setSport(SportEnum sport) {
+    public void setSport(CompetitionSportEnum sport) {
         this.sport = sport;
     }
 
-    public String getPays() {
-        return pays;
-    }
-
-    public void setPays(String pays) {
-        this.pays = pays;
-    }
-
-    public boolean isEstEnFrance() {
-        return estEnFrance;
-    }
-
-    public void setEstEnFrance(boolean estEnFrance) {
-        this.estEnFrance = estEnFrance;
-    }
-
-    public String getAdresse() {
-        return adresse;
-    }
-
-    public void setAdresse(String adresse) {
-        this.adresse = adresse;
-    }
-
-    public String getCodePostal() {
-        return codePostal;
-    }
-
-    public void setCodePostal(String codePostal) {
-        this.codePostal = codePostal;
-    }
-
-    public String getVille() {
-        return ville;
-    }
-
-    public void setVille(String ville) {
-        this.ville = ville;
-    }
-
-    public GenreEnum getGenre() {
+    public CompetitionGenreEnum getGenre() {
         return genre;
     }
 
-    public void setGenre(GenreEnum genre) {
+    public void setGenre(CompetitionGenreEnum genre) {
         this.genre = genre;
-    }
-
-    public int getAgeMin() {
-        return ageMin;
-    }
-
-    public void setAgeMin(int ageMin) {
-        this.ageMin = ageMin;
-    }
-
-    public int getAgeMax() {
-        return ageMax;
-    }
-
-    public void setAgeMax(int ageMax) {
-        this.ageMax = ageMax;
     }
 
     public CompetitionStatusEnum getStatut() {
@@ -217,5 +139,39 @@ public class Competition {
     public void setStatut(CompetitionStatusEnum statut) {
         this.statut = statut;
     }
+
+    public List<Equipe> getEquipes() {
+        return equipes;
+    }
+
+    public void setEquipes(List<Equipe> equipes) {
+        this.equipes = equipes;
+    }
+
+    public Periode getPeriode() {
+        return periode;
+    }
+
+    public void setPeriode(Periode periode) {
+        this.periode = periode;
+    }
+
+    public Lieu getLieu() {
+        return lieu;
+    }
+
+    public void setLieu(Lieu lieu) {
+        this.lieu = lieu;
+    }
+
+    public ConditionAge getConditionAge() {
+        return conditionAge;
+    }
+
+    public void setConditionAge(ConditionAge conditionAge) {
+        this.conditionAge = conditionAge;
+    }
+
+    
     
 }

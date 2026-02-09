@@ -2,14 +2,14 @@ package com.glop.cibl_orga_sport.dto;
 
 import java.sql.Date;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionStatusEnum;
-import com.glop.cibl_orga_sport.data.enumType.GenreEnum;
-import com.glop.cibl_orga_sport.data.enumType.SportEnum;
+import com.glop.cibl_orga_sport.data.enumType.CompetitionGenreEnum;
+import com.glop.cibl_orga_sport.data.enumType.CompetitionSportEnum;
 
 public class CompetitionDTO {
     private Long idCompetition;
     private String nameCompetition;
     private String description;
-    private SportEnum sport;
+    private CompetitionSportEnum sport;
     private Date dateDebut;
     private Date dateFin;
     private String pays;
@@ -17,14 +17,14 @@ public class CompetitionDTO {
     private String adresse;
     private String codePostal;
     private String ville;
-    private GenreEnum genre;
+    private CompetitionGenreEnum genre;
     private int ageMin;
     private int ageMax;
     private CompetitionStatusEnum statut;
 
     public CompetitionDTO() {}
 
-    public CompetitionDTO(Long idCompetition, String nameCompetition, String description, SportEnum sport, Date dateDebut, Date dateFin, String pays, boolean estEnFrance, String adresse, String codePostal, String ville, GenreEnum genre, int ageMin, int ageMax, CompetitionStatusEnum statut) {
+    public CompetitionDTO(Long idCompetition, String nameCompetition, String description, CompetitionSportEnum sport, Date dateDebut, Date dateFin, String pays, boolean estEnFrance, String adresse, String codePostal, String ville, CompetitionGenreEnum genre, int ageMin, int ageMax, CompetitionStatusEnum statut) {
         this.idCompetition = idCompetition;
         this.nameCompetition = nameCompetition;
         this.description = description;
@@ -82,11 +82,11 @@ public class CompetitionDTO {
         this.description = description;
     }
 
-    public SportEnum getSport() {
+    public CompetitionSportEnum getSport() {
         return sport;
     }
 
-    public void setSport(SportEnum sport) {
+    public void setSport(CompetitionSportEnum sport) {
         this.sport = sport;
     }
 
@@ -130,11 +130,11 @@ public class CompetitionDTO {
         this.ville = ville;
     }
 
-    public GenreEnum getGenre() {
+    public CompetitionGenreEnum getGenre() {
         return genre;
     }
 
-    public void setGenre(GenreEnum genre) {
+    public void setGenre(CompetitionGenreEnum genre) {
         this.genre = genre;
     }
 

@@ -2,7 +2,7 @@ package com.glop.cibl_orga_sport.service;
 
 import com.glop.cibl_orga_sport.data.Epreuve;
 import com.glop.cibl_orga_sport.data.Lieu;
-import com.glop.cibl_orga_sport.data.Phase;
+import com.glop.cibl_orga_sport.data.EtapeEpreuve;
 import com.glop.cibl_orga_sport.repository.PhaseRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,12 +37,12 @@ class PhaseServiceImplTest {
                 "361-363, Av. du Président Wilson");
         lieu.setIdLieu(1L);
 
-        Phase phase = new Phase("Finale", Date.valueOf("2026-01-05"), Date.valueOf("2026-01-06"), epreuve, lieu);
-        phase.setIdPhase(1L);
+        EtapeEpreuve phase = new EtapeEpreuve("Finale", Date.valueOf("2026-01-05"), Date.valueOf("2026-01-06"), epreuve, lieu);
+        phase.setIdEtapeEpreuve(1L);
 
-        when(phaseRepository.save(any(Phase.class))).thenReturn(phase);
+        when(phaseRepository.save(any(EtapeEpreuve.class))).thenReturn(phase);
 
-        Phase result = phaseService.createPhase("Finale", Date.valueOf("2026-01-05"), Date.valueOf("2026-01-06"),
+        EtapeEpreuve result = phaseService.createPhase("Finale", Date.valueOf("2026-01-05"), Date.valueOf("2026-01-06"),
                 epreuve, lieu);
 
         assertNotNull(result);
@@ -53,15 +53,15 @@ class PhaseServiceImplTest {
 
     @Test
     void testGetAllPhases() {
-        Phase phase1 = new Phase("Finale", Date.valueOf("2026-01-05"), Date.valueOf("2026-01-06"), null, null);
-        phase1.setIdPhase(1L);
+        EtapeEpreuve phase1 = new EtapeEpreuve("Finale", Date.valueOf("2026-01-05"), Date.valueOf("2026-01-06"), null, null);
+        phase1.setIdEtapeEpreuve(1L);
 
-        Phase phase2 = new Phase("Demi-finale", Date.valueOf("2026-01-03"), Date.valueOf("2026-01-04"), null, null);
-        phase2.setIdPhase(2L);
+        EtapeEpreuve phase2 = new EtapeEpreuve("Demi-finale", Date.valueOf("2026-01-03"), Date.valueOf("2026-01-04"), null, null);
+        phase2.setIdEtapeEpreuve(2L);
 
         when(phaseRepository.findAll()).thenReturn(Arrays.asList(phase1, phase2));
 
-        List<Phase> result = phaseService.getAllPhases();
+        List<EtapeEpreuve> result = phaseService.getAllPhases();
 
         assertEquals(2, result.size());
         assertEquals("Finale", result.get(0).getNomPhase());
@@ -70,12 +70,12 @@ class PhaseServiceImplTest {
 
     @Test
     void testGetPhase() {
-        Phase phase = new Phase("Finale", Date.valueOf("2026-01-05"), Date.valueOf("2026-01-06"), null, null);
-        phase.setIdPhase(1L);
+        EtapeEpreuve phase = new EtapeEpreuve("Finale", Date.valueOf("2026-01-05"), Date.valueOf("2026-01-06"), null, null);
+        phase.setIdEtapeEpreuve(1L);
 
         when(phaseRepository.findById(1L)).thenReturn(Optional.of(phase));
 
-        Optional<Phase> result = phaseService.getPhase(1L);
+        Optional<EtapeEpreuve> result = phaseService.getPhase(1L);
 
         assertTrue(result.isPresent());
         assertEquals("Finale", result.get().getNomPhase());
@@ -90,13 +90,13 @@ class PhaseServiceImplTest {
                 "361-363, Av. du Président Wilson");
         lieu.setIdLieu(1L);
 
-        Phase existingPhase = new Phase("Finale", Date.valueOf("2026-01-05"), Date.valueOf("2026-01-06"), null, null);
-        existingPhase.setIdPhase(1L);
+        EtapeEpreuve existingPhase = new EtapeEpreuve("Finale", Date.valueOf("2026-01-05"), Date.valueOf("2026-01-06"), null, null);
+        existingPhase.setIdEtapeEpreuve(1L);
 
         when(phaseRepository.findById(1L)).thenReturn(Optional.of(existingPhase));
-        when(phaseRepository.save(any(Phase.class))).thenReturn(existingPhase);
+        when(phaseRepository.save(any(EtapeEpreuve.class))).thenReturn(existingPhase);
 
-        Phase result = phaseService.updatePhase(1L, "Finale modifiée", Date.valueOf("2026-01-07"),
+        EtapeEpreuve result = phaseService.updatePhase(1L, "Finale modifiée", Date.valueOf("2026-01-07"),
                 Date.valueOf("2026-01-08"), epreuve, lieu);
 
         assertNotNull(result);
@@ -111,15 +111,15 @@ class PhaseServiceImplTest {
     void testUpdatePhase_NotFound() {
         when(phaseRepository.findById(999L)).thenReturn(Optional.empty());
 
-        Phase result = phaseService.updatePhase(999L, "Finale", null, null, null, null);
+        EtapeEpreuve result = phaseService.updatePhase(999L, "Finale", null, null, null, null);
 
         assertNull(result);
     }
 
     @Test
     void testDeletePhase() {
-        Phase phase = new Phase("Finale", null, null);
-        phase.setIdPhase(1L);
+        EtapeEpreuve phase = new EtapeEpreuve("Finale", null, null);
+        phase.setIdEtapeEpreuve(1L);
 
         when(phaseRepository.findById(1L)).thenReturn(Optional.of(phase));
 

@@ -1,14 +1,13 @@
 package com.glop.cibl_orga_sport.data;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionStatusEnum;
 import com.glop.cibl_orga_sport.data.enumType.DisciplineEnum;
-import com.glop.cibl_orga_sport.data.enumType.GenreEnum;
+import com.glop.cibl_orga_sport.data.enumType.CompetitionGenreEnum;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,32 +24,35 @@ public class Epreuve {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idEpreuve;
 
-    @Column(nullable = false)
-    private String nomEpreuve;
-
     @ManyToOne
     @JsonBackReference("competition-epreuves")
     private Competition competition;
 
-    @OneToMany(mappedBy = "epreuve", cascade = jakarta.persistence.CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference("epreuve-phases")
-    private Set<Phase> phases;
+    @Column(nullable = false)
+    private String nomEpreuve;
+
+    @Column(nullable = true)
+    private String description;
+
+    @Column(nullable = false)
+    private Periode periode;
+
+    @Column(nullable = false)
+    private ConditionAge conditionAge;
+
+    @OneToMany(mappedBy = "competition")
+    @JsonManagedReference("competition-epreuves")
+    private List<Equipe> equipes;
 
     @OneToMany(mappedBy = "epreuve", cascade = jakarta.persistence.CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference("epreuve-categories")
-    private Set<Category> categories;
+    @JsonManagedReference("epreuve-phases")
+    private List<EtapeEpreuve> etapesEpreuves;
 
     @Column(nullable = false)
     private DisciplineEnum discipline;
 
     @Column(nullable = false)
-    private GenreEnum genre;
-
-    @Column(nullable = false)
-    private Date dateDebut;
-
-    @Column(nullable = false)
-    private Date dateFin;
+    private CompetitionGenreEnum genre;
 
     @Column(nullable = false)
     private CompetitionStatusEnum statut;
@@ -59,8 +61,7 @@ public class Epreuve {
 
     public Epreuve(String nomEpreuve) {
         this.nomEpreuve = nomEpreuve;
-        this.phases = new HashSet<>();
-        this.categories = new HashSet<>();
+        this.etapesEpreuves = new ArrayList<>();
     }
 
     public Long getIdEpreuve() {
@@ -87,44 +88,24 @@ public class Epreuve {
         this.competition = competition;
     }
 
-    public Set<Phase> getPhases() {
-        return phases;
+    public List<EtapeEpreuve> getEtapesEpreuves() {
+        return etapesEpreuves;
     }
 
-    public void setPhases(Set<Phase> phases) {
-        this.phases = phases;
+    public void setEtapesEpreuves(List<EtapeEpreuve> etapesEpreuves) {
+        this.etapesEpreuves = etapesEpreuves;
     }
 
-    public void addPhase(Phase phase) {
-        this.phases.add(phase);
+    public void addPhase(EtapeEpreuve phase) {
+        this.etapesEpreuves.add(phase);
         phase.setEpreuve(this);
     }
 
-    public void removePhase(Phase phase) throws IllegalArgumentException {
-        if (!this.phases.remove(phase)) {
+    public void removePhase(EtapeEpreuve phase) throws IllegalArgumentException {
+        if (!this.etapesEpreuves.remove(phase)) {
             throw new IllegalArgumentException("La phase n'est pas associée à cette épreuve");
         }
         phase.setEpreuve(null);
-    }
-
-    public Set<Category> getCategories() {
-        return categories;
-    }
-
-    public void setCategories(Set<Category> categories) {
-        this.categories = categories;
-    }
-
-    public void addCategory(Category category) {
-        this.categories.add(category);
-        category.setEpreuve(this);
-    }
-
-    public void removeCategory(Category category) throws IllegalArgumentException {
-        if (!this.categories.remove(category)) {
-            throw new IllegalArgumentException("La catégorie n'est pas associée à cette épreuve");
-        }
-        category.setEpreuve(null);
     }
 
     public DisciplineEnum getDiscipline() {
@@ -135,28 +116,12 @@ public class Epreuve {
         this.discipline = discipline;
     }
 
-    public GenreEnum getGenre() {
+    public CompetitionGenreEnum getGenre() {
         return genre;
     }
 
-    public void setGenre(GenreEnum genre) {
+    public void setGenre(CompetitionGenreEnum genre) {
         this.genre = genre;
-    }
-
-    public Date getDateDebut() {
-        return dateDebut;
-    }
-
-    public void setDateDebut(Date dateDebut) {
-        this.dateDebut = dateDebut;
-    }
-
-    public Date getDateFin() {
-        return dateFin;
-    }
-
-    public void setDateFin(Date dateFin) {
-        this.dateFin = dateFin;
     }
 
     public CompetitionStatusEnum getStatut() {
@@ -166,5 +131,39 @@ public class Epreuve {
     public void setStatut(CompetitionStatusEnum statut) {
         this.statut = statut;
     }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Periode getPeriode() {
+        return periode;
+    }
+
+    public void setPeriode(Periode periode) {
+        this.periode = periode;
+    }
+
+    public ConditionAge getConditionAge() {
+        return conditionAge;
+    }
+
+    public void setConditionAge(ConditionAge conditionAge) {
+        this.conditionAge = conditionAge;
+    }
+
+    public List<Equipe> getEquipes() {
+        return equipes;
+    }
+
+    public void setEquipes(List<Equipe> equipes) {
+        this.equipes = equipes;
+    }
+
+    
 
 }

@@ -3,10 +3,10 @@ package com.glop.cibl_orga_sport.mapper;
 import com.glop.cibl_orga_sport.data.Category;
 import com.glop.cibl_orga_sport.data.Competition;
 import com.glop.cibl_orga_sport.data.Epreuve;
-import com.glop.cibl_orga_sport.data.enumType.SportEnum;
+import com.glop.cibl_orga_sport.data.enumType.CompetitionSportEnum;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionStatusEnum;
 import com.glop.cibl_orga_sport.data.enumType.DisciplineEnum;
-import com.glop.cibl_orga_sport.data.enumType.GenreEnum;
+import com.glop.cibl_orga_sport.data.enumType.CompetitionGenreEnum;
 import com.glop.cibl_orga_sport.dto.CategoryDTO;
 import com.glop.cibl_orga_sport.dto.CompetitionDTO;
 import com.glop.cibl_orga_sport.dto.EpreuveDTO;
@@ -43,7 +43,7 @@ class CategoryMapperTest {
                 id,
                 name,
                 "Description",
-                SportEnum.NATATION,
+                CompetitionSportEnum.NATATION,
                 Date.valueOf("2026-01-01"),
                 Date.valueOf("2026-01-10"),
                 "France",
@@ -51,7 +51,7 @@ class CategoryMapperTest {
                 "1 rue test",
                 "01000",
                 "Ville",
-                GenreEnum.HOMME,
+                CompetitionGenreEnum.HOMME,
                 18,
                 99,
                 CompetitionStatusEnum.DRAFT
@@ -64,7 +64,7 @@ class CategoryMapperTest {
                 name,
                 competitionDTO,
                 DisciplineEnum.NAGE_LIBRE,
-                GenreEnum.HOMME,
+                CompetitionGenreEnum.HOMME,
                 new java.util.Date(),
                 new java.util.Date(),
                 CompetitionStatusEnum.DRAFT

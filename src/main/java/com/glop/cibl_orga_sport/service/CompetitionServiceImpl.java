@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.glop.cibl_orga_sport.data.Competition;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionStatusEnum;
-import com.glop.cibl_orga_sport.data.enumType.GenreEnum;
-import com.glop.cibl_orga_sport.data.enumType.SportEnum;
+import com.glop.cibl_orga_sport.data.enumType.CompetitionGenreEnum;
+import com.glop.cibl_orga_sport.data.enumType.CompetitionSportEnum;
 import com.glop.cibl_orga_sport.repository.CompetitionRepository;
 
 @Service
@@ -20,9 +20,9 @@ public class CompetitionServiceImpl implements CompetitionService {
     private CompetitionRepository repository;
 
     @Override
-    public Competition createCompetition(String name, String description, SportEnum sport, Date dateDebut, Date dateFin, 
+    public Competition createCompetition(String name, String description, CompetitionSportEnum sport, Date dateDebut, Date dateFin, 
                                         String pays, boolean estEnFrance, String adresse, String codePostal, String ville, 
-                                        GenreEnum genre, int ageMin, int ageMax) {
+                                        CompetitionGenreEnum genre, int ageMin, int ageMax) {
         if (dateDebut != null && dateFin != null && dateDebut.after(dateFin)) {
             throw new IllegalArgumentException("La date de début doit être avant la date de fin");
         }
@@ -43,9 +43,9 @@ public class CompetitionServiceImpl implements CompetitionService {
     }
 
     @Override
-    public Competition updateCompetition(Long id, String name, String description, SportEnum sport, Date dateDebut, Date dateFin, 
+    public Competition updateCompetition(Long id, String name, String description, CompetitionSportEnum sport, Date dateDebut, Date dateFin, 
                                         String pays, boolean estEnFrance, String adresse, String codePostal, String ville, 
-                                        GenreEnum genre, int ageMin, int ageMax, CompetitionStatusEnum statut) {
+                                        CompetitionGenreEnum genre, int ageMin, int ageMax, CompetitionStatusEnum statut) {
         if (dateDebut != null && dateFin != null && dateDebut.after(dateFin)) {
             throw new IllegalArgumentException("La date de début doit être avant la date de fin");
         }

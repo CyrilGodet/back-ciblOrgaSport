@@ -2,8 +2,8 @@ package com.glop.cibl_orga_sport.service;
 
 import com.glop.cibl_orga_sport.data.Competition;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionStatusEnum;
-import com.glop.cibl_orga_sport.data.enumType.GenreEnum;
-import com.glop.cibl_orga_sport.data.enumType.SportEnum;
+import com.glop.cibl_orga_sport.data.enumType.CompetitionGenreEnum;
+import com.glop.cibl_orga_sport.data.enumType.CompetitionSportEnum;
 import com.glop.cibl_orga_sport.repository.CompetitionRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,7 +34,7 @@ class CompetitionServiceImplTest {
         Competition competition = new Competition("Championnats du monde de natation", Date.valueOf("2026-01-01"), Date.valueOf("2026-01-10"));
         competition.setIdCompetition(1L);
         competition.setDescription("Description test");
-        competition.setSport(SportEnum.NATATION);
+        competition.setSport(CompetitionSportEnum.NATATION);
         competition.setStatut(CompetitionStatusEnum.DRAFT);
 
         when(competitionRepository.save(any(Competition.class))).thenReturn(competition);
@@ -42,7 +42,7 @@ class CompetitionServiceImplTest {
         Competition result = competitionService.createCompetition(
                 "Championnats du monde de natation",
                 "Description test",
-                SportEnum.NATATION,
+                CompetitionSportEnum.NATATION,
                 Date.valueOf("2026-01-01"),
                 Date.valueOf("2026-01-10"),
                 "France",
@@ -50,7 +50,7 @@ class CompetitionServiceImplTest {
                 "test",
                 "01000",
                 "Ville",
-                GenreEnum.HOMME,
+                CompetitionGenreEnum.HOMME,
                 18,
                 99
         );
@@ -103,7 +103,7 @@ class CompetitionServiceImplTest {
                 1L,
                 "Championnats du monde de natation Modifié",
                 "Description modifiée",
-                SportEnum.NATATION,
+                CompetitionSportEnum.NATATION,
                 Date.valueOf("2026-02-01"),
                 Date.valueOf("2026-02-10"),
                 "France",
@@ -111,7 +111,7 @@ class CompetitionServiceImplTest {
                 "1 rue test",
                 "01000",
                 "Ville",
-                GenreEnum.MIXTE,
+                CompetitionGenreEnum.MIXTE,
                 18,
                 99,
                 CompetitionStatusEnum.IN_PROGRESS
@@ -130,7 +130,7 @@ class CompetitionServiceImplTest {
                 999L,
                 "Championnats du monde de natation",
                 "Description",
-                SportEnum.NATATION,
+                CompetitionSportEnum.NATATION,
                 Date.valueOf("2026-01-01"),
                 Date.valueOf("2026-01-10"),
                 "France",
@@ -138,7 +138,7 @@ class CompetitionServiceImplTest {
                 "1 rue test",
                 "01000",
                 "Ville",
-                GenreEnum.HOMME,
+                CompetitionGenreEnum.HOMME,
                 18,
                 99,
                 CompetitionStatusEnum.DRAFT

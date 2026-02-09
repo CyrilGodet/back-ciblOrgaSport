@@ -3,7 +3,7 @@ package com.glop.cibl_orga_sport.mapper;
 import com.glop.cibl_orga_sport.data.Competition;
 import com.glop.cibl_orga_sport.data.Epreuve;
 import com.glop.cibl_orga_sport.data.Lieu;
-import com.glop.cibl_orga_sport.data.Phase;
+import com.glop.cibl_orga_sport.data.EtapeEpreuve;
 import com.glop.cibl_orga_sport.dto.CompetitionDTO;
 import com.glop.cibl_orga_sport.dto.EpreuveDTO;
 import com.glop.cibl_orga_sport.dto.LieuDTO;
@@ -35,9 +35,9 @@ class PhaseMapperTest {
         return lieu;
     }
 
-    private Phase createPhase(String name, Long id, Epreuve epreuve, Lieu lieu) {
-        Phase phase = new Phase(name, Date.valueOf("2026-01-05"), Date.valueOf("2026-01-06"), epreuve, lieu);
-        phase.setIdPhase(id);
+    private EtapeEpreuve createPhase(String name, Long id, Epreuve epreuve, Lieu lieu) {
+        EtapeEpreuve phase = new EtapeEpreuve(name, Date.valueOf("2026-01-05"), Date.valueOf("2026-01-06"), epreuve, lieu);
+        phase.setIdEtapeEpreuve(id);
         return phase;
     }
 
@@ -46,7 +46,7 @@ class PhaseMapperTest {
                 id,
                 name,
                 "Description",
-                com.glop.cibl_orga_sport.data.enumType.SportEnum.NATATION,
+                com.glop.cibl_orga_sport.data.enumType.CompetitionSportEnum.NATATION,
                 Date.valueOf("2026-01-01"),
                 Date.valueOf("2026-01-10"),
                 "France",
@@ -54,7 +54,7 @@ class PhaseMapperTest {
                 "123 rue test",
                 "75001",
                 "Paris",
-                com.glop.cibl_orga_sport.data.enumType.GenreEnum.HOMME,
+                com.glop.cibl_orga_sport.data.enumType.CompetitionGenreEnum.HOMME,
                 18,
                 99,
                 com.glop.cibl_orga_sport.data.enumType.CompetitionStatusEnum.DRAFT
@@ -67,7 +67,7 @@ class PhaseMapperTest {
                 name,
                 competitionDTO,
                 com.glop.cibl_orga_sport.data.enumType.DisciplineEnum.NAGE_LIBRE,
-                com.glop.cibl_orga_sport.data.enumType.GenreEnum.HOMME,
+                com.glop.cibl_orga_sport.data.enumType.CompetitionGenreEnum.HOMME,
                 new java.util.Date(),
                 new java.util.Date(),
                 com.glop.cibl_orga_sport.data.enumType.CompetitionStatusEnum.DRAFT
@@ -88,7 +88,7 @@ class PhaseMapperTest {
         Epreuve epreuve = createEpreuve("100m nage libre", 2L, competition);
         Lieu lieu = createLieu("Centre Aquatique Olympique Métropole du Grand Saint-Denis", "Saint-Denis",
                 "361-363, Av. du Président Wilson", 3L);
-        Phase phase = createPhase("Finale", 4L, epreuve, lieu);
+        EtapeEpreuve phase = createPhase("Finale", 4L, epreuve, lieu);
 
         PhaseDTO dto = PhaseMapper.toDTO(phase);
 
@@ -116,7 +116,7 @@ class PhaseMapperTest {
                 "361-363, Av. du Président Wilson", 3L);
         PhaseDTO dto = createPhaseDTO("Finale", 4L, epreuveDTO, lieuDTO);
 
-        Phase phase = PhaseMapper.toEntity(dto);
+        EtapeEpreuve phase = PhaseMapper.toEntity(dto);
 
         assertNotNull(phase);
         assertEquals("Finale", phase.getNomPhase());

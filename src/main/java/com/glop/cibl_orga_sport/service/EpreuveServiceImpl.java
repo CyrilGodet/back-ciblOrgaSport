@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.glop.cibl_orga_sport.data.Competition;
 import com.glop.cibl_orga_sport.data.Epreuve;
+import com.glop.cibl_orga_sport.data.Periode;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionStatusEnum;
 import com.glop.cibl_orga_sport.data.enumType.DisciplineEnum;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionGenreEnum;
@@ -26,8 +27,12 @@ public class EpreuveServiceImpl implements EpreuveService {
         Epreuve e = new Epreuve(nomEpreuve);
         e.setDiscipline(discipline);
         e.setGenre(genre);
-        e.setDateDebut(dateDebut);
-        e.setDateFin(dateFin);
+        
+        if (dateDebut != null && dateFin != null) {
+            Periode periode = new Periode((java.sql.Date) dateDebut, (java.sql.Date) dateFin);
+            e.setPeriode(periode);
+        }
+        
         e.setStatut(CompetitionStatusEnum.DRAFT);
         e.setCompetition(competition);
         if (competition != null && !competition.getEpreuves().contains(e)) {
@@ -46,8 +51,16 @@ public class EpreuveServiceImpl implements EpreuveService {
             e.setNomEpreuve(nomEpreuve);
             e.setDiscipline(discipline);
             e.setGenre(genre);
-            e.setDateDebut(dateDebut);
-            e.setDateFin(dateFin);
+            
+            if (dateDebut != null && dateFin != null) {
+                if (e.getPeriode() == null) {
+                    e.setPeriode(new Periode((java.sql.Date) dateDebut, (java.sql.Date) dateFin));
+                } else {
+                    e.getPeriode().setDateDebut((java.sql.Date) dateDebut);
+                    e.getPeriode().setDateFin((java.sql.Date) dateFin);
+                }
+            }
+            
             e.setStatut(statut);
 
             Competition oldCompetition = e.getCompetition();
@@ -72,11 +85,10 @@ public class EpreuveServiceImpl implements EpreuveService {
         if (e.isPresent()) {
             Epreuve epreuve = e.get();
             boolean hasPhases = epreuve.getEtapesEpreuves() != null && !epreuve.getEtapesEpreuves().isEmpty();
-            boolean hasCategories = epreuve.getCategories() != null && !epreuve.getCategories().isEmpty();
 
-            if (hasPhases || hasCategories) {
+            if (hasPhases) {
                 throw new IllegalStateException(
-                        "Impossible de supprimer cette épreuve car elle contient des phases ou des catégories.");
+                        "Impossible de supprimer cette épreuve car elle contient des phases.");
             }
 
             repository.deleteById(id);

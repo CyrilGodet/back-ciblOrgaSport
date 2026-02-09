@@ -1,6 +1,9 @@
 package com.glop.cibl_orga_sport.mapper;
 
 import com.glop.cibl_orga_sport.data.Competition;
+import com.glop.cibl_orga_sport.data.Periode;
+import com.glop.cibl_orga_sport.data.Lieu;
+import com.glop.cibl_orga_sport.data.ConditionAge;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionStatusEnum;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionGenreEnum;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionSportEnum;
@@ -14,19 +17,21 @@ import static org.junit.jupiter.api.Assertions.*;
 class CompetitionMapperTest {
 
     private Competition createCompetition(String name, Long id) {
-        Competition competition = new Competition(name, Date.valueOf("2026-01-01"), Date.valueOf("2026-01-10"));
+        Periode periode = new Periode(Date.valueOf("2026-01-01"), Date.valueOf("2026-01-10"));
+        Lieu lieu = new Lieu(null, "Ville", "1 rue test");
+        ConditionAge conditionAge = new ConditionAge(18, 99);
+        
+        Competition competition = new Competition(
+            name,
+            "Description test",
+            periode,
+            lieu,
+            conditionAge,
+            CompetitionGenreEnum.HOMME,
+            CompetitionStatusEnum.DRAFT,
+            CompetitionSportEnum.NATATION
+        );
         competition.setIdCompetition(id);
-        competition.setDescription("Description test");
-        competition.setSport(CompetitionSportEnum.NATATION);
-        competition.setPays("France");
-        competition.setEstEnFrance(true);
-        competition.setAdresse("1 rue test");
-        competition.setCodePostal("01000");
-        competition.setVille("Ville");
-        competition.setGenre(CompetitionGenreEnum.HOMME);
-        competition.setAgeMin(18);
-        competition.setAgeMax(99);
-        competition.setStatut(CompetitionStatusEnum.DRAFT);
         return competition;
     }
 
@@ -63,8 +68,9 @@ class CompetitionMapperTest {
         assertEquals(Date.valueOf("2026-01-10"), dto.getDateFin());
         assertEquals("Description test", dto.getDescription());
         assertEquals(CompetitionSportEnum.NATATION, dto.getSport());
-        assertEquals("France", dto.getPays());
-        assertTrue(dto.isEstEnFrance());
+        assertEquals("Ville", dto.getVille());
+        assertEquals(18, dto.getAgeMin());
+        assertEquals(99, dto.getAgeMax());
         assertEquals(CompetitionStatusEnum.DRAFT, dto.getStatut());
     }
 
@@ -81,12 +87,16 @@ class CompetitionMapperTest {
 
         assertNotNull(competition);
         assertEquals("Championnats du monde de natation", competition.getNameCompetition());
-        assertEquals(Date.valueOf("2026-01-01"), competition.getDateDebut());
-        assertEquals(Date.valueOf("2026-01-10"), competition.getDateFin());
+        assertNotNull(competition.getPeriode());
+        assertEquals(Date.valueOf("2026-01-01"), competition.getPeriode().getDateDebut());
+        assertEquals(Date.valueOf("2026-01-10"), competition.getPeriode().getDateFin());
         assertEquals("Description test", competition.getDescription());
         assertEquals(CompetitionSportEnum.NATATION, competition.getSport());
-        assertEquals("France", competition.getPays());
-        assertTrue(competition.isEstEnFrance());
+        assertNotNull(competition.getLieu());
+        assertEquals("Ville", competition.getLieu().getVille());
+        assertNotNull(competition.getConditionAge());
+        assertEquals(18, competition.getConditionAge().getAgeMin());
+        assertEquals(99, competition.getConditionAge().getAgeMax());
         assertEquals(CompetitionStatusEnum.DRAFT, competition.getStatut());
     }
 

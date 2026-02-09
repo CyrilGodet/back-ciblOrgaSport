@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 
 import com.glop.cibl_orga_sport.data.EtapeEpreuve;
 import com.glop.cibl_orga_sport.data.Epreuve;
-import com.glop.cibl_orga_sport.data.Lieu;
+import com.glop.cibl_orga_sport.data.Periode;
+import com.glop.cibl_orga_sport.data.Resultat;
+import com.glop.cibl_orga_sport.data.enumType.EtapeEpreuveEnum;
 import com.glop.cibl_orga_sport.repository.PhaseRepository;
 
 import java.sql.Date;
@@ -20,32 +22,40 @@ public class PhaseServiceImpl implements PhaseService {
     private PhaseRepository repository;
 
     @Override
-    public EtapeEpreuve createPhase(String nomPhase, Date dateDebut, Date dateFin, Epreuve epreuve,
-            Lieu lieu) {
-        EtapeEpreuve p = new EtapeEpreuve(nomPhase, dateDebut, dateFin, epreuve, lieu);
+    public EtapeEpreuve createPhase(Epreuve epreuve, Date dateDebut, Date dateFin,
+                                   EtapeEpreuveEnum etapeEnum, Resultat resultat) {
+        Periode periode = new Periode(dateDebut, dateFin);
+        EtapeEpreuve p = new EtapeEpreuve(epreuve, periode, resultat, etapeEnum);
+        
         if (epreuve != null) {
             if (epreuve.getEtapesEpreuves() == null)
-                epreuve.setPhases(new java.util.HashSet<>());
+                epreuve.setEtapesEpreuves(new java.util.ArrayList<>());
             epreuve.getEtapesEpreuves().add(p);
         }
-        if (lieu != null) {
-            if (lieu.getPhases() == null)
-                lieu.setPhases(new java.util.HashSet<>());
-            lieu.getPhases().add(p);
-        }
-        System.out.println("Création phase : " + nomPhase);
+        
+        System.out.println("Création phase : " + (etapeEnum != null ? etapeEnum.name() : "null"));
         return repository.save(p);
     }
 
     @Override
-    public EtapeEpreuve updatePhase(Long id, String nomPhase, java.sql.Date dateDebut, java.sql.Date dateFin, Epreuve epreuve,
-            Lieu lieu) {
+    public EtapeEpreuve updatePhase(Long id, Epreuve epreuve, Date dateDebut, Date dateFin,
+                                   EtapeEpreuveEnum etapeEnum, Resultat resultat) {
         Optional<EtapeEpreuve> existingPhase = repository.findById(id);
         if (existingPhase.isPresent()) {
             EtapeEpreuve p = existingPhase.get();
-            p.setNomPhase(nomPhase);
-            p.setDateDebut(dateDebut);
-            p.setDateFin(dateFin);
+            
+            if (dateDebut != null && dateFin != null) {
+                if (p.getPeriode() == null) {
+                    p.setPeriode(new Periode(dateDebut, dateFin));
+                } else {
+                    p.getPeriode().setDateDebut(dateDebut);
+                    p.getPeriode().setDateFin(dateFin);
+                }
+            }
+            
+            p.setEtapeEpreuveEnum(etapeEnum);
+            p.setResultat(resultat);
+            
             Epreuve oldEpreuve = p.getEpreuve();
             if (oldEpreuve != null && !oldEpreuve.equals(epreuve)) {
                 oldEpreuve.getEtapesEpreuves().remove(p);
@@ -54,14 +64,7 @@ public class PhaseServiceImpl implements PhaseService {
             if (epreuve != null && !epreuve.getEtapesEpreuves().contains(p)) {
                 epreuve.getEtapesEpreuves().add(p);
             }
-            Lieu oldLieu = p.getLieu();
-            if (oldLieu != null && !oldLieu.equals(lieu)) {
-                oldLieu.getPhases().remove(p);
-            }
-            p.setLieu(lieu);
-            if (lieu != null && !lieu.getPhases().contains(p)) {
-                lieu.getPhases().add(p);
-            }
+            
             System.out.println("Modification phase : " + id);
             return repository.save(p);
         }

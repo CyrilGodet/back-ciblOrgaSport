@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.glop.cibl_orga_sport.data.Competition;
+import com.glop.cibl_orga_sport.data.Periode;
+import com.glop.cibl_orga_sport.data.Lieu;
+import com.glop.cibl_orga_sport.data.ConditionAge;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionStatusEnum;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionGenreEnum;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionSportEnum;
@@ -26,18 +29,13 @@ public class CompetitionServiceImpl implements CompetitionService {
         if (dateDebut != null && dateFin != null && dateDebut.after(dateFin)) {
             throw new IllegalArgumentException("La date de début doit être avant la date de fin");
         }
-        Competition c = new Competition(name, dateDebut, dateFin);
-        c.setDescription(description);
-        c.setSport(sport);
-        c.setPays(pays);
-        c.setEstEnFrance(estEnFrance);
-        c.setAdresse(adresse);
-        c.setCodePostal(codePostal);
-        c.setVille(ville);
-        c.setGenre(genre);
-        c.setAgeMin(ageMin);
-        c.setAgeMax(ageMax);
-        c.setStatut(CompetitionStatusEnum.DRAFT);
+        
+        Periode periode = new Periode(dateDebut, dateFin);
+        Lieu lieu = new Lieu(null, ville, adresse);
+        ConditionAge conditionAge = new ConditionAge(ageMin, ageMax);
+        
+        Competition c = new Competition(name, description, periode, lieu, conditionAge, genre, CompetitionStatusEnum.DRAFT, sport);
+        
         System.out.println("Création compétition : " + name);
         return repository.save(c);
     }
@@ -55,17 +53,35 @@ public class CompetitionServiceImpl implements CompetitionService {
             c.setNameCompetition(name);
             c.setDescription(description);
             c.setSport(sport);
-            c.setDateDebut(dateDebut);
-            c.setDateFin(dateFin);
-            c.setPays(pays);
-            c.setEstEnFrance(estEnFrance);
-            c.setAdresse(adresse);
-            c.setCodePostal(codePostal);
-            c.setVille(ville);
+            
+            if (dateDebut != null && dateFin != null) {
+                if (c.getPeriode() == null) {
+                    c.setPeriode(new Periode(dateDebut, dateFin));
+                } else {
+                    c.getPeriode().setDateDebut(dateDebut);
+                    c.getPeriode().setDateFin(dateFin);
+                }
+            }
+            
+            if (ville != null) {
+                if (c.getLieu() == null) {
+                    c.setLieu(new Lieu(null, ville, adresse));
+                } else {
+                    c.getLieu().setVille(ville);
+                    c.getLieu().setAdresse(adresse);
+                }
+            }
+            
+            if (c.getConditionAge() == null) {
+                c.setConditionAge(new ConditionAge(ageMin, ageMax));
+            } else {
+                c.getConditionAge().setAgeMin(ageMin);
+                c.getConditionAge().setAgeMax(ageMax);
+            }
+            
             c.setGenre(genre);
-            c.setAgeMin(ageMin);
-            c.setAgeMax(ageMax);
             c.setStatut(statut);
+            
             System.out.println("Modification compétition : " + id);
             return repository.save(c);
         }

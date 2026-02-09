@@ -9,10 +9,12 @@ import com.glop.cibl_orga_sport.data.enumType.CompetitionGenreEnum;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionSportEnum;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
 @Entity
@@ -30,19 +32,15 @@ public class Competition {
 
     @OneToMany(mappedBy = "competition")
     @JsonManagedReference("competition-epreuves")
-    private List<Equipe> equipes;
-
-    @OneToMany(mappedBy = "competition")
-    @JsonManagedReference("competition-epreuves")
     private List<Epreuve> epreuves;
 
-    @Column(nullable = false)
+    @Embedded
     private Periode periode;
 
-    @Column(nullable = false)
+    @ManyToOne
     private Lieu lieu;
 
-    @Column(nullable = false)
+    @Embedded
     private ConditionAge conditionAge;
 
     @Column(nullable = false)
@@ -67,7 +65,6 @@ public class Competition {
         this.statut = statut;
         this.sport = sport;
         this.epreuves = new ArrayList<>();
-        this.equipes = new ArrayList<>();
     }
 
 
@@ -138,14 +135,6 @@ public class Competition {
 
     public void setStatut(CompetitionStatusEnum statut) {
         this.statut = statut;
-    }
-
-    public List<Equipe> getEquipes() {
-        return equipes;
-    }
-
-    public void setEquipes(List<Equipe> equipes) {
-        this.equipes = equipes;
     }
 
     public Periode getPeriode() {

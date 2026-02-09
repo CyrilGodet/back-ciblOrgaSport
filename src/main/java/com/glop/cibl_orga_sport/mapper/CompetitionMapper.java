@@ -1,49 +1,68 @@
 package com.glop.cibl_orga_sport.mapper;
 
 import com.glop.cibl_orga_sport.data.Competition;
+import com.glop.cibl_orga_sport.data.Periode;
+import com.glop.cibl_orga_sport.data.Lieu;
+import com.glop.cibl_orga_sport.data.ConditionAge;
 import com.glop.cibl_orga_sport.dto.CompetitionDTO;
 
 public class CompetitionMapper {
     
     public static CompetitionDTO toDTO(Competition competition) {
         if (competition == null) return null;
-        return new CompetitionDTO(
-            competition.getIdCompetition(),
-            competition.getNameCompetition(),
-            competition.getDescription(),
-            competition.getSport(),
-            competition.getDateDebut(),
-            competition.getDateFin(),
-            competition.getPays(),
-            competition.isEstEnFrance(),
-            competition.getAdresse(),
-            competition.getCodePostal(),
-            competition.getVille(),
-            competition.getGenre(),
-            competition.getAgeMin(),
-            competition.getAgeMax(),
-            competition.getStatut()
-        );
+        
+        CompetitionDTO dto = new CompetitionDTO();
+        dto.setIdCompetition(competition.getIdCompetition());
+        dto.setNameCompetition(competition.getNameCompetition());
+        dto.setDescription(competition.getDescription());
+        dto.setSport(competition.getSport());
+        dto.setGenre(competition.getGenre());
+        dto.setStatut(competition.getStatut());
+        
+        if (competition.getPeriode() != null) {
+            dto.setDateDebut(competition.getPeriode().getDateDebut());
+            dto.setDateFin(competition.getPeriode().getDateFin());
+        }
+        
+        if (competition.getLieu() != null) {
+            dto.setVille(competition.getLieu().getVille());
+            dto.setAdresse(competition.getLieu().getAdresse());
+        }
+        
+        if (competition.getConditionAge() != null) {
+            dto.setAgeMin(competition.getConditionAge().getAgeMin());
+            dto.setAgeMax(competition.getConditionAge().getAgeMax());
+        }
+        
+        return dto;
     }
 
     public static Competition toEntity(CompetitionDTO dto) {
         if (dto == null) return null;
+        
+        Periode periode = null;
+        if (dto.getDateDebut() != null && dto.getDateFin() != null) {
+            periode = new Periode(dto.getDateDebut(), dto.getDateFin());
+        }
+        
+        Lieu lieu = null;
+        if (dto.getVille() != null) {
+            lieu = new Lieu(null, dto.getVille(), dto.getAdresse());
+        }
+        
+        ConditionAge conditionAge = new ConditionAge(dto.getAgeMin(), dto.getAgeMax());
+        
         Competition competition = new Competition(
             dto.getNameCompetition(),
-            dto.getDateDebut(),
-            dto.getDateFin()
+            dto.getDescription(),
+            periode,
+            lieu,
+            conditionAge,
+            dto.getGenre(),
+            dto.getStatut(),
+            dto.getSport()
         );
-        competition.setDescription(dto.getDescription());
-        competition.setSport(dto.getSport());
-        competition.setPays(dto.getPays());
-        competition.setEstEnFrance(dto.isEstEnFrance());
-        competition.setAdresse(dto.getAdresse());
-        competition.setCodePostal(dto.getCodePostal());
-        competition.setVille(dto.getVille());
-        competition.setGenre(dto.getGenre());
-        competition.setAgeMin(dto.getAgeMin());
-        competition.setAgeMax(dto.getAgeMax());
-        competition.setStatut(dto.getStatut());
+        
         return competition;
     }
 }

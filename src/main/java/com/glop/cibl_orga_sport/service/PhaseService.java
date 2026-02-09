@@ -2,17 +2,19 @@ package com.glop.cibl_orga_sport.service;
 
 import com.glop.cibl_orga_sport.data.EtapeEpreuve;
 import com.glop.cibl_orga_sport.data.Epreuve;
-import com.glop.cibl_orga_sport.data.Lieu;
+import com.glop.cibl_orga_sport.data.Resultat;
+import com.glop.cibl_orga_sport.data.enumType.EtapeEpreuveEnum;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface PhaseService {
 
-    EtapeEpreuve createPhase(String nomPhase, java.sql.Date dateDebut, java.sql.Date dateFin, Epreuve epreuve, Lieu lieu);
+    EtapeEpreuve createPhase(Epreuve epreuve, java.sql.Date dateDebut, java.sql.Date dateFin, 
+                            EtapeEpreuveEnum etapeEnum, Resultat resultat);
 
-    EtapeEpreuve updatePhase(Long id, String nomPhase, java.sql.Date dateDebut, java.sql.Date dateFin, Epreuve epreuve,
-            Lieu lieu);
+    EtapeEpreuve updatePhase(Long id, Epreuve epreuve, java.sql.Date dateDebut, java.sql.Date dateFin,
+                            EtapeEpreuveEnum etapeEnum, Resultat resultat);
 
     boolean deletePhase(Long id);
 

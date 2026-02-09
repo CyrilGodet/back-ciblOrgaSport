@@ -41,11 +41,6 @@ public class LieuServiceImpl implements LieuService {
     public boolean deleteLieu(Long id) {
         Optional<Lieu> l = repository.findById(id);
         if (l.isPresent()) {
-            Lieu lieu = l.get();
-            if (lieu.getPhases() != null && !lieu.getPhases().isEmpty()) {
-                throw new IllegalStateException("Impossible de supprimer ce lieu car il est lié à " + 
-                    lieu.getPhases().size() + " phase(s) existante(s).");
-            }
             repository.deleteById(id);
             System.out.println("Lieu supprimé : " + id);
             return true;

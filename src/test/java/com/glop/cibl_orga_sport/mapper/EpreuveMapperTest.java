@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class EpreuveMapperTest {
 
     private Competition createCompetition(String name, Long id) {
-        Competition competition = new Competition(name, Date.valueOf("2026-01-01"), Date.valueOf("2026-01-10"));
+        Competition competition = new Competition(name, null, new com.glop.cibl_orga_sport.data.Periode(Date.valueOf("2026-01-01"), Date.valueOf("2026-01-10")), null, null, null, null, null);
         competition.setIdCompetition(id);
         return competition;
     }
@@ -28,8 +28,10 @@ class EpreuveMapperTest {
         epreuve.setCompetition(competition);
         epreuve.setDiscipline(DisciplineEnum.NAGE_LIBRE);
         epreuve.setGenre(CompetitionGenreEnum.HOMME);
-        epreuve.setDateDebut(new java.util.Date());
-        epreuve.setDateFin(new java.util.Date());
+        epreuve.setPeriode(new com.glop.cibl_orga_sport.data.Periode(
+            new java.sql.Date(new java.util.Date().getTime()),
+            new java.sql.Date(new java.util.Date().getTime())
+        ));
         epreuve.setStatut(CompetitionStatusEnum.DRAFT);
         return epreuve;
     }
@@ -61,8 +63,8 @@ class EpreuveMapperTest {
                 competitionDTO,
                 DisciplineEnum.NAGE_LIBRE,
                 CompetitionGenreEnum.HOMME,
-                new java.util.Date(),
-                new java.util.Date(),
+                new java.sql.Date(System.currentTimeMillis()),
+                new java.sql.Date(System.currentTimeMillis() + 86400000),
                 CompetitionStatusEnum.DRAFT
         );
     }

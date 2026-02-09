@@ -10,6 +10,7 @@ import com.glop.cibl_orga_sport.data.enumType.DisciplineEnum;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionGenreEnum;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -34,15 +35,11 @@ public class Epreuve {
     @Column(nullable = true)
     private String description;
 
-    @Column(nullable = false)
+    @Embedded
     private Periode periode;
 
-    @Column(nullable = false)
+    @Embedded
     private ConditionAge conditionAge;
-
-    @OneToMany(mappedBy = "competition")
-    @JsonManagedReference("competition-epreuves")
-    private List<Equipe> equipes;
 
     @OneToMany(mappedBy = "epreuve", cascade = jakarta.persistence.CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference("epreuve-phases")
@@ -155,15 +152,6 @@ public class Epreuve {
     public void setConditionAge(ConditionAge conditionAge) {
         this.conditionAge = conditionAge;
     }
-
-    public List<Equipe> getEquipes() {
-        return equipes;
-    }
-
-    public void setEquipes(List<Equipe> equipes) {
-        this.equipes = equipes;
-    }
-
     
 
 }

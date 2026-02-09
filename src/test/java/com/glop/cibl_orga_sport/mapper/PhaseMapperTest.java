@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class PhaseMapperTest {
 
     private Competition createCompetition(String name, Long id) {
-        Competition competition = new Competition(name, Date.valueOf("2026-01-01"), Date.valueOf("2026-01-10"));
+        Competition competition = new Competition(name, null, new com.glop.cibl_orga_sport.data.Periode(Date.valueOf("2026-01-01"), Date.valueOf("2026-01-10")), null, null, null, null, null);
         competition.setIdCompetition(id);
         return competition;
     }
@@ -36,7 +36,8 @@ class PhaseMapperTest {
     }
 
     private EtapeEpreuve createPhase(String name, Long id, Epreuve epreuve, Lieu lieu) {
-        EtapeEpreuve phase = new EtapeEpreuve(name, Date.valueOf("2026-01-05"), Date.valueOf("2026-01-06"), epreuve, lieu);
+        com.glop.cibl_orga_sport.data.Periode periode = new com.glop.cibl_orga_sport.data.Periode(Date.valueOf("2026-01-05"), Date.valueOf("2026-01-06"));
+        EtapeEpreuve phase = new EtapeEpreuve(epreuve, periode, null, com.glop.cibl_orga_sport.data.enumType.EtapeEpreuveEnum.FINALE);
         phase.setIdEtapeEpreuve(id);
         return phase;
     }
@@ -88,19 +89,17 @@ class PhaseMapperTest {
         Epreuve epreuve = createEpreuve("100m nage libre", 2L, competition);
         Lieu lieu = createLieu("Centre Aquatique Olympique Métropole du Grand Saint-Denis", "Saint-Denis",
                 "361-363, Av. du Président Wilson", 3L);
-        EtapeEpreuve phase = createPhase("Finale", 4L, epreuve, lieu);
+        EtapeEpreuve phase = createPhase("FINALE", 4L, epreuve, lieu);
 
         PhaseDTO dto = PhaseMapper.toDTO(phase);
 
         assertNotNull(dto);
         assertEquals(4L, dto.getIdPhase());
-        assertEquals("Finale", dto.getNomPhase());
+        assertEquals("FINALE", dto.getNomPhase());
         assertEquals(Date.valueOf("2026-01-05"), dto.getDateDebut());
         assertEquals(Date.valueOf("2026-01-06"), dto.getDateFin());
         assertNotNull(dto.getEpreuve());
         assertEquals("100m nage libre", dto.getEpreuve().getNomEpreuve());
-        assertNotNull(dto.getLieu());
-        assertEquals("Centre Aquatique Olympique Métropole du Grand Saint-Denis", dto.getLieu().getNom());
     }
 
     @Test
@@ -114,14 +113,15 @@ class PhaseMapperTest {
         EpreuveDTO epreuveDTO = createEpreuveDTO("100m nage libre", 2L, competitionDTO);
         LieuDTO lieuDTO = createLieuDTO("Centre Aquatique Olympique Métropole du Grand Saint-Denis", "Saint-Denis",
                 "361-363, Av. du Président Wilson", 3L);
-        PhaseDTO dto = createPhaseDTO("Finale", 4L, epreuveDTO, lieuDTO);
+        PhaseDTO dto = createPhaseDTO("FINALE", 4L, epreuveDTO, lieuDTO);
 
         EtapeEpreuve phase = PhaseMapper.toEntity(dto);
 
         assertNotNull(phase);
-        assertEquals("Finale", phase.getNomPhase());
-        assertEquals(Date.valueOf("2026-01-05"), phase.getDateDebut());
-        assertEquals(Date.valueOf("2026-01-06"), phase.getDateFin());
+        assertEquals(com.glop.cibl_orga_sport.data.enumType.EtapeEpreuveEnum.FINALE, phase.getEtapeEpreuveEnum());
+        assertNotNull(phase.getPeriode());
+        assertEquals(Date.valueOf("2026-01-05"), phase.getPeriode().getDateDebut());
+        assertEquals(Date.valueOf("2026-01-06"), phase.getPeriode().getDateFin());
     }
 
     @Test

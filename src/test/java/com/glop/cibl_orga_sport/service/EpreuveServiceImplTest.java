@@ -32,7 +32,8 @@ class EpreuveServiceImplTest {
 
     @Test
     void testCreateEpreuve() {
-        Competition competition = new Competition("Championnats du monde de natation", Date.valueOf("2026-01-01"), Date.valueOf("2026-01-10"));
+        com.glop.cibl_orga_sport.data.Periode periode = new com.glop.cibl_orga_sport.data.Periode(Date.valueOf("2026-01-01"), Date.valueOf("2026-01-10"));
+        Competition competition = new Competition("Championnats du monde de natation", null, periode, null, null, null, null, null);
         competition.setIdCompetition(1L);
 
         Epreuve epreuve = new Epreuve("100m nage libre");
@@ -46,8 +47,8 @@ class EpreuveServiceImplTest {
                 "100m nage libre",
                 DisciplineEnum.NAGE_LIBRE,
                 CompetitionGenreEnum.HOMME,
-                new java.util.Date(),
-                new java.util.Date(),
+                new java.sql.Date(System.currentTimeMillis()),
+                new java.sql.Date(System.currentTimeMillis() + 86400000),
                 competition
         );
 
@@ -88,7 +89,8 @@ class EpreuveServiceImplTest {
 
     @Test
     void testUpdateEpreuve() {
-        Competition competition = new Competition("Championnats du monde de natation", Date.valueOf("2026-01-01"), Date.valueOf("2026-01-10"));
+        com.glop.cibl_orga_sport.data.Periode periode = new com.glop.cibl_orga_sport.data.Periode(Date.valueOf("2026-01-01"), Date.valueOf("2026-01-10"));
+        Competition competition = new Competition("Championnats du monde de natation", null, periode, null, null, null, null, null);
         competition.setIdCompetition(1L);
 
         Epreuve existingEpreuve = new Epreuve("100m nage libre");
@@ -102,8 +104,8 @@ class EpreuveServiceImplTest {
                 "200m nage libre",
                 DisciplineEnum.NAGE_LIBRE,
                 CompetitionGenreEnum.FEMME,
-                new java.util.Date(),
-                new java.util.Date(),
+                new java.sql.Date(System.currentTimeMillis()),
+                new java.sql.Date(System.currentTimeMillis() + 86400000),
                 CompetitionStatusEnum.IN_PROGRESS,
                 competition
         );

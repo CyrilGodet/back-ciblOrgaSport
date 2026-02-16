@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.glop.cibl_orga_sport.data.Competition;
+import com.glop.cibl_orga_sport.data.ConditionAge;
 import com.glop.cibl_orga_sport.data.Epreuve;
 import com.glop.cibl_orga_sport.data.Periode;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionStatusEnum;
@@ -22,9 +23,10 @@ public class EpreuveServiceImpl implements EpreuveService {
     private EpreuveRepository repository;
 
     @Override
-    public Epreuve createEpreuve(String nomEpreuve, DisciplineEnum discipline, CompetitionGenreEnum genre, 
-                                Date dateDebut, Date dateFin, Competition competition) {
+    public Epreuve createEpreuve(String nomEpreuve, String description, DisciplineEnum discipline, CompetitionGenreEnum genre, 
+                                Date dateDebut, Date dateFin, int ageMin, int ageMax, Competition competition) {
         Epreuve e = new Epreuve(nomEpreuve);
+        e.setDescription(description);
         e.setDiscipline(discipline);
         e.setGenre(genre);
         
@@ -33,18 +35,21 @@ public class EpreuveServiceImpl implements EpreuveService {
             e.setPeriode(periode);
         }
         
+        ConditionAge conditionAge = new ConditionAge(ageMin, ageMax);
+        e.setConditionAge(conditionAge);
+        
         e.setStatut(CompetitionStatusEnum.DRAFT);
         e.setCompetition(competition);
         if (competition != null && !competition.getEpreuves().contains(e)) {
             competition.getEpreuves().add(e);
         }
-        System.out.println("Création épreuve : " + nomEpreuve);
+        System.out.println("Épreuve créée : " + nomEpreuve);
         return repository.save(e);
     }
 
     @Override
-    public Epreuve updateEpreuve(Long id, String nomEpreuve, DisciplineEnum discipline, CompetitionGenreEnum genre, 
-                                Date dateDebut, Date dateFin, CompetitionStatusEnum statut, Competition competition) {
+    public Epreuve updateEpreuve(Long id, String nomEpreuve, String description, DisciplineEnum discipline, CompetitionGenreEnum genre, 
+                                Date dateDebut, Date dateFin, int ageMin, int ageMax, CompetitionStatusEnum statut, Competition competition) {
         Optional<Epreuve> existingEpreuve = repository.findById(id);
         if (existingEpreuve.isPresent()) {
             Epreuve e = existingEpreuve.get();
@@ -55,6 +60,7 @@ public class EpreuveServiceImpl implements EpreuveService {
             }
 
             e.setNomEpreuve(nomEpreuve);
+            e.setDescription(description);
             e.setDiscipline(discipline);
             e.setGenre(genre);
             
@@ -65,6 +71,13 @@ public class EpreuveServiceImpl implements EpreuveService {
                     e.getPeriode().setDateDebut((java.sql.Date) dateDebut);
                     e.getPeriode().setDateFin((java.sql.Date) dateFin);
                 }
+            }
+            
+            if (e.getConditionAge() == null) {
+                e.setConditionAge(new ConditionAge(ageMin, ageMax));
+            } else {
+                e.getConditionAge().setAgeMin(ageMin);
+                e.getConditionAge().setAgeMax(ageMax);
             }
             
             e.setStatut(statut);
@@ -78,7 +91,7 @@ public class EpreuveServiceImpl implements EpreuveService {
                 competition.getEpreuves().add(e);
             }
 
-            System.out.println("Modification épreuve : " + id);
+            System.out.println("Épreuve modifiée : " + id);
             return repository.save(e);
         }
         System.out.println("Épreuve non trouvée : " + id);

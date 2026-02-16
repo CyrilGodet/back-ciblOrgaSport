@@ -8,23 +8,29 @@ import com.glop.cibl_orga_sport.data.enumType.CompetitionGenreEnum;
 public class EpreuveDTO {
     private Long idEpreuve;
     private String nomEpreuve;
+    private String description;
     private CompetitionDTO competition;
     private DisciplineEnum discipline;
     private CompetitionGenreEnum genre;
     private Date dateDebut;
     private Date dateFin;
+    private int ageMin;
+    private int ageMax;
     private CompetitionStatusEnum statut;
 
     public EpreuveDTO() {}
 
-    public EpreuveDTO(Long idEpreuve, String nomEpreuve, CompetitionDTO competition, DisciplineEnum discipline, CompetitionGenreEnum genre, Date dateDebut, Date dateFin, CompetitionStatusEnum statut) {
+    public EpreuveDTO(Long idEpreuve, String nomEpreuve, String description, CompetitionDTO competition, DisciplineEnum discipline, CompetitionGenreEnum genre, Date dateDebut, Date dateFin, int ageMin, int ageMax, CompetitionStatusEnum statut) {
         this.idEpreuve = idEpreuve;
         this.nomEpreuve = nomEpreuve;
+        this.description = description;
         this.competition = competition;
         this.discipline = discipline;
         this.genre = genre;
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
+        this.ageMin = ageMin;
+        this.ageMax = ageMax;
         this.statut = statut;
     }
 
@@ -42,6 +48,14 @@ public class EpreuveDTO {
 
     public void setNomEpreuve(String nomEpreuve) {
         this.nomEpreuve = nomEpreuve;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public CompetitionDTO getCompetition() {
@@ -82,6 +96,22 @@ public class EpreuveDTO {
 
     public void setDateFin(Date dateFin) {
         this.dateFin = dateFin;
+    }
+
+    public int getAgeMin() {
+        return ageMin;
+    }
+
+    public void setAgeMin(int ageMin) {
+        this.ageMin = ageMin;
+    }
+
+    public int getAgeMax() {
+        return ageMax;
+    }
+
+    public void setAgeMax(int ageMax) {
+        this.ageMax = ageMax;
     }
 
     public CompetitionStatusEnum getStatut() {

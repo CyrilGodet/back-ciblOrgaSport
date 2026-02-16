@@ -28,7 +28,6 @@ public class CompetitionServiceImpl implements CompetitionService {
 
     @Override
     public Competition createCompetition(String name, String description, CompetitionSportEnum sport, Date dateDebut, Date dateFin, 
-                                        String pays, boolean estEnFrance, String adresse, String codePostal, String ville, 
                                         CompetitionGenreEnum genre, int ageMin, int ageMax, Long lieuId) {
         if (dateDebut != null && dateFin != null && dateDebut.after(dateFin)) {
             throw new IllegalArgumentException("La date de début doit être avant la date de fin");
@@ -49,7 +48,6 @@ public class CompetitionServiceImpl implements CompetitionService {
 
     @Override
     public Competition updateCompetition(Long id, String name, String description, CompetitionSportEnum sport, Date dateDebut, Date dateFin, 
-                                        String pays, boolean estEnFrance, String adresse, String codePostal, String ville, 
                                         CompetitionGenreEnum genre, int ageMin, int ageMax, CompetitionStatusEnum statut, Long lieuId) {
         if (dateDebut != null && dateFin != null && dateDebut.after(dateFin)) {
             throw new IllegalArgumentException("La date de début doit être avant la date de fin");

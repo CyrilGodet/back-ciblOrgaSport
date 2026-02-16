@@ -25,8 +25,6 @@ public class CompetitionMapper {
         }
         
         if (competition.getLieu() != null) {
-            dto.setVille(competition.getLieu().getVille());
-            dto.setAdresse(competition.getLieu().getAdresse());
             dto.setLieu(LieuMapper.toDTO(competition.getLieu()));
         }
         
@@ -47,8 +45,8 @@ public class CompetitionMapper {
         }
         
         Lieu lieu = null;
-        if (dto.getVille() != null) {
-            lieu = new Lieu(null, dto.getVille(), dto.getAdresse());
+        if (dto.getLieu() != null) {
+            lieu = LieuMapper.toEntity(dto.getLieu());
         }
         
         ConditionAge conditionAge = new ConditionAge(dto.getAgeMin(), dto.getAgeMax());

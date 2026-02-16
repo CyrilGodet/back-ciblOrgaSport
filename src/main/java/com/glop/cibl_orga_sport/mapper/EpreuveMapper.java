@@ -2,6 +2,7 @@ package com.glop.cibl_orga_sport.mapper;
 
 import com.glop.cibl_orga_sport.data.Epreuve;
 import com.glop.cibl_orga_sport.data.Periode;
+import com.glop.cibl_orga_sport.data.ConditionAge;
 import com.glop.cibl_orga_sport.dto.EpreuveDTO;
 import java.sql.Date;
 
@@ -13,6 +14,7 @@ public class EpreuveMapper {
         EpreuveDTO dto = new EpreuveDTO();
         dto.setIdEpreuve(epreuve.getIdEpreuve());
         dto.setNomEpreuve(epreuve.getNomEpreuve());
+        dto.setDescription(epreuve.getDescription());
         dto.setDiscipline(epreuve.getDiscipline());
         dto.setGenre(epreuve.getGenre());
         dto.setStatut(epreuve.getStatut());
@@ -26,6 +28,11 @@ public class EpreuveMapper {
             dto.setDateFin(epreuve.getPeriode().getDateFin());
         }
         
+        if (epreuve.getConditionAge() != null) {
+            dto.setAgeMin(epreuve.getConditionAge().getAgeMin());
+            dto.setAgeMax(epreuve.getConditionAge().getAgeMax());
+        }
+        
         return dto;
     }
 
@@ -33,6 +40,7 @@ public class EpreuveMapper {
         if (dto == null) return null;
         
         Epreuve epreuve = new Epreuve(dto.getNomEpreuve());
+        epreuve.setDescription(dto.getDescription());
         epreuve.setDiscipline(dto.getDiscipline());
         epreuve.setGenre(dto.getGenre());
         epreuve.setStatut(dto.getStatut());
@@ -44,6 +52,9 @@ public class EpreuveMapper {
             );
             epreuve.setPeriode(periode);
         }
+        
+        ConditionAge conditionAge = new ConditionAge(dto.getAgeMin(), dto.getAgeMax());
+        epreuve.setConditionAge(conditionAge);
         
         return epreuve;
     }

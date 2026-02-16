@@ -52,10 +52,13 @@ public class EpreuveController {
         }
         Epreuve created = epreuveService.createEpreuve(
                 epreuveDTO.getNomEpreuve(),
+                epreuveDTO.getDescription(),
                 epreuveDTO.getDiscipline(),
                 epreuveDTO.getGenre(),
                 epreuveDTO.getDateDebut(),
                 epreuveDTO.getDateFin(),
+                epreuveDTO.getAgeMin(),
+                epreuveDTO.getAgeMax(),
                 competition
         );
         return ResponseEntity.status(201).body(EpreuveMapper.toDTO(created));
@@ -73,10 +76,13 @@ public class EpreuveController {
         Epreuve updated = epreuveService.updateEpreuve(
                 id,
                 epreuveDTO.getNomEpreuve(),
+                epreuveDTO.getDescription(),
                 epreuveDTO.getDiscipline(),
                 epreuveDTO.getGenre(),
                 epreuveDTO.getDateDebut(),
                 epreuveDTO.getDateFin(),
+                epreuveDTO.getAgeMin(),
+                epreuveDTO.getAgeMax(),
                 epreuveDTO.getStatut(),
                 competition
         );

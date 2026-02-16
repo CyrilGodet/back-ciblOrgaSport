@@ -8,6 +8,7 @@ import com.glop.cibl_orga_sport.data.enumType.CompetitionStatusEnum;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionGenreEnum;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionSportEnum;
 import com.glop.cibl_orga_sport.dto.CompetitionDTO;
+import com.glop.cibl_orga_sport.dto.LieuDTO;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Date;
@@ -36,6 +37,7 @@ class CompetitionMapperTest {
     }
 
     private CompetitionDTO createCompetitionDTO(String name, Long id) {
+        LieuDTO lieuDTO = new LieuDTO(null, null, "Ville", "1 rue test");
         return new CompetitionDTO(
                 id,
                 name,
@@ -43,15 +45,11 @@ class CompetitionMapperTest {
                 CompetitionSportEnum.NATATION,
                 Date.valueOf("2026-01-01"),
                 Date.valueOf("2026-01-10"),
-                "France",
-                true,
-                "1 rue test",
-                "01000",
-                "Ville",
                 CompetitionGenreEnum.HOMME,
                 18,
                 99,
-                CompetitionStatusEnum.DRAFT
+                CompetitionStatusEnum.DRAFT,
+                lieuDTO
         );
     }
 
@@ -68,7 +66,8 @@ class CompetitionMapperTest {
         assertEquals(Date.valueOf("2026-01-10"), dto.getDateFin());
         assertEquals("Description test", dto.getDescription());
         assertEquals(CompetitionSportEnum.NATATION, dto.getSport());
-        assertEquals("Ville", dto.getVille());
+        assertNotNull(dto.getLieu());
+        assertEquals("Ville", dto.getLieu().getVille());
         assertEquals(18, dto.getAgeMin());
         assertEquals(99, dto.getAgeMax());
         assertEquals(CompetitionStatusEnum.DRAFT, dto.getStatut());

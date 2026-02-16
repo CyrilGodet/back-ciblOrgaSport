@@ -2,6 +2,7 @@ package com.glop.cibl_orga_sport.service;
 
 import com.glop.cibl_orga_sport.data.Competition;
 import com.glop.cibl_orga_sport.data.Epreuve;
+import com.glop.cibl_orga_sport.data.Periode;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionStatusEnum;
 import com.glop.cibl_orga_sport.data.enumType.DisciplineEnum;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionGenreEnum;
@@ -32,7 +33,7 @@ class EpreuveServiceImplTest {
 
     @Test
     void testCreateEpreuve() {
-        com.glop.cibl_orga_sport.data.Periode periode = new com.glop.cibl_orga_sport.data.Periode(Date.valueOf("2026-01-01"), Date.valueOf("2026-01-10"));
+        Periode periode = new Periode(Date.valueOf("2026-01-01"), Date.valueOf("2026-01-10"));
         Competition competition = new Competition("Championnats du monde de natation", null, periode, null, null, null, null, null);
         competition.setIdCompetition(1L);
 
@@ -45,10 +46,13 @@ class EpreuveServiceImplTest {
 
         Epreuve result = epreuveService.createEpreuve(
                 "100m nage libre",
+                "Description test",
                 DisciplineEnum.NAGE_LIBRE,
                 CompetitionGenreEnum.HOMME,
                 new java.sql.Date(System.currentTimeMillis()),
                 new java.sql.Date(System.currentTimeMillis() + 86400000),
+                18,
+                99,
                 competition
         );
 
@@ -89,7 +93,7 @@ class EpreuveServiceImplTest {
 
     @Test
     void testUpdateEpreuve() {
-        com.glop.cibl_orga_sport.data.Periode periode = new com.glop.cibl_orga_sport.data.Periode(Date.valueOf("2026-01-01"), Date.valueOf("2026-01-10"));
+        Periode periode = new Periode(Date.valueOf("2026-01-01"), Date.valueOf("2026-01-10"));
         Competition competition = new Competition("Championnats du monde de natation", null, periode, null, null, null, null, null);
         competition.setIdCompetition(1L);
 
@@ -103,10 +107,13 @@ class EpreuveServiceImplTest {
         Epreuve result = epreuveService.updateEpreuve(
                 1L,
                 "200m nage libre",
+                "Description modifiée",
                 DisciplineEnum.NAGE_LIBRE,
                 CompetitionGenreEnum.FEMME,
                 new java.sql.Date(System.currentTimeMillis()),
                 new java.sql.Date(System.currentTimeMillis() + 86400000),
+                18,
+                99,
                 CompetitionStatusEnum.IN_PROGRESS,
                 competition
         );
@@ -123,10 +130,13 @@ class EpreuveServiceImplTest {
         Epreuve result = epreuveService.updateEpreuve(
                 999L,
                 "100m nage libre",
+                "Description",
                 DisciplineEnum.NAGE_LIBRE,
                 CompetitionGenreEnum.HOMME,
                 null,
                 null,
+                18,
+                99,
                 CompetitionStatusEnum.DRAFT,
                 null
         );

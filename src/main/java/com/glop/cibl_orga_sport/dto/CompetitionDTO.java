@@ -12,11 +12,6 @@ public class CompetitionDTO {
     private CompetitionSportEnum sport;
     private Date dateDebut;
     private Date dateFin;
-    private String pays;
-    private boolean estEnFrance;
-    private String adresse;
-    private String codePostal;
-    private String ville;
     private CompetitionGenreEnum genre;
     private int ageMin;
     private int ageMax;
@@ -25,22 +20,18 @@ public class CompetitionDTO {
 
     public CompetitionDTO() {}
 
-    public CompetitionDTO(Long idCompetition, String nameCompetition, String description, CompetitionSportEnum sport, Date dateDebut, Date dateFin, String pays, boolean estEnFrance, String adresse, String codePostal, String ville, CompetitionGenreEnum genre, int ageMin, int ageMax, CompetitionStatusEnum statut) {
+    public CompetitionDTO(Long idCompetition, String nameCompetition, String description, CompetitionSportEnum sport, Date dateDebut, Date dateFin, CompetitionGenreEnum genre, int ageMin, int ageMax, CompetitionStatusEnum statut, LieuDTO lieu) {
         this.idCompetition = idCompetition;
         this.nameCompetition = nameCompetition;
         this.description = description;
         this.sport = sport;
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
-        this.pays = pays;
-        this.estEnFrance = estEnFrance;
-        this.adresse = adresse;
-        this.codePostal = codePostal;
-        this.ville = ville;
         this.genre = genre;
         this.ageMin = ageMin;
         this.ageMax = ageMax;
         this.statut = statut;
+        this.lieu = lieu;
     }
 
     public Long getIdCompetition() {
@@ -89,46 +80,6 @@ public class CompetitionDTO {
 
     public void setSport(CompetitionSportEnum sport) {
         this.sport = sport;
-    }
-
-    public String getPays() {
-        return pays;
-    }
-
-    public void setPays(String pays) {
-        this.pays = pays;
-    }
-
-    public boolean isEstEnFrance() {
-        return estEnFrance;
-    }
-
-    public void setEstEnFrance(boolean estEnFrance) {
-        this.estEnFrance = estEnFrance;
-    }
-
-    public String getAdresse() {
-        return adresse;
-    }
-
-    public void setAdresse(String adresse) {
-        this.adresse = adresse;
-    }
-
-    public String getCodePostal() {
-        return codePostal;
-    }
-
-    public void setCodePostal(String codePostal) {
-        this.codePostal = codePostal;
-    }
-
-    public String getVille() {
-        return ville;
-    }
-
-    public void setVille(String ville) {
-        this.ville = ville;
     }
 
     public CompetitionGenreEnum getGenre() {

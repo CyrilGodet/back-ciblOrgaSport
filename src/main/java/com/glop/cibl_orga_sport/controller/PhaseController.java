@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.*;
 
 import com.glop.cibl_orga_sport.data.EtapeEpreuve;
 import com.glop.cibl_orga_sport.data.Epreuve;
-import com.glop.cibl_orga_sport.data.enumType.EtapeEpreuveEnum;
 import com.glop.cibl_orga_sport.dto.PhaseDTO;
 import com.glop.cibl_orga_sport.mapper.PhaseMapper;
 import com.glop.cibl_orga_sport.service.PhaseService;
@@ -52,17 +51,8 @@ public class PhaseController {
             }
         }
 
-        EtapeEpreuveEnum etapeEnum = null;
-        if (phaseDTO.getNomPhase() != null) {
-            try {
-                etapeEnum = EtapeEpreuveEnum.valueOf(phaseDTO.getNomPhase());
-            } catch (IllegalArgumentException e) {
-                System.out.println("Nom de phase invalide : " + phaseDTO.getNomPhase());
-            }
-        }
-
         EtapeEpreuve created = phaseService.createPhase(epreuve, phaseDTO.getDateDebut(), phaseDTO.getDateFin(), 
-                                                       etapeEnum, null);
+                                                       phaseDTO.getEtapeEpreuve(), null);
         return PhaseMapper.toDTO(created);
     }
 
@@ -76,17 +66,8 @@ public class PhaseController {
             }
         }
 
-        EtapeEpreuveEnum etapeEnum = null;
-        if (phaseDTO.getNomPhase() != null) {
-            try {
-                etapeEnum = EtapeEpreuveEnum.valueOf(phaseDTO.getNomPhase());
-            } catch (IllegalArgumentException e) {
-                System.out.println("Nom de phase invalide : " + phaseDTO.getNomPhase());
-            }
-        }
-
         EtapeEpreuve updated = phaseService.updatePhase(id, epreuve, phaseDTO.getDateDebut(), phaseDTO.getDateFin(),
-                                                       etapeEnum, null);
+                                                       phaseDTO.getEtapeEpreuve(), null);
         if (updated != null) {
             return ResponseEntity.ok(PhaseMapper.toDTO(updated));
         }

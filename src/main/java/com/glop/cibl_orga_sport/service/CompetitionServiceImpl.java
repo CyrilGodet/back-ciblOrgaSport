@@ -50,6 +50,12 @@ public class CompetitionServiceImpl implements CompetitionService {
         Optional<Competition> existingCompetition = repository.findById(id);
         if (existingCompetition.isPresent()) {
             Competition c = existingCompetition.get();
+
+            if(c.getStatut() != CompetitionStatusEnum.DRAFT) {
+                System.out.println("Impossible de modifier une compétition publiée : " + id);
+                return c;
+            }
+
             c.setNameCompetition(name);
             c.setDescription(description);
             c.setSport(sport);
@@ -94,6 +100,14 @@ public class CompetitionServiceImpl implements CompetitionService {
         Optional<Competition> c = repository.findById(id);
         if (c.isPresent()) {
             Competition competition = c.get();
+
+            if(competition.getStatut() != CompetitionStatusEnum.DRAFT) {
+                System.out.println("Impossible de supprimer une compétition publiée : " + id);
+                competition.setStatut(CompetitionStatusEnum.CANCELLED);
+                repository.save(competition);
+                return false;
+            }
+
             if (competition.getEpreuves() != null && !competition.getEpreuves().isEmpty()) {
                 throw new IllegalStateException("Impossible de supprimer cette compétition car elle est liée à " + 
                     competition.getEpreuves().size() + " épreuve(s) existante(s).");

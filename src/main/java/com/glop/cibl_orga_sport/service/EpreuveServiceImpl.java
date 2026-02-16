@@ -48,6 +48,12 @@ public class EpreuveServiceImpl implements EpreuveService {
         Optional<Epreuve> existingEpreuve = repository.findById(id);
         if (existingEpreuve.isPresent()) {
             Epreuve e = existingEpreuve.get();
+
+            if(e.getStatut() != CompetitionStatusEnum.DRAFT) {
+                System.out.println("Impossible de modifier une épreuve publiée : " + id);
+                return e;
+            }
+
             e.setNomEpreuve(nomEpreuve);
             e.setDiscipline(discipline);
             e.setGenre(genre);
@@ -84,6 +90,14 @@ public class EpreuveServiceImpl implements EpreuveService {
         Optional<Epreuve> e = repository.findById(id);
         if (e.isPresent()) {
             Epreuve epreuve = e.get();
+
+            if(epreuve.getStatut() == CompetitionStatusEnum.PUBLISH) {
+                epreuve.setStatut(CompetitionStatusEnum.CANCELLED);
+                repository.save(epreuve);
+                System.out.println("Épreuve annulée car elle est déjà publiée : " + id);
+                return true;
+            }
+
             boolean hasPhases = epreuve.getEtapesEpreuves() != null && !epreuve.getEtapesEpreuves().isEmpty();
 
             if (hasPhases) {

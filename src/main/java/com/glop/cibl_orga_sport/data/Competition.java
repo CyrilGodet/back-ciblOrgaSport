@@ -34,6 +34,10 @@ public class Competition {
     @JsonManagedReference("competition-epreuves")
     private List<Epreuve> epreuves;
 
+    @OneToMany(mappedBy = "competition")
+    @JsonManagedReference("competition-equipes")
+    private List<Equipe> equipes;
+
     @Embedded
     private Periode periode;
 
@@ -65,9 +69,8 @@ public class Competition {
         this.statut = statut;
         this.sport = sport;
         this.epreuves = new ArrayList<>();
+        this.equipes = new ArrayList<>();
     }
-
-
 
     public Long getIdCompetition() {
         return idCompetition;
@@ -161,6 +164,12 @@ public class Competition {
         this.conditionAge = conditionAge;
     }
 
-    
+    public List<Equipe> getEquipes() {
+        return equipes;
+    }
+
+    public void setEquipes(List<Equipe> equipes) {
+        this.equipes = equipes;
+    }
     
 }

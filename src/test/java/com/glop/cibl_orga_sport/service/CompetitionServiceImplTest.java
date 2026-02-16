@@ -113,7 +113,7 @@ class CompetitionServiceImplTest {
         Periode periode = new Periode(Date.valueOf("2026-01-01"), Date.valueOf("2026-01-10"));
         Lieu lieu = new Lieu(null, "Ville", "1 rue test");
         ConditionAge conditionAge = new ConditionAge(18, 99);
-        Competition existingCompetition = new Competition("Championnats du monde de natation", null, periode, lieu, conditionAge, null, null, null);
+        Competition existingCompetition = new Competition("Championnats du monde de natation", null, periode, lieu, conditionAge, null, CompetitionStatusEnum.DRAFT, null);
         existingCompetition.setIdCompetition(1L);
 
         when(competitionRepository.findById(1L)).thenReturn(Optional.of(existingCompetition));
@@ -171,7 +171,7 @@ class CompetitionServiceImplTest {
     @Test
     void testDeleteCompetition() {
         Periode periode = new Periode(Date.valueOf("2026-01-01"), Date.valueOf("2026-01-10"));
-        Competition competition = new Competition("Championnats du monde de natation", null, periode, null, null, null, null, null);
+        Competition competition = new Competition("Championnats du monde de natation", null, periode, null, null, null, CompetitionStatusEnum.DRAFT, null);
         competition.setIdCompetition(1L);
 
         when(competitionRepository.findById(1L)).thenReturn(Optional.of(competition));

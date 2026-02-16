@@ -95,6 +95,7 @@ class EpreuveServiceImplTest {
 
         Epreuve existingEpreuve = new Epreuve("100m nage libre");
         existingEpreuve.setIdEpreuve(1L);
+        existingEpreuve.setStatut(CompetitionStatusEnum.DRAFT);
 
         when(epreuveRepository.findById(1L)).thenReturn(Optional.of(existingEpreuve));
         when(epreuveRepository.save(any(Epreuve.class))).thenReturn(existingEpreuve);
@@ -137,6 +138,7 @@ class EpreuveServiceImplTest {
     void testDeleteEpreuve() {
         Epreuve epreuve = new Epreuve("100m nage libre");
         epreuve.setIdEpreuve(1L);
+        epreuve.setStatut(CompetitionStatusEnum.DRAFT);
 
         when(epreuveRepository.findById(1L)).thenReturn(Optional.of(epreuve));
 

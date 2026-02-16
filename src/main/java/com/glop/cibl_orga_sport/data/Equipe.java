@@ -3,10 +3,13 @@ package com.glop.cibl_orga_sport.data;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Transient;
 
 @Entity
@@ -18,6 +21,10 @@ public class Equipe {
     private Long idEquipe;
 
     private String nomEquipe;
+
+    @ManyToOne
+    @JsonBackReference("competition-equipes")
+    private Competition competition;
 
     @Transient
     private List<Sportif> participants;
@@ -52,6 +59,14 @@ public class Equipe {
 
     public void setParticipants(List<Sportif> participants) {
         this.participants = participants;
+    }
+
+    public Competition getCompetition() {
+        return competition;
+    }
+
+    public void setCompetition(Competition competition) {
+        this.competition = competition;
     }
 
     

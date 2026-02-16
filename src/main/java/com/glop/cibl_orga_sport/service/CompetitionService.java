@@ -12,11 +12,15 @@ public interface CompetitionService {
 
     Competition createCompetition(String name, String description, CompetitionSportEnum sport, Date dateDebut, Date dateFin, 
                                  String pays, boolean estEnFrance, String adresse, String codePostal, String ville, 
-                                 CompetitionGenreEnum genre, int ageMin, int ageMax);
+                                 CompetitionGenreEnum genre, int ageMin, int ageMax, Long lieuId);
     Competition updateCompetition(Long id, String name, String description, CompetitionSportEnum sport, Date dateDebut, Date dateFin, 
                                  String pays, boolean estEnFrance, String adresse, String codePostal, String ville, 
-                                 CompetitionGenreEnum genre, int ageMin, int ageMax, CompetitionStatusEnum statut);
+                                 CompetitionGenreEnum genre, int ageMin, int ageMax, CompetitionStatusEnum statut, Long lieuId);
     boolean deleteCompetition(Long id);
     List<Competition> getAllCompetitions();
     Optional<Competition> getCompetition(Long id);
+    
+    Competition publishCompetition(Long id);
+    Competition startCompetition(Long id);
+    Competition finishCompetition(Long id);
 }

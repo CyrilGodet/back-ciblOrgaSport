@@ -24,4 +24,8 @@ public interface EpreuveService {
     Optional<Epreuve> getEpreuve(Long id);
 
     List<Epreuve> getEpreuvesByCompetitionId(Long competitionId);
+    
+    Epreuve publishEpreuve(Long id);
+    Epreuve startEpreuve(Long id);
+    Epreuve finishEpreuve(Long id);
 }

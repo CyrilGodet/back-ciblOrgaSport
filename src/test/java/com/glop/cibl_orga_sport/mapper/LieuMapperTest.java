@@ -26,7 +26,7 @@ class LieuMapperTest {
 
         assertNotNull(dto);
         assertEquals(1L, dto.getIdLieu());
-        assertEquals("Centre Aquatique Olympique Métropole du Grand Saint-Denis", dto.getNom());
+        assertEquals("Centre Aquatique Olympique Métropole du Grand Saint-Denis", dto.getNomLieu());
         assertEquals("Saint-Denis", dto.getVille());
         assertEquals("361-363, Av. du Président Wilson", dto.getAdresse());
     }

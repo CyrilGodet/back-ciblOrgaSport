@@ -27,6 +27,7 @@ public class CompetitionMapper {
         if (competition.getLieu() != null) {
             dto.setVille(competition.getLieu().getVille());
             dto.setAdresse(competition.getLieu().getAdresse());
+            dto.setLieu(LieuMapper.toDTO(competition.getLieu()));
         }
         
         if (competition.getConditionAge() != null) {

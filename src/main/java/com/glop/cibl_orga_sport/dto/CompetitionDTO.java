@@ -21,6 +21,7 @@ public class CompetitionDTO {
     private int ageMin;
     private int ageMax;
     private CompetitionStatusEnum statut;
+    private LieuDTO lieu;
 
     public CompetitionDTO() {}
 
@@ -160,5 +161,13 @@ public class CompetitionDTO {
 
     public void setStatut(CompetitionStatusEnum statut) {
         this.statut = statut;
+    }
+
+    public LieuDTO getLieu() {
+        return lieu;
+    }
+
+    public void setLieu(LieuDTO lieu) {
+        this.lieu = lieu;
     }
 }

@@ -98,4 +98,31 @@ public class EpreuveController {
             return ResponseEntity.status(409).body("{\"error\":\"" + e.getMessage() + "\"}");
         }
     }
+
+    @PatchMapping("/{id}/publish")
+    public ResponseEntity<EpreuveDTO> publishEpreuve(@PathVariable Long id) {
+        Epreuve published = epreuveService.publishEpreuve(id);
+        if (published != null) {
+            return ResponseEntity.ok(EpreuveMapper.toDTO(published));
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
+    @PatchMapping("/{id}/start")
+    public ResponseEntity<EpreuveDTO> startEpreuve(@PathVariable Long id) {
+        Epreuve started = epreuveService.startEpreuve(id);
+        if (started != null) {
+            return ResponseEntity.ok(EpreuveMapper.toDTO(started));
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
+    @PatchMapping("/{id}/finish")
+    public ResponseEntity<EpreuveDTO> finishEpreuve(@PathVariable Long id) {
+        Epreuve finished = epreuveService.finishEpreuve(id);
+        if (finished != null) {
+            return ResponseEntity.ok(EpreuveMapper.toDTO(finished));
+        }
+        return ResponseEntity.badRequest().build();
+    }
 }

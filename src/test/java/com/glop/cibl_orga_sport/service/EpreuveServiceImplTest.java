@@ -155,4 +155,88 @@ class EpreuveServiceImplTest {
 
         assertFalse(result);
     }
+
+    @Test
+    void testPublishEpreuve() {
+        Epreuve epreuve = new Epreuve("100m nage libre");
+        epreuve.setIdEpreuve(1L);
+        epreuve.setStatut(CompetitionStatusEnum.DRAFT);
+
+        when(epreuveRepository.findById(1L)).thenReturn(Optional.of(epreuve));
+        when(epreuveRepository.save(any(Epreuve.class))).thenReturn(epreuve);
+
+        Epreuve result = epreuveService.publishEpreuve(1L);
+
+        assertNotNull(result);
+        assertEquals(CompetitionStatusEnum.PUBLISH, result.getStatut());
+    }
+
+    @Test
+    void testPublishEpreuve_AlreadyPublished() {
+        Epreuve epreuve = new Epreuve("100m nage libre");
+        epreuve.setIdEpreuve(1L);
+        epreuve.setStatut(CompetitionStatusEnum.PUBLISH);
+
+        when(epreuveRepository.findById(1L)).thenReturn(Optional.of(epreuve));
+
+        Epreuve result = epreuveService.publishEpreuve(1L);
+
+        assertNull(result);
+    }
+
+    @Test
+    void testStartEpreuve() {
+        Epreuve epreuve = new Epreuve("100m nage libre");
+        epreuve.setIdEpreuve(1L);
+        epreuve.setStatut(CompetitionStatusEnum.PUBLISH);
+
+        when(epreuveRepository.findById(1L)).thenReturn(Optional.of(epreuve));
+        when(epreuveRepository.save(any(Epreuve.class))).thenReturn(epreuve);
+
+        Epreuve result = epreuveService.startEpreuve(1L);
+
+        assertNotNull(result);
+        assertEquals(CompetitionStatusEnum.IN_PROGRESS, result.getStatut());
+    }
+
+    @Test
+    void testStartEpreuve_NotPublished() {
+        Epreuve epreuve = new Epreuve("100m nage libre");
+        epreuve.setIdEpreuve(1L);
+        epreuve.setStatut(CompetitionStatusEnum.DRAFT);
+
+        when(epreuveRepository.findById(1L)).thenReturn(Optional.of(epreuve));
+
+        Epreuve result = epreuveService.startEpreuve(1L);
+
+        assertNull(result);
+    }
+
+    @Test
+    void testFinishEpreuve() {
+        Epreuve epreuve = new Epreuve("100m nage libre");
+        epreuve.setIdEpreuve(1L);
+        epreuve.setStatut(CompetitionStatusEnum.IN_PROGRESS);
+
+        when(epreuveRepository.findById(1L)).thenReturn(Optional.of(epreuve));
+        when(epreuveRepository.save(any(Epreuve.class))).thenReturn(epreuve);
+
+        Epreuve result = epreuveService.finishEpreuve(1L);
+
+        assertNotNull(result);
+        assertEquals(CompetitionStatusEnum.FINISHED, result.getStatut());
+    }
+
+    @Test
+    void testFinishEpreuve_NotInProgress() {
+        Epreuve epreuve = new Epreuve("100m nage libre");
+        epreuve.setIdEpreuve(1L);
+        epreuve.setStatut(CompetitionStatusEnum.PUBLISH);
+
+        when(epreuveRepository.findById(1L)).thenReturn(Optional.of(epreuve));
+
+        Epreuve result = epreuveService.finishEpreuve(1L);
+
+        assertNull(result);
+    }
 }

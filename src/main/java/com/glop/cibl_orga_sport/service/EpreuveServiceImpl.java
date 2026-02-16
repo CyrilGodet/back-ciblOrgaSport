@@ -127,4 +127,55 @@ public class EpreuveServiceImpl implements EpreuveService {
     public List<Epreuve> getEpreuvesByCompetitionId(Long competitionId) {
         return repository.findByCompetitionIdCompetition(competitionId);
     }
+
+    @Override
+    public Epreuve publishEpreuve(Long id) {
+        Optional<Epreuve> epreuveOpt = repository.findById(id);
+        if (epreuveOpt.isPresent()) {
+            Epreuve epreuve = epreuveOpt.get();
+            if (epreuve.getStatut() != CompetitionStatusEnum.DRAFT) {
+                System.out.println("Impossible de publier : l'épreuve n'est pas en mode DRAFT - ID: " + id);
+                return null;
+            }
+            epreuve.setStatut(CompetitionStatusEnum.PUBLISH);
+            System.out.println("Épreuve publiée : " + id);
+            return repository.save(epreuve);
+        }
+        System.out.println("Épreuve non trouvée : " + id);
+        return null;
+    }
+
+    @Override
+    public Epreuve startEpreuve(Long id) {
+        Optional<Epreuve> epreuveOpt = repository.findById(id);
+        if (epreuveOpt.isPresent()) {
+            Epreuve epreuve = epreuveOpt.get();
+            if (epreuve.getStatut() != CompetitionStatusEnum.PUBLISH) {
+                System.out.println("Impossible de démarrer : l'épreuve n'est pas publiée - ID: " + id);
+                return null;
+            }
+            epreuve.setStatut(CompetitionStatusEnum.IN_PROGRESS);
+            System.out.println("Épreuve démarrée : " + id);
+            return repository.save(epreuve);
+        }
+        System.out.println("Épreuve non trouvée : " + id);
+        return null;
+    }
+
+    @Override
+    public Epreuve finishEpreuve(Long id) {
+        Optional<Epreuve> epreuveOpt = repository.findById(id);
+        if (epreuveOpt.isPresent()) {
+            Epreuve epreuve = epreuveOpt.get();
+            if (epreuve.getStatut() != CompetitionStatusEnum.IN_PROGRESS) {
+                System.out.println("Impossible de terminer : l'épreuve n'est pas en cours - ID: " + id);
+                return null;
+            }
+            epreuve.setStatut(CompetitionStatusEnum.FINISHED);
+            System.out.println("Épreuve terminée : " + id);
+            return repository.save(epreuve);
+        }
+        System.out.println("Épreuve non trouvée : " + id);
+        return null;
+    }
 }

@@ -65,7 +65,8 @@ class CompetitionServiceImplTest {
                 "Ville",
                 CompetitionGenreEnum.HOMME,
                 18,
-                99
+                99,
+                null
         );
 
         assertNotNull(result);
@@ -134,7 +135,8 @@ class CompetitionServiceImplTest {
                 CompetitionGenreEnum.MIXTE,
                 18,
                 99,
-                CompetitionStatusEnum.IN_PROGRESS
+                CompetitionStatusEnum.IN_PROGRESS,
+                null
         );
 
         assertNotNull(result);
@@ -162,7 +164,8 @@ class CompetitionServiceImplTest {
                 CompetitionGenreEnum.HOMME,
                 18,
                 99,
-                CompetitionStatusEnum.DRAFT
+                CompetitionStatusEnum.DRAFT,
+                null
         );
 
         assertNull(result);
@@ -188,5 +191,89 @@ class CompetitionServiceImplTest {
         boolean result = competitionService.deleteCompetition(999L);
 
         assertFalse(result);
+    }
+
+    @Test
+    void testPublishCompetition() {
+        Periode periode = new Periode(Date.valueOf("2026-01-01"), Date.valueOf("2026-01-10"));
+        Competition competition = new Competition("Championnats du monde de natation", null, periode, null, null, null, CompetitionStatusEnum.DRAFT, null);
+        competition.setIdCompetition(1L);
+
+        when(competitionRepository.findById(1L)).thenReturn(Optional.of(competition));
+        when(competitionRepository.save(any(Competition.class))).thenReturn(competition);
+
+        Competition result = competitionService.publishCompetition(1L);
+
+        assertNotNull(result);
+        assertEquals(CompetitionStatusEnum.PUBLISH, result.getStatut());
+    }
+
+    @Test
+    void testPublishCompetition_AlreadyPublished() {
+        Periode periode = new Periode(Date.valueOf("2026-01-01"), Date.valueOf("2026-01-10"));
+        Competition competition = new Competition("Championnats du monde de natation", null, periode, null, null, null, CompetitionStatusEnum.PUBLISH, null);
+        competition.setIdCompetition(1L);
+
+        when(competitionRepository.findById(1L)).thenReturn(Optional.of(competition));
+
+        Competition result = competitionService.publishCompetition(1L);
+
+        assertNull(result);
+    }
+
+    @Test
+    void testStartCompetition() {
+        Periode periode = new Periode(Date.valueOf("2026-01-01"), Date.valueOf("2026-01-10"));
+        Competition competition = new Competition("Championnats du monde de natation", null, periode, null, null, null, CompetitionStatusEnum.PUBLISH, null);
+        competition.setIdCompetition(1L);
+
+        when(competitionRepository.findById(1L)).thenReturn(Optional.of(competition));
+        when(competitionRepository.save(any(Competition.class))).thenReturn(competition);
+
+        Competition result = competitionService.startCompetition(1L);
+
+        assertNotNull(result);
+        assertEquals(CompetitionStatusEnum.IN_PROGRESS, result.getStatut());
+    }
+
+    @Test
+    void testStartCompetition_NotPublished() {
+        Periode periode = new Periode(Date.valueOf("2026-01-01"), Date.valueOf("2026-01-10"));
+        Competition competition = new Competition("Championnats du monde de natation", null, periode, null, null, null, CompetitionStatusEnum.DRAFT, null);
+        competition.setIdCompetition(1L);
+
+        when(competitionRepository.findById(1L)).thenReturn(Optional.of(competition));
+
+        Competition result = competitionService.startCompetition(1L);
+
+        assertNull(result);
+    }
+
+    @Test
+    void testFinishCompetition() {
+        Periode periode = new Periode(Date.valueOf("2026-01-01"), Date.valueOf("2026-01-10"));
+        Competition competition = new Competition("Championnats du monde de natation", null, periode, null, null, null, CompetitionStatusEnum.IN_PROGRESS, null);
+        competition.setIdCompetition(1L);
+
+        when(competitionRepository.findById(1L)).thenReturn(Optional.of(competition));
+        when(competitionRepository.save(any(Competition.class))).thenReturn(competition);
+
+        Competition result = competitionService.finishCompetition(1L);
+
+        assertNotNull(result);
+        assertEquals(CompetitionStatusEnum.FINISHED, result.getStatut());
+    }
+
+    @Test
+    void testFinishCompetition_NotInProgress() {
+        Periode periode = new Periode(Date.valueOf("2026-01-01"), Date.valueOf("2026-01-10"));
+        Competition competition = new Competition("Championnats du monde de natation", null, periode, null, null, null, CompetitionStatusEnum.PUBLISH, null);
+        competition.setIdCompetition(1L);
+
+        when(competitionRepository.findById(1L)).thenReturn(Optional.of(competition));
+
+        Competition result = competitionService.finishCompetition(1L);
+
+        assertNull(result);
     }
 }

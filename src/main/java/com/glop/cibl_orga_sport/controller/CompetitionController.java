@@ -65,6 +65,7 @@ public class CompetitionController {
 
     @PostMapping
     public ResponseEntity<CompetitionDTO> createCompetition(@RequestBody CompetitionDTO competitionDTO) {
+        Long lieuId = competitionDTO.getLieu() != null ? competitionDTO.getLieu().getIdLieu() : null;
         Competition competition = service.createCompetition(
                 competitionDTO.getNameCompetition(),
                 competitionDTO.getDescription(),
@@ -78,13 +79,15 @@ public class CompetitionController {
                 competitionDTO.getVille(),
                 competitionDTO.getGenre(),
                 competitionDTO.getAgeMin(),
-                competitionDTO.getAgeMax()
+                competitionDTO.getAgeMax(),
+                lieuId
         );
         return new ResponseEntity<>(CompetitionMapper.toDTO(competition), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<CompetitionDTO> updateCompetition(@PathVariable Long id, @RequestBody CompetitionDTO competitionDTO) {
+        Long lieuId = competitionDTO.getLieu() != null ? competitionDTO.getLieu().getIdLieu() : null;
         Competition updated = service.updateCompetition(
                 id,
                 competitionDTO.getNameCompetition(),
@@ -100,7 +103,8 @@ public class CompetitionController {
                 competitionDTO.getGenre(),
                 competitionDTO.getAgeMin(),
                 competitionDTO.getAgeMax(),
-                competitionDTO.getStatut()
+                competitionDTO.getStatut(),
+                lieuId
         );
         if (updated != null) {
             return ResponseEntity.ok(CompetitionMapper.toDTO(updated));
@@ -119,5 +123,32 @@ public class CompetitionController {
         } catch (IllegalStateException e) {
             return ResponseEntity.status(409).body("{\"error\":\"" + e.getMessage() + "\"}");
         }
+    }
+
+    @PatchMapping("/{id}/publish")
+    public ResponseEntity<CompetitionDTO> publishCompetition(@PathVariable Long id) {
+        Competition published = service.publishCompetition(id);
+        if (published != null) {
+            return ResponseEntity.ok(CompetitionMapper.toDTO(published));
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
+    @PatchMapping("/{id}/start")
+    public ResponseEntity<CompetitionDTO> startCompetition(@PathVariable Long id) {
+        Competition started = service.startCompetition(id);
+        if (started != null) {
+            return ResponseEntity.ok(CompetitionMapper.toDTO(started));
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
+    @PatchMapping("/{id}/finish")
+    public ResponseEntity<CompetitionDTO> finishCompetition(@PathVariable Long id) {
+        Competition finished = service.finishCompetition(id);
+        if (finished != null) {
+            return ResponseEntity.ok(CompetitionMapper.toDTO(finished));
+        }
+        return ResponseEntity.badRequest().build();
     }
 }

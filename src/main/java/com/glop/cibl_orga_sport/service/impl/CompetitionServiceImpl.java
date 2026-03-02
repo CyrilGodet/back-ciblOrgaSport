@@ -1,4 +1,4 @@
-package com.glop.cibl_orga_sport.service;
+package com.glop.cibl_orga_sport.service.impl;
 
 import java.sql.Date;
 import java.util.ArrayList;

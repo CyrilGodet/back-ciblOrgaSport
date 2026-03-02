@@ -1,4 +1,4 @@
-package com.glop.cibl_orga_sport.service;
+package com.glop.cibl_orga_sport.service.impl;
 
 import com.glop.cibl_orga_sport.data.Incident;
 import com.glop.cibl_orga_sport.data.Competition;
@@ -9,6 +9,8 @@ import com.glop.cibl_orga_sport.mapper.IncidentMapper;
 import com.glop.cibl_orga_sport.repository.IncidentRepository;
 import com.glop.cibl_orga_sport.repository.CompetitionRepository;
 import com.glop.cibl_orga_sport.repository.LieuRepository;
+import com.glop.cibl_orga_sport.service.IncidentService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

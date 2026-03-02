@@ -1,6 +1,7 @@
 package com.glop.cibl_orga_sport.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,9 +38,9 @@ public class LieuController {
     }
 
     @PostMapping
-    public LieuDTO createLieu(@RequestBody LieuDTO lieuDTO) {
+    public ResponseEntity<LieuDTO> createLieu(@RequestBody LieuDTO lieuDTO) {
         Lieu lieu = lieuService.createLieu(lieuDTO.getNomLieu(), lieuDTO.getVille(), lieuDTO.getAdresse());
-        return LieuMapper.toDTO(lieu);
+        return ResponseEntity.status(HttpStatus.CREATED).body(LieuMapper.toDTO(lieu));
     }
 
     @PutMapping("/{id}")

@@ -49,7 +49,7 @@ public class EquipeController {
                 equipeDTO.getNomEquipe(),
                 equipeDTO.getCompetitionId()
         );
-        return new ResponseEntity<>(EquipeMapper.toDTO(created), HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(EquipeMapper.toDTO(created));
     }
 
     @PutMapping("/{id}")

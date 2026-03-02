@@ -1,8 +1,9 @@
-package com.glop.cibl_orga_sport.service;
+package com.glop.cibl_orga_sport.service.impl;
 
 import com.glop.cibl_orga_sport.data.Equipe;
 import com.glop.cibl_orga_sport.data.Competition;
 import com.glop.cibl_orga_sport.repository.EquipeRepository;
+import com.glop.cibl_orga_sport.service.EquipeService;
 import com.glop.cibl_orga_sport.repository.CompetitionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

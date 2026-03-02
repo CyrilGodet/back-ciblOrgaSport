@@ -1,4 +1,4 @@
-package com.glop.cibl_orga_sport.service;
+package com.glop.cibl_orga_sport.service.impl;
 
 import com.glop.cibl_orga_sport.data.AffectationVolontaire;
 import com.glop.cibl_orga_sport.data.Volontaire;
@@ -8,6 +8,7 @@ import com.glop.cibl_orga_sport.dto.AffectationVolontaireDTO;
 import com.glop.cibl_orga_sport.mapper.AffectationVolontaireMapper;
 import com.glop.cibl_orga_sport.repository.AffectationVolontaireRepository;
 import com.glop.cibl_orga_sport.repository.VolontaireRepository;
+import com.glop.cibl_orga_sport.service.AffectationVolontaireService;
 import com.glop.cibl_orga_sport.repository.EpreuveRepository;
 import com.glop.cibl_orga_sport.repository.LieuRepository;
 import org.springframework.beans.factory.annotation.Autowired;

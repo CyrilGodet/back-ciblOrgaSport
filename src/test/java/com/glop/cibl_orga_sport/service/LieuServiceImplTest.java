@@ -2,6 +2,8 @@ package com.glop.cibl_orga_sport.service;
 
 import com.glop.cibl_orga_sport.data.Lieu;
 import com.glop.cibl_orga_sport.repository.LieuRepository;
+import com.glop.cibl_orga_sport.service.impl.LieuServiceImpl;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

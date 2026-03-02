@@ -1,4 +1,4 @@
-package com.glop.cibl_orga_sport.service;
+package com.glop.cibl_orga_sport.service.impl;
 
 import java.sql.Date;
 import java.util.List;
@@ -16,6 +16,7 @@ import com.glop.cibl_orga_sport.data.enumType.CompetitionGenreEnum;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionSportEnum;
 import com.glop.cibl_orga_sport.repository.CompetitionRepository;
 import com.glop.cibl_orga_sport.repository.LieuRepository;
+import com.glop.cibl_orga_sport.service.CompetitionService;
 
 @Service
 public class CompetitionServiceImpl implements CompetitionService {

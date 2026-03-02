@@ -5,6 +5,8 @@ import com.glop.cibl_orga_sport.data.Equipe;
 import com.glop.cibl_orga_sport.data.Periode;
 import com.glop.cibl_orga_sport.repository.CompetitionRepository;
 import com.glop.cibl_orga_sport.repository.EquipeRepository;
+import com.glop.cibl_orga_sport.service.impl.EquipeServiceImpl;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

@@ -8,6 +8,8 @@ import com.glop.cibl_orga_sport.data.enumType.CompetitionStatusEnum;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionGenreEnum;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionSportEnum;
 import com.glop.cibl_orga_sport.repository.CompetitionRepository;
+import com.glop.cibl_orga_sport.service.impl.CompetitionServiceImpl;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

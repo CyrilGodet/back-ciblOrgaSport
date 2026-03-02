@@ -1,6 +1,7 @@
 package com.glop.cibl_orga_sport.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,7 +43,7 @@ public class PhaseController {
     }
 
     @PostMapping
-    public PhaseDTO createPhase(@RequestBody PhaseDTO phaseDTO) {
+    public ResponseEntity<PhaseDTO> createPhase(@RequestBody PhaseDTO phaseDTO) {
         Epreuve epreuve = null;
         if (phaseDTO.getEpreuve() != null && phaseDTO.getEpreuve().getIdEpreuve() != null) {
             Optional<Epreuve> epreuveOpt = epreuveService.getEpreuve(phaseDTO.getEpreuve().getIdEpreuve());
@@ -53,7 +54,8 @@ public class PhaseController {
 
         EtapeEpreuve created = phaseService.createPhase(epreuve, phaseDTO.getDateDebut(), phaseDTO.getDateFin(), 
                                                        phaseDTO.getEtapeEpreuve(), null);
-        return PhaseMapper.toDTO(created);
+        return ResponseEntity.status(HttpStatus.CREATED).body(PhaseMapper.toDTO(created));
+        
     }
 
     @PutMapping("/{id}")

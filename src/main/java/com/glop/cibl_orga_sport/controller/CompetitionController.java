@@ -5,7 +5,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -77,7 +76,7 @@ public class CompetitionController {
                 competitionDTO.getAgeMax(),
                 lieuId
         );
-        return new ResponseEntity<>(CompetitionMapper.toDTO(competition), HttpStatus.CREATED);
+        return ResponseEntity.status(201).body(CompetitionMapper.toDTO(competition));
     }
 
     @PutMapping("/{id}")

@@ -1,9 +1,11 @@
-package com.glop.cibl_orga_sport.service;
+package com.glop.cibl_orga_sport.service.impl;
 
 import com.glop.cibl_orga_sport.data.Volontaire;
 import com.glop.cibl_orga_sport.dto.VolontaireDTO;
 import com.glop.cibl_orga_sport.mapper.VolontaireMapper;
 import com.glop.cibl_orga_sport.repository.VolontaireRepository;
+import com.glop.cibl_orga_sport.service.VolontaireService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -41,9 +41,7 @@ public class Volontaire extends Personne {
         this.email = email;
         this.affectations = new ArrayList<>();
     }
-    
-    // Getters and Setters
-    
+        
     public Long getIdVolontaire() {
         return idVolontaire;
     }

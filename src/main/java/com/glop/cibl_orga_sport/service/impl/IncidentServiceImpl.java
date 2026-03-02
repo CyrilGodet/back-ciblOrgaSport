@@ -50,7 +50,7 @@ public class IncidentServiceImpl implements IncidentService {
     
     @Override
     public List<IncidentDTO> getIncidentsNonResolus() {
-        return incidentRepository.findByResoluFalse().stream()
+        return incidentRepository.findByEstResoluFalse().stream()
                 .map(IncidentMapper::toDTO)
                 .collect(Collectors.toList());
     }

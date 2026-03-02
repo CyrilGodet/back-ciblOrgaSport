@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface IncidentRepository extends JpaRepository<Incident, Long> {
     List<Incident> findByCompetition(Competition competition);
-    List<Incident> findByResoluFalse();
-    List<Incident> findByCompetitionAndResoluFalse(Competition competition);
+    List<Incident> findByEstResoluFalse();
+    List<Incident> findByCompetitionAndEstResoluFalse(Competition competition);
 }

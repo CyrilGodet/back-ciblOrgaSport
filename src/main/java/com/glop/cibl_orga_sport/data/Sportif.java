@@ -25,13 +25,8 @@ public class Sportif extends Utilisateur {
     public Sportif(String nom, String prenom, String email, int age, Lieu lieu) {
         super(nom, prenom, email, age, lieu);
     }
-
     public Long getIdSportif() {
         return getIdUtilisateur();
-    }
-
-    public void setIdSportif(Long idSportif) {
-        setIdUtilisateur(idSportif);
     }
 
     public List<ParticipantEquipe> getEquipes() {

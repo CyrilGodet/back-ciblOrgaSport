@@ -16,9 +16,7 @@ public class IncidentDTO {
     private boolean resolu;
     
     public IncidentDTO() {}
-    
-    // Getters and Setters
-    
+        
     public Long getIdIncident() {
         return idIncident;
     }

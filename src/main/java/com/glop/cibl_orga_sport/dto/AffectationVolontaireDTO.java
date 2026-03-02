@@ -21,9 +21,7 @@ public class AffectationVolontaireDTO {
     private String instructions;
     
     public AffectationVolontaireDTO() {}
-    
-    // Getters and Setters
-    
+        
     public Long getIdAffectation() {
         return idAffectation;
     }

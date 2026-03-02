@@ -15,7 +15,6 @@ public interface IncidentService {
     IncidentDTO resoudreIncident(Long id);
     void deleteIncident(Long id);
     
-    // Méthodes pour récupérer les incidents selon le type de personne
     List<IncidentDTO> getIncidentsForVolontaire(Long competitionId);
     List<IncidentDTO> getIncidentsForSportif(Long competitionId);
 }

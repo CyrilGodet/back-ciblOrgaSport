@@ -16,9 +16,7 @@ public class VolontaireDTO {
         this.prenom = prenom;
         this.email = email;
     }
-    
-    // Getters and Setters
-    
+        
     public Long getIdVolontaire() {
         return idVolontaire;
     }

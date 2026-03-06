@@ -28,9 +28,14 @@ public class DatabaseConfig {
             String password = dbUri.getUserInfo().split(":")[1];
             String host = dbUri.getHost();
             int port = dbUri.getPort();
-            String database = dbUri.getPath().substring(1); // Remove leading '/'
+            if (port == -1) {
+                port = 5432;
+            }
+            String database = dbUri.getPath().substring(1); 
             
             String jdbcUrl = String.format("jdbc:postgresql://%s:%d/%s", host, port, database);
+            
+            System.out.println("Connecting to: " + jdbcUrl); 
             
             return DataSourceBuilder
                     .create()

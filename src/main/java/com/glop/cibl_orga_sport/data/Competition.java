@@ -48,6 +48,10 @@ public class Competition {
     private List<CompetitionPhaseType> phases = new ArrayList<>();
 
 
+    @ElementCollection
+    @Enumerated(EnumType.STRING)
+    private List<CompetitionPhaseType> phases = new ArrayList<>();
+
     @Embedded
     private Periode periode;
 
@@ -181,6 +185,14 @@ public class Competition {
 
     public void setConditionAge(ConditionAge conditionAge) {
         this.conditionAge = conditionAge;
+    }
+
+    public List<CompetitionPhaseType> getPhases() {
+        return phases;
+    }
+
+    public void setPhases(List<CompetitionPhaseType> phases) {
+        this.phases = phases;
     }
 
     public List<CompetitionPhaseType> getPhases() {

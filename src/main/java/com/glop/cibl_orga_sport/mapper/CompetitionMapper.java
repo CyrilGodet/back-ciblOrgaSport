@@ -56,6 +56,10 @@ public class CompetitionMapper {
                     .collect(Collectors.toList()));
         }
 
+        if (competition.getPhases() != null) {
+            dto.setPhases(new ArrayList<>(competition.getPhases()));
+        }
+
         return dto;
     }
 
@@ -96,6 +100,10 @@ public class CompetitionMapper {
             competition.setPhases(dto.getPhases().stream()
                     .map(phaseDto -> CompetitionPhaseType.valueOf(phaseDto.getValue()))
                     .collect(Collectors.toList()));
+        }
+
+        if (dto.getPhases() != null) {
+            competition.setPhases(new ArrayList<>(dto.getPhases()));
         }
 
         return competition;

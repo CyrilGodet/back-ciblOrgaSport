@@ -4,6 +4,7 @@ import com.glop.cibl_orga_sport.data.Competition;
 import com.glop.cibl_orga_sport.data.Periode;
 import com.glop.cibl_orga_sport.data.Lieu;
 import com.glop.cibl_orga_sport.data.ConditionAge;
+import com.glop.cibl_orga_sport.data.enumType.CompetitionPhaseType;
 import com.glop.cibl_orga_sport.dto.CompetitionDTO;
 import java.util.stream.Collectors;
 import java.util.ArrayList;
@@ -48,6 +49,10 @@ public class CompetitionMapper {
                     .collect(Collectors.toList()));
         }
 
+        if (competition.getPhases() != null) {
+            dto.setPhases(new ArrayList<>(competition.getPhases()));
+        }
+
         return dto;
     }
 
@@ -89,6 +94,10 @@ public class CompetitionMapper {
                     .map(EquipeMapper::toEntity)
                     .collect(Collectors.toList()));
             competition.getEquipes().forEach(e -> e.setCompetition(competition));
+        }
+
+        if (dto.getPhases() != null) {
+            competition.setPhases(new ArrayList<>(dto.getPhases()));
         }
 
         return competition;

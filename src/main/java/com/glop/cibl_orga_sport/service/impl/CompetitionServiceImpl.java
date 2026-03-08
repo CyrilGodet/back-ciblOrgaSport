@@ -1,6 +1,7 @@
 package com.glop.cibl_orga_sport.service.impl;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,6 +55,10 @@ public class CompetitionServiceImpl implements CompetitionService {
                 eq.setCompetition(c);
                 c.getEquipes().add(eq);
             });
+        }
+
+        if (dto.getPhases() != null) {
+            c.setPhases(new ArrayList<>(dto.getPhases()));
         }
 
         System.out.println("Création compétition : " + dto.getNameCompetition());
@@ -115,6 +120,11 @@ public class CompetitionServiceImpl implements CompetitionService {
                 eq.setCompetition(c);
                 c.getEquipes().add(eq);
             });
+        }
+
+        if (dto.getPhases() != null) {
+            c.getPhases().clear();
+            c.getPhases().addAll(dto.getPhases());
         }
 
         System.out.println("Modification compétition : " + id);

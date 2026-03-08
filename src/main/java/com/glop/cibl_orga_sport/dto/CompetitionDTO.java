@@ -4,6 +4,7 @@ import java.sql.Date;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionStatusEnum;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionGenreEnum;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionSportEnum;
+import com.glop.cibl_orga_sport.data.enumType.CompetitionPhaseType;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -21,6 +22,7 @@ public class CompetitionDTO {
     private LieuDTO lieu;
     private List<EpreuveDTO> epreuves = new ArrayList<>();
     private List<EquipeDTO> equipes = new ArrayList<>();
+    private List<CompetitionPhaseType> phases = new ArrayList<>();
 
     public CompetitionDTO() {
     }
@@ -41,11 +43,13 @@ public class CompetitionDTO {
         this.lieu = lieu;
         this.epreuves = new ArrayList<>();
         this.equipes = new ArrayList<>();
+        this.phases = new ArrayList<>();
     }
 
     public CompetitionDTO(Long idCompetition, String nameCompetition, String description, CompetitionSportEnum sport,
             Date dateDebut, Date dateFin, CompetitionGenreEnum genre, int ageMin, int ageMax,
-            CompetitionStatusEnum statut, LieuDTO lieu, List<EpreuveDTO> epreuves, List<EquipeDTO> equipes) {
+            CompetitionStatusEnum statut, LieuDTO lieu, List<EpreuveDTO> epreuves, List<EquipeDTO> equipes,
+            List<CompetitionPhaseType> phases) {
         this.idCompetition = idCompetition;
         this.nameCompetition = nameCompetition;
         this.description = description;
@@ -59,6 +63,7 @@ public class CompetitionDTO {
         this.lieu = lieu;
         this.epreuves = epreuves != null ? epreuves : new ArrayList<>();
         this.equipes = equipes != null ? equipes : new ArrayList<>();
+        this.phases = phases != null ? phases : new ArrayList<>();
     }
 
     public Long getIdCompetition() {
@@ -163,5 +168,13 @@ public class CompetitionDTO {
 
     public void setEquipes(List<EquipeDTO> equipes) {
         this.equipes = equipes;
+    }
+
+    public List<CompetitionPhaseType> getPhases() {
+        return phases;
+    }
+
+    public void setPhases(List<CompetitionPhaseType> phases) {
+        this.phases = phases;
     }
 }

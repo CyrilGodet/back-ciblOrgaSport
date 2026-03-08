@@ -7,10 +7,14 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionStatusEnum;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionGenreEnum;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionSportEnum;
+import com.glop.cibl_orga_sport.data.enumType.CompetitionPhaseType;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -38,6 +42,10 @@ public class Competition {
     @OneToMany(mappedBy = "competition", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference("competition-equipes")
     private List<Equipe> equipes;
+
+    @ElementCollection
+    @Enumerated(EnumType.STRING)
+    private List<CompetitionPhaseType> phases = new ArrayList<>();
 
     @Embedded
     private Periode periode;
@@ -173,6 +181,14 @@ public class Competition {
 
     public void setEquipes(List<Equipe> equipes) {
         this.equipes = equipes;
+    }
+
+    public List<CompetitionPhaseType> getPhases() {
+        return phases;
+    }
+
+    public void setPhases(List<CompetitionPhaseType> phases) {
+        this.phases = phases;
     }
 
 }

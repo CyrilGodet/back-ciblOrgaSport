@@ -1,50 +1,112 @@
 -- ============================
+-- RESET COMPLET
+-- ============================
+
+-- 0. Supprimer toutes les participations (lié à équipes & épreuves)
+DELETE FROM participation;
+
+-- 1. Supprimer toutes les liaisons équipe ↔ sportif
+DELETE FROM equipe_sportif;
+
+-- 2. Supprimer les sportifs
+DELETE FROM sportif;
+
+-- 3. Supprimer les équipes
+DELETE FROM equipe;
+
+-- Réinitialiser les séquences
+ALTER SEQUENCE equipe_id_equipe_seq RESTART WITH 1;
+ALTER SEQUENCE sportif_id_sportif_seq RESTART WITH 1;
+ALTER SEQUENCE participation_id_participation_seq RESTART WITH 1;
+
+
+-- ============================
 -- Création des équipes
 -- ============================
 
-INSERT INTO equipe (nom_equipe) VALUES ('Team Alpha');
-INSERT INTO equipe (nom_equipe) VALUES ('Team Beta');
-INSERT INTO equipe (nom_equipe) VALUES ('Team Gamma');
+INSERT INTO equipe (nom_equipe) VALUES 
+('Team 1'), ('Team 2'), ('Team 3'), ('Team 4'), ('Team 5'),
+('Team 6'), ('Team 7'), ('Team 8'), ('Team 9'), ('Team 10');
 
 
 -- ============================
 -- Création des sportifs
 -- ============================
 
--- Team Alpha (2 sportifs)
-INSERT INTO sportif (nom, prenom) VALUES ('Lefebvre', 'Thomas');
-INSERT INTO sportif (nom, prenom) VALUES ('Martin', 'Julie');
+-- 5 premières équipes : 1 sportif chacune
+INSERT INTO sportif (nom, prenom) VALUES
+('Nom1', 'Prénom1'),
+('Nom2', 'Prénom2'),
+('Nom3', 'Prénom3'),
+('Nom4', 'Prénom4'),
+('Nom5', 'Prénom5');
+
+-- 5 suivantes : 2 sportifs chacune (10 sportifs)
+INSERT INTO sportif (nom, prenom) VALUES
+('Nom6', 'Prénom6'),
+('Nom7', 'Prénom7'),
+('Nom8', 'Prénom8'),
+('Nom9', 'Prénom9'),
+('Nom10', 'Prénom10'),
+('Nom11', 'Prénom11'),
+('Nom12', 'Prénom12'),
+('Nom13', 'Prénom13'),
+('Nom14', 'Prénom14'),
+('Nom15', 'Prénom15');
+
+
+-- ============================
+-- Liaisons équipes ↔ sportifs
+-- ============================
+
+-- 5 premières équipes (1 sportif chacune)
+INSERT INTO equipe_sportif (equipe_id, sportif_id)
+SELECT e.id_equipe, s.id_sportif
+FROM equipe e, sportif s
+WHERE e.id_equipe = 1 AND s.id_sportif = 1;
 
 INSERT INTO equipe_sportif (equipe_id, sportif_id)
 SELECT e.id_equipe, s.id_sportif
 FROM equipe e, sportif s
-WHERE e.nom_equipe = 'Team Alpha' AND s.nom = 'Lefebvre' AND s.prenom = 'Thomas';
+WHERE e.id_equipe = 2 AND s.id_sportif = 2;
 
 INSERT INTO equipe_sportif (equipe_id, sportif_id)
 SELECT e.id_equipe, s.id_sportif
 FROM equipe e, sportif s
-WHERE e.nom_equipe = 'Team Alpha' AND s.nom = 'Martin' AND s.prenom = 'Julie';
-
-
--- Team Beta (2 sportifs)
-INSERT INTO sportif (nom, prenom) VALUES ('Dubois', 'Sophie');
-INSERT INTO sportif (nom, prenom) VALUES ('Petit', 'Lucas');
+WHERE e.id_equipe = 3 AND s.id_sportif = 3;
 
 INSERT INTO equipe_sportif (equipe_id, sportif_id)
 SELECT e.id_equipe, s.id_sportif
 FROM equipe e, sportif s
-WHERE e.nom_equipe = 'Team Beta' AND s.nom = 'Dubois' AND s.prenom = 'Sophie';
+WHERE e.id_equipe = 4 AND s.id_sportif = 4;
 
 INSERT INTO equipe_sportif (equipe_id, sportif_id)
 SELECT e.id_equipe, s.id_sportif
 FROM equipe e, sportif s
-WHERE e.nom_equipe = 'Team Beta' AND s.nom = 'Petit' AND s.prenom = 'Lucas';
+WHERE e.id_equipe = 5 AND s.id_sportif = 5;
 
-
--- Team Gamma (1 sportif)
-INSERT INTO sportif (nom, prenom) VALUES ('Moreau', 'Antoine');
+-- 5 suivantes (2 sportifs chacune)
+INSERT INTO equipe_sportif (equipe_id, sportif_id)
+SELECT e.id_equipe, s.id_sportif
+FROM equipe e, sportif s
+WHERE e.id_equipe = 6 AND s.id_sportif IN (6,7);
 
 INSERT INTO equipe_sportif (equipe_id, sportif_id)
 SELECT e.id_equipe, s.id_sportif
 FROM equipe e, sportif s
-WHERE e.nom_equipe = 'Team Gamma' AND s.nom = 'Moreau' AND s.prenom = 'Antoine';
+WHERE e.id_equipe = 7 AND s.id_sportif IN (8,9);
+
+INSERT INTO equipe_sportif (equipe_id, sportif_id)
+SELECT e.id_equipe, s.id_sportif
+FROM equipe e, sportif s
+WHERE e.id_equipe = 8 AND s.id_sportif IN (10,11);
+
+INSERT INTO equipe_sportif (equipe_id, sportif_id)
+SELECT e.id_equipe, s.id_sportif
+FROM equipe e, sportif s
+WHERE e.id_equipe = 9 AND s.id_sportif IN (12,13);
+
+INSERT INTO equipe_sportif (equipe_id, sportif_id)
+SELECT e.id_equipe, s.id_sportif
+FROM equipe e, sportif s
+WHERE e.id_equipe = 10 AND s.id_sportif IN (14,15);

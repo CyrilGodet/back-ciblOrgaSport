@@ -209,21 +209,21 @@ public class CompetitionServiceImpl implements CompetitionService {
             Competition competition = c.get();
 
             if (competition.getStatut() != CompetitionStatusEnum.DRAFT) {
-                System.out.println("Impossible de supprimer une compétition publiée : " + id);
+                logger.warn(
+                        "Tentative de suppression d'une compétition non-DRAFT (ID: {}). Passage en statut CANCELLED.",
+                        id);
                 competition.setStatut(CompetitionStatusEnum.CANCELLED);
                 repository.save(competition);
                 return false;
             }
 
-            if (competition.getEpreuves() != null && !competition.getEpreuves().isEmpty()) {
-                throw new IllegalStateException("Impossible de supprimer cette compétition car elle est liée à " +
-                        competition.getEpreuves().size() + " épreuve(s) existante(s).");
-            }
-            repository.deleteById(id);
-            System.out.println("Compétition supprimée : " + id);
+            repository.delete(competition);
+            logger.info(
+                    "Compétition supprimée avec succès (ID: {}). Toutes les épreuves et participations liées ont été supprimées.",
+                    id);
             return true;
         }
-        System.out.println("Compétition non trouvée : " + id);
+        logger.error("Échec de la suppression: Compétition non trouvée (ID: {})", id);
         return false;
     }
 

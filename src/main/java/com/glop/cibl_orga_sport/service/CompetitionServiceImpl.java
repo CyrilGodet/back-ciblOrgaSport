@@ -16,17 +16,32 @@ import com.glop.cibl_orga_sport.data.enumType.CompetitionStatusEnum;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionGenreEnum;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionSportEnum;
 import com.glop.cibl_orga_sport.repository.CompetitionRepository;
+import com.glop.cibl_orga_sport.repository.EquipeRepository;
 import com.glop.cibl_orga_sport.repository.LieuRepository;
+import com.glop.cibl_orga_sport.repository.ParticipationRepository;
 import com.glop.cibl_orga_sport.dto.CompetitionDTO;
+import com.glop.cibl_orga_sport.data.Equipe;
+import com.glop.cibl_orga_sport.data.Participation;
+import com.glop.cibl_orga_sport.data.enumType.ParticipationStatusEnum;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class CompetitionServiceImpl implements CompetitionService {
+
+    private static final Logger logger = LoggerFactory.getLogger(CompetitionServiceImpl.class);
 
     @Autowired
     private CompetitionRepository repository;
 
     @Autowired
     private LieuRepository lieuRepository;
+
+    @Autowired
+    private EquipeRepository equipeRepository;
+
+    @Autowired
+    private ParticipationRepository participationRepository;
 
     @Override
     public Competition createCompetition(CompetitionDTO dto) {
@@ -45,6 +60,25 @@ public class CompetitionServiceImpl implements CompetitionService {
             dto.getEpreuves().forEach(eDto -> {
                 com.glop.cibl_orga_sport.data.Epreuve e = com.glop.cibl_orga_sport.mapper.EpreuveMapper.toEntity(eDto);
                 c.addEpreuve(e);
+
+                // Process participations
+                if (eDto.getParticipations() != null) {
+                    eDto.getParticipations().forEach(pDto -> {
+                        if (pDto.getEquipe() != null && pDto.getEquipe().getIdEquipe() != null) {
+                            Optional<Equipe> equipeOpt = equipeRepository.findById(pDto.getEquipe().getIdEquipe());
+                            if (equipeOpt.isPresent()) {
+                                Participation p = new Participation();
+                                p.setEpreuve(e);
+                                p.setEquipe(equipeOpt.get());
+                                p.setStatut(
+                                        pDto.getStatut() != null ? pDto.getStatut() : ParticipationStatusEnum.INSCRIT);
+                                e.getParticipations().add(p);
+                            } else {
+                                logger.error("Équipe non trouvée avec l'ID: {}", pDto.getEquipe().getIdEquipe());
+                            }
+                        }
+                    });
+                }
             });
         }
 
@@ -103,6 +137,27 @@ public class CompetitionServiceImpl implements CompetitionService {
             dto.getEpreuves().forEach(eDto -> {
                 com.glop.cibl_orga_sport.data.Epreuve e = com.glop.cibl_orga_sport.mapper.EpreuveMapper.toEntity(eDto);
                 c.addEpreuve(e);
+
+                // Process participations
+                if (eDto.getParticipations() != null) {
+                    eDto.getParticipations().forEach(pDto -> {
+                        if (pDto.getEquipe() != null && pDto.getEquipe().getIdEquipe() != null) {
+                            Optional<Equipe> equipeOpt = equipeRepository.findById(pDto.getEquipe().getIdEquipe());
+                            if (equipeOpt.isPresent()) {
+                                // For update, we might want to check if it exists, but since we cleared
+                                // epreuves, we recreate
+                                Participation p = new Participation();
+                                p.setEpreuve(e);
+                                p.setEquipe(equipeOpt.get());
+                                p.setStatut(
+                                        pDto.getStatut() != null ? pDto.getStatut() : ParticipationStatusEnum.INSCRIT);
+                                e.getParticipations().add(p);
+                            } else {
+                                logger.error("Équipe non trouvée avec l'ID: {}", pDto.getEquipe().getIdEquipe());
+                            }
+                        }
+                    });
+                }
             });
         }
 

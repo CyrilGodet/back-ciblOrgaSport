@@ -25,8 +25,11 @@ public class ParticipationMapper {
 
         Participation participation = new Participation();
         participation.setIdParticipation(dto.getIdParticipation());
-        // Epreuve association will be handled by EpreuveMapper/Service
-        participation.setEquipe(EquipeMapper.toEntity(dto.getEquipe()));
+        // Equipe association is handled by the service during create/update
+        // but for general mapping, we use EquipeMapper
+        if (dto.getEquipe() != null) {
+            participation.setEquipe(EquipeMapper.toEntity(dto.getEquipe()));
+        }
         participation.setStatut(dto.getStatut());
         return participation;
     }

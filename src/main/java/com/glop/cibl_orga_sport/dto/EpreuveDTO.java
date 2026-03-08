@@ -9,7 +9,7 @@ public class EpreuveDTO {
     private Long idEpreuve;
     private String nomEpreuve;
     private String description;
-    private CompetitionDTO competition;
+    private Long competitionId;
     private DisciplineEnum discipline;
     private CompetitionGenreEnum genre;
     private Date dateDebut;
@@ -18,13 +18,16 @@ public class EpreuveDTO {
     private int ageMax;
     private CompetitionStatusEnum statut;
 
-    public EpreuveDTO() {}
+    public EpreuveDTO() {
+    }
 
-    public EpreuveDTO(Long idEpreuve, String nomEpreuve, String description, CompetitionDTO competition, DisciplineEnum discipline, CompetitionGenreEnum genre, Date dateDebut, Date dateFin, int ageMin, int ageMax, CompetitionStatusEnum statut) {
+    public EpreuveDTO(Long idEpreuve, String nomEpreuve, String description, Long competitionId,
+            DisciplineEnum discipline, CompetitionGenreEnum genre, Date dateDebut, Date dateFin, int ageMin, int ageMax,
+            CompetitionStatusEnum statut) {
         this.idEpreuve = idEpreuve;
         this.nomEpreuve = nomEpreuve;
         this.description = description;
-        this.competition = competition;
+        this.competitionId = competitionId;
         this.discipline = discipline;
         this.genre = genre;
         this.dateDebut = dateDebut;
@@ -58,12 +61,12 @@ public class EpreuveDTO {
         this.description = description;
     }
 
-    public CompetitionDTO getCompetition() {
-        return competition;
+    public Long getCompetitionId() {
+        return competitionId;
     }
 
-    public void setCompetition(CompetitionDTO competition) {
-        this.competition = competition;
+    public void setCompetitionId(Long competitionId) {
+        this.competitionId = competitionId;
     }
 
     public DisciplineEnum getDiscipline() {
@@ -122,5 +125,4 @@ public class EpreuveDTO {
         this.statut = statut;
     }
 
-    
 }

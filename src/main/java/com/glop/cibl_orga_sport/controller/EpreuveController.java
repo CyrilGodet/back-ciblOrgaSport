@@ -19,10 +19,10 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/epreuves")
 @CrossOrigin(origins = "http://localhost:4200")
 public class EpreuveController {
-    
+
     @Autowired
     private EpreuveService epreuveService;
-    
+
     @Autowired
     private CompetitionService competitionService;
 
@@ -37,15 +37,15 @@ public class EpreuveController {
     public ResponseEntity<EpreuveDTO> getEpreuve(@PathVariable Long id) {
         Optional<Epreuve> epreuve = epreuveService.getEpreuve(id);
         return epreuve.map(EpreuveMapper::toDTO)
-                      .map(ResponseEntity::ok)
-                      .orElse(ResponseEntity.notFound().build());
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
     public ResponseEntity<EpreuveDTO> createEpreuve(@RequestBody EpreuveDTO epreuveDTO) {
         Competition competition = null;
-        if (epreuveDTO.getCompetition() != null && epreuveDTO.getCompetition().getIdCompetition() != null) {
-            Optional<Competition> competitionOpt = competitionService.getCompetition(epreuveDTO.getCompetition().getIdCompetition());
+        if (epreuveDTO.getCompetitionId() != null) {
+            Optional<Competition> competitionOpt = competitionService.getCompetition(epreuveDTO.getCompetitionId());
             if (competitionOpt.isPresent()) {
                 competition = competitionOpt.get();
             }
@@ -59,16 +59,15 @@ public class EpreuveController {
                 epreuveDTO.getDateFin(),
                 epreuveDTO.getAgeMin(),
                 epreuveDTO.getAgeMax(),
-                competition
-        );
+                competition);
         return ResponseEntity.status(201).body(EpreuveMapper.toDTO(created));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<EpreuveDTO> updateEpreuve(@PathVariable Long id, @RequestBody EpreuveDTO epreuveDTO) {
         Competition competition = null;
-        if (epreuveDTO.getCompetition() != null && epreuveDTO.getCompetition().getIdCompetition() != null) {
-            Optional<Competition> competitionOpt = competitionService.getCompetition(epreuveDTO.getCompetition().getIdCompetition());
+        if (epreuveDTO.getCompetitionId() != null) {
+            Optional<Competition> competitionOpt = competitionService.getCompetition(epreuveDTO.getCompetitionId());
             if (competitionOpt.isPresent()) {
                 competition = competitionOpt.get();
             }
@@ -84,8 +83,7 @@ public class EpreuveController {
                 epreuveDTO.getAgeMin(),
                 epreuveDTO.getAgeMax(),
                 epreuveDTO.getStatut(),
-                competition
-        );
+                competition);
         if (updated != null) {
             return ResponseEntity.ok(EpreuveMapper.toDTO(updated));
         }

@@ -23,21 +23,22 @@ public class EpreuveServiceImpl implements EpreuveService {
     private EpreuveRepository repository;
 
     @Override
-    public Epreuve createEpreuve(String nomEpreuve, String description, DisciplineEnum discipline, CompetitionGenreEnum genre, 
-                                Date dateDebut, Date dateFin, int ageMin, int ageMax, Competition competition) {
+    public Epreuve createEpreuve(String nomEpreuve, String description, DisciplineEnum discipline,
+            CompetitionGenreEnum genre,
+            Date dateDebut, Date dateFin, int ageMin, int ageMax, Competition competition) {
         Epreuve e = new Epreuve(nomEpreuve);
         e.setDescription(description);
         e.setDiscipline(discipline);
         e.setGenre(genre);
-        
+
         if (dateDebut != null && dateFin != null) {
-            Periode periode = new Periode((java.sql.Date) dateDebut, (java.sql.Date) dateFin);
+            Periode periode = new Periode(new java.sql.Date(dateDebut.getTime()), new java.sql.Date(dateFin.getTime()));
             e.setPeriode(periode);
         }
-        
+
         ConditionAge conditionAge = new ConditionAge(ageMin, ageMax);
         e.setConditionAge(conditionAge);
-        
+
         e.setStatut(CompetitionStatusEnum.DRAFT);
         e.setCompetition(competition);
         if (competition != null && !competition.getEpreuves().contains(e)) {
@@ -48,13 +49,15 @@ public class EpreuveServiceImpl implements EpreuveService {
     }
 
     @Override
-    public Epreuve updateEpreuve(Long id, String nomEpreuve, String description, DisciplineEnum discipline, CompetitionGenreEnum genre, 
-                                Date dateDebut, Date dateFin, int ageMin, int ageMax, CompetitionStatusEnum statut, Competition competition) {
+    public Epreuve updateEpreuve(Long id, String nomEpreuve, String description, DisciplineEnum discipline,
+            CompetitionGenreEnum genre,
+            Date dateDebut, Date dateFin, int ageMin, int ageMax, CompetitionStatusEnum statut,
+            Competition competition) {
         Optional<Epreuve> existingEpreuve = repository.findById(id);
         if (existingEpreuve.isPresent()) {
             Epreuve e = existingEpreuve.get();
 
-            if(e.getStatut() != CompetitionStatusEnum.DRAFT) {
+            if (e.getStatut() != CompetitionStatusEnum.DRAFT) {
                 System.out.println("Impossible de modifier une épreuve publiée : " + id);
                 return e;
             }
@@ -63,23 +66,24 @@ public class EpreuveServiceImpl implements EpreuveService {
             e.setDescription(description);
             e.setDiscipline(discipline);
             e.setGenre(genre);
-            
+
             if (dateDebut != null && dateFin != null) {
                 if (e.getPeriode() == null) {
-                    e.setPeriode(new Periode((java.sql.Date) dateDebut, (java.sql.Date) dateFin));
+                    e.setPeriode(
+                            new Periode(new java.sql.Date(dateDebut.getTime()), new java.sql.Date(dateFin.getTime())));
                 } else {
-                    e.getPeriode().setDateDebut((java.sql.Date) dateDebut);
-                    e.getPeriode().setDateFin((java.sql.Date) dateFin);
+                    e.getPeriode().setDateDebut(new java.sql.Date(dateDebut.getTime()));
+                    e.getPeriode().setDateFin(new java.sql.Date(dateFin.getTime()));
                 }
             }
-            
+
             if (e.getConditionAge() == null) {
                 e.setConditionAge(new ConditionAge(ageMin, ageMax));
             } else {
                 e.getConditionAge().setAgeMin(ageMin);
                 e.getConditionAge().setAgeMax(ageMax);
             }
-            
+
             e.setStatut(statut);
 
             Competition oldCompetition = e.getCompetition();
@@ -104,7 +108,7 @@ public class EpreuveServiceImpl implements EpreuveService {
         if (e.isPresent()) {
             Epreuve epreuve = e.get();
 
-            if(epreuve.getStatut() == CompetitionStatusEnum.PUBLISH) {
+            if (epreuve.getStatut() == CompetitionStatusEnum.PUBLISH) {
                 epreuve.setStatut(CompetitionStatusEnum.CANCELLED);
                 repository.save(epreuve);
                 System.out.println("Épreuve annulée car elle est déjà publiée : " + id);

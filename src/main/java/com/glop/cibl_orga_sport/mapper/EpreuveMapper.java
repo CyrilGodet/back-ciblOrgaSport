@@ -7,10 +7,11 @@ import com.glop.cibl_orga_sport.dto.EpreuveDTO;
 import java.sql.Date;
 
 public class EpreuveMapper {
-    
+
     public static EpreuveDTO toDTO(Epreuve epreuve) {
-        if (epreuve == null) return null;
-        
+        if (epreuve == null)
+            return null;
+
         EpreuveDTO dto = new EpreuveDTO();
         dto.setIdEpreuve(epreuve.getIdEpreuve());
         dto.setNomEpreuve(epreuve.getNomEpreuve());
@@ -18,44 +19,44 @@ public class EpreuveMapper {
         dto.setDiscipline(epreuve.getDiscipline());
         dto.setGenre(epreuve.getGenre());
         dto.setStatut(epreuve.getStatut());
-        
+
         if (epreuve.getCompetition() != null) {
-            dto.setCompetition(CompetitionMapper.toDTO(epreuve.getCompetition()));
+            dto.setCompetitionId(epreuve.getCompetition().getIdCompetition());
         }
-        
+
         if (epreuve.getPeriode() != null) {
             dto.setDateDebut(epreuve.getPeriode().getDateDebut());
             dto.setDateFin(epreuve.getPeriode().getDateFin());
         }
-        
+
         if (epreuve.getConditionAge() != null) {
             dto.setAgeMin(epreuve.getConditionAge().getAgeMin());
             dto.setAgeMax(epreuve.getConditionAge().getAgeMax());
         }
-        
+
         return dto;
     }
 
     public static Epreuve toEntity(EpreuveDTO dto) {
-        if (dto == null) return null;
-        
+        if (dto == null)
+            return null;
+
         Epreuve epreuve = new Epreuve(dto.getNomEpreuve());
         epreuve.setDescription(dto.getDescription());
         epreuve.setDiscipline(dto.getDiscipline());
         epreuve.setGenre(dto.getGenre());
         epreuve.setStatut(dto.getStatut());
-        
+
         if (dto.getDateDebut() != null && dto.getDateFin() != null) {
             Periode periode = new Periode(
-                (Date) dto.getDateDebut(),
-                (Date) dto.getDateFin()
-            );
+                    new java.sql.Date(dto.getDateDebut().getTime()),
+                    new java.sql.Date(dto.getDateFin().getTime()));
             epreuve.setPeriode(periode);
         }
-        
+
         ConditionAge conditionAge = new ConditionAge(dto.getAgeMin(), dto.getAgeMax());
         epreuve.setConditionAge(conditionAge);
-        
+
         return epreuve;
     }
 }

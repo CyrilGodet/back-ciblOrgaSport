@@ -39,10 +39,6 @@ public class Competition {
     @JsonManagedReference("competition-epreuves")
     private List<Epreuve> epreuves;
 
-    @OneToMany(mappedBy = "competition", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference("competition-equipes")
-    private List<Equipe> equipes;
-
     @ElementCollection
     @Enumerated(EnumType.STRING)
     private List<CompetitionPhaseType> phases = new ArrayList<>();
@@ -80,7 +76,6 @@ public class Competition {
         this.statut = statut;
         this.sport = sport;
         this.epreuves = new ArrayList<>();
-        this.equipes = new ArrayList<>();
     }
 
     public Long getIdCompetition() {
@@ -173,14 +168,6 @@ public class Competition {
 
     public void setConditionAge(ConditionAge conditionAge) {
         this.conditionAge = conditionAge;
-    }
-
-    public List<Equipe> getEquipes() {
-        return equipes;
-    }
-
-    public void setEquipes(List<Equipe> equipes) {
-        this.equipes = equipes;
     }
 
     public List<CompetitionPhaseType> getPhases() {

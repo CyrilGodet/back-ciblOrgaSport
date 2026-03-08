@@ -12,12 +12,9 @@ import java.util.Optional;
 
 @Service
 public class EquipeServiceImpl implements EquipeService {
-    
+
     @Autowired
     private EquipeRepository equipeRepository;
-    
-    @Autowired
-    private CompetitionRepository competitionRepository;
 
     @Override
     public List<Equipe> getAllEquipes() {
@@ -30,30 +27,17 @@ public class EquipeServiceImpl implements EquipeService {
     }
 
     @Override
-    public List<Equipe> getEquipesByCompetitionId(Long competitionId) {
-        return equipeRepository.findByCompetition_IdCompetition(competitionId);
-    }
-
-    @Override
-    public Equipe createEquipe(String nomEquipe, Long competitionId) {
+    public Equipe createEquipe(String nomEquipe) {
         Equipe equipe = new Equipe(nomEquipe);
-        if (competitionId != null) {
-            Optional<Competition> competition = competitionRepository.findById(competitionId);
-            competition.ifPresent(equipe::setCompetition);
-        }
         return equipeRepository.save(equipe);
     }
 
     @Override
-    public Equipe updateEquipe(Long id, String nomEquipe, Long competitionId) {
+    public Equipe updateEquipe(Long id, String nomEquipe) {
         Optional<Equipe> existing = equipeRepository.findById(id);
         if (existing.isPresent()) {
             Equipe equipe = existing.get();
             equipe.setNomEquipe(nomEquipe);
-            if (competitionId != null) {
-                Optional<Competition> competition = competitionRepository.findById(competitionId);
-                competition.ifPresent(equipe::setCompetition);
-            }
             return equipeRepository.save(equipe);
         }
         return null;

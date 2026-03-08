@@ -20,7 +20,7 @@ import jakarta.persistence.OneToMany;
 
 @Entity
 public class Epreuve {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idEpreuve;
@@ -45,6 +45,10 @@ public class Epreuve {
     @JsonManagedReference("epreuve-phases")
     private List<EtapeEpreuve> etapesEpreuves;
 
+    @OneToMany(mappedBy = "epreuve", cascade = jakarta.persistence.CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference("epreuve-participations")
+    private List<Participation> participations = new ArrayList<>();
+
     @Column(nullable = false)
     private DisciplineEnum discipline;
 
@@ -54,7 +58,8 @@ public class Epreuve {
     @Column(nullable = false)
     private CompetitionStatusEnum statut;
 
-    public Epreuve() {}
+    public Epreuve() {
+    }
 
     public Epreuve(String nomEpreuve) {
         this.nomEpreuve = nomEpreuve;
@@ -68,7 +73,7 @@ public class Epreuve {
     public void setIdEpreuve(Long idEpreuve) {
         this.idEpreuve = idEpreuve;
     }
-    
+
     public String getNomEpreuve() {
         return nomEpreuve;
     }
@@ -152,5 +157,13 @@ public class Epreuve {
     public void setConditionAge(ConditionAge conditionAge) {
         this.conditionAge = conditionAge;
     }
-    
+
+    public List<Participation> getParticipations() {
+        return participations;
+    }
+
+    public void setParticipations(List<Participation> participations) {
+        this.participations = participations;
+    }
+
 }

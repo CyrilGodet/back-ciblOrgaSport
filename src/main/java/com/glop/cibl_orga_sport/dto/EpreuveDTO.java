@@ -4,6 +4,8 @@ import java.util.Date;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionStatusEnum;
 import com.glop.cibl_orga_sport.data.enumType.DisciplineEnum;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionGenreEnum;
+import java.util.List;
+import java.util.ArrayList;
 
 public class EpreuveDTO {
     private Long idEpreuve;
@@ -17,13 +19,14 @@ public class EpreuveDTO {
     private int ageMin;
     private int ageMax;
     private CompetitionStatusEnum statut;
+    private List<ParticipationDTO> participations = new ArrayList<>();
 
     public EpreuveDTO() {
     }
 
     public EpreuveDTO(Long idEpreuve, String nomEpreuve, String description, Long competitionId,
             DisciplineEnum discipline, CompetitionGenreEnum genre, Date dateDebut, Date dateFin, int ageMin, int ageMax,
-            CompetitionStatusEnum statut) {
+            CompetitionStatusEnum statut, List<ParticipationDTO> participations) {
         this.idEpreuve = idEpreuve;
         this.nomEpreuve = nomEpreuve;
         this.description = description;
@@ -35,6 +38,7 @@ public class EpreuveDTO {
         this.ageMin = ageMin;
         this.ageMax = ageMax;
         this.statut = statut;
+        this.participations = participations != null ? participations : new ArrayList<>();
     }
 
     public Long getIdEpreuve() {
@@ -123,6 +127,14 @@ public class EpreuveDTO {
 
     public void setStatut(CompetitionStatusEnum statut) {
         this.statut = statut;
+    }
+
+    public List<ParticipationDTO> getParticipations() {
+        return participations;
+    }
+
+    public void setParticipations(List<ParticipationDTO> participations) {
+        this.participations = participations;
     }
 
 }

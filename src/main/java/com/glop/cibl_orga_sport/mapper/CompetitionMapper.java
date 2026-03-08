@@ -6,6 +6,7 @@ import com.glop.cibl_orga_sport.data.Lieu;
 import com.glop.cibl_orga_sport.data.ConditionAge;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionPhaseType;
 import com.glop.cibl_orga_sport.dto.CompetitionDTO;
+import com.glop.cibl_orga_sport.dto.CompetitionPhaseTypeDto;
 import java.util.stream.Collectors;
 import java.util.ArrayList;
 
@@ -43,14 +44,10 @@ public class CompetitionMapper {
                     .collect(Collectors.toList()));
         }
 
-        if (competition.getEquipes() != null) {
-            dto.setEquipes(competition.getEquipes().stream()
-                    .map(EquipeMapper::toDTO)
-                    .collect(Collectors.toList()));
-        }
-
         if (competition.getPhases() != null) {
-            dto.setPhases(new ArrayList<>(competition.getPhases()));
+            dto.setPhases(competition.getPhases().stream()
+                    .map(phase -> new CompetitionPhaseTypeDto(phase.name(), phase.getLabel()))
+                    .collect(Collectors.toList()));
         }
 
         return dto;
@@ -89,15 +86,10 @@ public class CompetitionMapper {
             competition.getEpreuves().forEach(e -> e.setCompetition(competition));
         }
 
-        if (dto.getEquipes() != null) {
-            competition.setEquipes(dto.getEquipes().stream()
-                    .map(EquipeMapper::toEntity)
-                    .collect(Collectors.toList()));
-            competition.getEquipes().forEach(e -> e.setCompetition(competition));
-        }
-
         if (dto.getPhases() != null) {
-            competition.setPhases(new ArrayList<>(dto.getPhases()));
+            competition.setPhases(dto.getPhases().stream()
+                    .map(phaseDto -> CompetitionPhaseType.valueOf(phaseDto.getValue()))
+                    .collect(Collectors.toList()));
         }
 
         return competition;

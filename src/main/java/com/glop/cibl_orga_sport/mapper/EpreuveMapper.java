@@ -34,6 +34,12 @@ public class EpreuveMapper {
             dto.setAgeMax(epreuve.getConditionAge().getAgeMax());
         }
 
+        if (epreuve.getParticipations() != null) {
+            dto.setParticipations(epreuve.getParticipations().stream()
+                    .map(ParticipationMapper::toDTO)
+                    .collect(java.util.stream.Collectors.toList()));
+        }
+
         return dto;
     }
 

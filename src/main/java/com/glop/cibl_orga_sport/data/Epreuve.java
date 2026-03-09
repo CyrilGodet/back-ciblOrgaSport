@@ -58,12 +58,16 @@ public class Epreuve {
     @Column(nullable = false)
     private CompetitionStatusEnum statut;
 
+    @Column(nullable = false)
+    private int nombreEquipeParMatch = 2;
+
     public Epreuve() {
     }
 
     public Epreuve(String nomEpreuve) {
         this.nomEpreuve = nomEpreuve;
         this.etapesEpreuves = new ArrayList<>();
+        this.nombreEquipeParMatch = 2;
     }
 
     public Long getIdEpreuve() {
@@ -164,6 +168,14 @@ public class Epreuve {
 
     public void setParticipations(List<Participation> participations) {
         this.participations = participations;
+    }
+
+    public int getNombreEquipeParMatch() {
+        return nombreEquipeParMatch;
+    }
+
+    public void setNombreEquipeParMatch(int nombreEquipeParMatch) {
+        this.nombreEquipeParMatch = nombreEquipeParMatch;
     }
 
 }

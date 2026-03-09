@@ -1,24 +1,22 @@
 -- ============================
--- RESET COMPLET
+-- RESET COMPLET DE LA BASE
 -- ============================
 
--- 0. Supprimer toutes les participations (lié à équipes & épreuves)
+-- Suppression des enfants d'abord
 DELETE FROM participation;
-
--- 1. Supprimer toutes les liaisons équipe ↔ sportif
+DELETE FROM competition_phases;
+DELETE FROM epreuve;
 DELETE FROM equipe_sportif;
-
--- 2. Supprimer les sportifs
 DELETE FROM sportif;
-
--- 3. Supprimer les équipes
 DELETE FROM equipe;
+DELETE FROM competition;
 
--- Réinitialiser les séquences
+-- Réinitialisation des séquences existantes
 ALTER SEQUENCE equipe_id_equipe_seq RESTART WITH 1;
 ALTER SEQUENCE sportif_id_sportif_seq RESTART WITH 1;
 ALTER SEQUENCE participation_id_participation_seq RESTART WITH 1;
-
+ALTER SEQUENCE epreuve_id_epreuve_seq RESTART WITH 1;
+ALTER SEQUENCE competition_id_competition_seq RESTART WITH 1;
 
 -- ============================
 -- Création des équipes

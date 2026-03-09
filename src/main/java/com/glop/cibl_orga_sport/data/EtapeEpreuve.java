@@ -11,8 +11,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+
+import java.util.ArrayList;
 
 @Entity
 public class EtapeEpreuve {
@@ -31,11 +36,15 @@ public class EtapeEpreuve {
     @ManyToOne
     private Resultat resultat;
 
-    @OneToMany(mappedBy = "etapeEpreuve")
-    private List<Match> matches;
+    @OneToMany(mappedBy = "etapeEpreuve", cascade = jakarta.persistence.CascadeType.ALL, orphanRemoval = true)
+    private List<Match> matches = new ArrayList<>();
 
     @Column(nullable = false)
     private EtapeEpreuveEnum etapeEpreuveEnum;
+
+    @ManyToMany
+    @JoinTable(name = "etape_equipe", joinColumns = @JoinColumn(name = "etape_id"), inverseJoinColumns = @JoinColumn(name = "equipe_id"))
+    private List<Equipe> equipes = new ArrayList<>();
 
     public EtapeEpreuve() {
     }
@@ -95,6 +104,12 @@ public class EtapeEpreuve {
         this.etapeEpreuveEnum = etapeEpreuveEnum;
     }
 
-    
+    public List<Equipe> getEquipes() {
+        return equipes;
+    }
+
+    public void setEquipes(List<Equipe> equipes) {
+        this.equipes = equipes;
+    }
 
 }

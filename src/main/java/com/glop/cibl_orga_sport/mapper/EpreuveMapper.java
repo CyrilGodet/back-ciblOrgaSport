@@ -5,6 +5,7 @@ import com.glop.cibl_orga_sport.data.Periode;
 import com.glop.cibl_orga_sport.data.ConditionAge;
 import com.glop.cibl_orga_sport.dto.EpreuveDTO;
 import java.sql.Date;
+import java.util.stream.Collectors;
 
 public class EpreuveMapper {
 
@@ -37,6 +38,12 @@ public class EpreuveMapper {
         if (epreuve.getParticipations() != null) {
             dto.setParticipations(epreuve.getParticipations().stream()
                     .map(ParticipationMapper::toDTO)
+                    .collect(java.util.stream.Collectors.toList()));
+        }
+
+        if (epreuve.getEtapesEpreuves() != null) {
+            dto.setEtapesEpreuves(epreuve.getEtapesEpreuves().stream()
+                    .map(EtapeEpreuveMapper::toDTO)
                     .collect(java.util.stream.Collectors.toList()));
         }
 

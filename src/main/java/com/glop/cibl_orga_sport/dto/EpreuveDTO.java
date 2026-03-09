@@ -137,4 +137,14 @@ public class EpreuveDTO {
         this.participations = participations;
     }
 
+    private List<EtapeEpreuveDTO> etapesEpreuves = new java.util.ArrayList<>();
+
+    public List<EtapeEpreuveDTO> getEtapesEpreuves() {
+        return etapesEpreuves;
+    }
+
+    public void setEtapesEpreuves(List<EtapeEpreuveDTO> etapesEpreuves) {
+        this.etapesEpreuves = etapesEpreuves;
+    }
+
 }

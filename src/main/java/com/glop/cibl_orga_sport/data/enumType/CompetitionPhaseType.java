@@ -5,10 +5,10 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public enum CompetitionPhaseType {
     PRE_SELECTION("Pré-sélection"),
     SELECTION("Sélection"),
-    OCTO_FINAL("Huitièmes de finale"),
-    QUARTER_FINAL("Quarts de finale"),
-    SEMI_FINAL("Demi-finales"),
-    FINAL("Finale");
+    HUITIEME("Huitièmes de finale"),
+    QUART_DE_FINALE("Quarts de finale"),
+    DEMI_FINALE("Demi-finales"),
+    FINALE("Finale");
 
     private final String label;
 

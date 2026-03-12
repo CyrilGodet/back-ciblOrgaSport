@@ -5,10 +5,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.glop.cibl_orga_sport.data.Lieu;
+import com.glop.cibl_orga_sport.dto.LieuDTO;
+import com.glop.cibl_orga_sport.mapper.LieuMapper;
 import com.glop.cibl_orga_sport.service.LieuService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/lieux")
@@ -19,27 +22,31 @@ public class LieuController {
     private LieuService lieuService;
 
     @GetMapping
-    public List<Lieu> getAllLieux() {
-        return lieuService.getAllLieux();
+    public List<LieuDTO> getAllLieux() {
+        return lieuService.getAllLieux().stream()
+                .map(LieuMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Lieu> getLieu(@PathVariable Long id) {
+    public ResponseEntity<LieuDTO> getLieu(@PathVariable Long id) {
         Optional<Lieu> lieu = lieuService.getLieu(id);
-        return lieu.map(ResponseEntity::ok)
+        return lieu.map(LieuMapper::toDTO)
+                   .map(ResponseEntity::ok)
                    .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Lieu createLieu(@RequestBody Lieu lieu) {
-        return lieuService.createLieu(lieu.getNom(), lieu.getVille(), lieu.getAdresse());
+    public LieuDTO createLieu(@RequestBody LieuDTO lieuDTO) {
+        Lieu lieu = lieuService.createLieu(lieuDTO.getNomLieu(), lieuDTO.getVille(), lieuDTO.getAdresse());
+        return LieuMapper.toDTO(lieu);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Lieu> updateLieu(@PathVariable Long id, @RequestBody Lieu lieu) {
-        Lieu updated = lieuService.updateLieu(id, lieu.getNom(), lieu.getVille(), lieu.getAdresse());
+    public ResponseEntity<LieuDTO> updateLieu(@PathVariable Long id, @RequestBody LieuDTO lieuDTO) {
+        Lieu updated = lieuService.updateLieu(id, lieuDTO.getNomLieu(), lieuDTO.getVille(), lieuDTO.getAdresse());
         if (updated != null) {
-            return ResponseEntity.ok(updated);
+            return ResponseEntity.ok(LieuMapper.toDTO(updated));
         }
         return ResponseEntity.notFound().build();
     }

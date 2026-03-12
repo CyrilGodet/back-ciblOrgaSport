@@ -9,7 +9,7 @@ public class LieuMapper {
         if (lieu == null) return null;
         return new LieuDTO(
             lieu.getIdLieu(),
-            lieu.getNom(),
+            lieu.getNomLieu(),
             lieu.getVille(),
             lieu.getAdresse()
         );
@@ -18,7 +18,7 @@ public class LieuMapper {
     public static Lieu toEntity(LieuDTO dto) {
         if (dto == null) return null;
         Lieu lieu = new Lieu(
-            dto.getNom(),
+            dto.getNomLieu(),
             dto.getVille(),
             dto.getAdresse()
         );

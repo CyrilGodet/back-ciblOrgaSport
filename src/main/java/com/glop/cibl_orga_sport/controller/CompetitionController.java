@@ -5,12 +5,15 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.glop.cibl_orga_sport.data.Competition;
+import com.glop.cibl_orga_sport.dto.CompetitionDTO;
 import com.glop.cibl_orga_sport.dto.EpreuveDTO;
 import com.glop.cibl_orga_sport.dto.PhaseDTO;
+import com.glop.cibl_orga_sport.mapper.CompetitionMapper;
 import com.glop.cibl_orga_sport.mapper.EpreuveMapper;
 import com.glop.cibl_orga_sport.mapper.PhaseMapper;
 import com.glop.cibl_orga_sport.service.CompetitionService;
@@ -32,14 +35,17 @@ public class CompetitionController {
     private PhaseService phaseService;
 
     @GetMapping
-    public List<Competition> getAllCompetitions() {
-        return service.getAllCompetitions();
+    public List<CompetitionDTO> getAllCompetitions() {
+        return service.getAllCompetitions().stream()
+                .map(CompetitionMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Competition> getCompetition(@PathVariable Long id) {
+    public ResponseEntity<CompetitionDTO> getCompetition(@PathVariable Long id) {
         Optional<Competition> competition = service.getCompetition(id);
-        return competition.map(ResponseEntity::ok)
+        return competition.map(CompetitionMapper::toDTO)
+                .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
@@ -58,22 +64,17 @@ public class CompetitionController {
     }
 
     @PostMapping
-    public Competition createCompetition(@RequestBody Competition competition) {
-        return service.createCompetition(
-                competition.getNameCompetition(),
-                competition.getDateDebut(),
-                competition.getDateFin());
+    public ResponseEntity<CompetitionDTO> createCompetition(@RequestBody CompetitionDTO competitionDTO) {
+        Competition competition = service.createCompetition(competitionDTO);
+        return new ResponseEntity<>(CompetitionMapper.toDTO(competition), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Competition> updateCompetition(@PathVariable Long id, @RequestBody Competition competition) {
-        Competition updated = service.updateCompetition(
-                id,
-                competition.getNameCompetition(),
-                competition.getDateDebut(),
-                competition.getDateFin());
+    public ResponseEntity<CompetitionDTO> updateCompetition(@PathVariable Long id,
+            @RequestBody CompetitionDTO competitionDTO) {
+        Competition updated = service.updateCompetition(id, competitionDTO);
         if (updated != null) {
-            return ResponseEntity.ok(updated);
+            return ResponseEntity.ok(CompetitionMapper.toDTO(updated));
         }
         return ResponseEntity.notFound().build();
     }
@@ -89,5 +90,32 @@ public class CompetitionController {
         } catch (IllegalStateException e) {
             return ResponseEntity.status(409).body("{\"error\":\"" + e.getMessage() + "\"}");
         }
+    }
+
+    @PatchMapping("/{id}/publish")
+    public ResponseEntity<CompetitionDTO> publishCompetition(@PathVariable Long id) {
+        Competition published = service.publishCompetition(id);
+        if (published != null) {
+            return ResponseEntity.ok(CompetitionMapper.toDTO(published));
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
+    @PatchMapping("/{id}/start")
+    public ResponseEntity<CompetitionDTO> startCompetition(@PathVariable Long id) {
+        Competition started = service.startCompetition(id);
+        if (started != null) {
+            return ResponseEntity.ok(CompetitionMapper.toDTO(started));
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
+    @PatchMapping("/{id}/finish")
+    public ResponseEntity<CompetitionDTO> finishCompetition(@PathVariable Long id) {
+        Competition finished = service.finishCompetition(id);
+        if (finished != null) {
+            return ResponseEntity.ok(CompetitionMapper.toDTO(finished));
+        }
+        return ResponseEntity.badRequest().build();
     }
 }

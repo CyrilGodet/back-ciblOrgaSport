@@ -1,24 +1,23 @@
 package com.glop.cibl_orga_sport.dto;
 
+import com.glop.cibl_orga_sport.data.enumType.EtapeEpreuveEnum;
+
 public class PhaseDTO {
     private Long idPhase;
-    private String nomPhase;
+    private EtapeEpreuveEnum etapeEpreuve;
     private java.sql.Date dateDebut;
     private java.sql.Date dateFin;
     private EpreuveDTO epreuve;
-    private LieuDTO lieu;
 
     public PhaseDTO() {
     }
 
-    public PhaseDTO(Long idPhase, String nomPhase, java.sql.Date dateDebut, java.sql.Date dateFin, EpreuveDTO epreuve,
-            LieuDTO lieu) {
+    public PhaseDTO(Long idPhase, EtapeEpreuveEnum etapeEpreuve, java.sql.Date dateDebut, java.sql.Date dateFin, EpreuveDTO epreuve) {
         this.idPhase = idPhase;
-        this.nomPhase = nomPhase;
+        this.etapeEpreuve = etapeEpreuve;
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
         this.epreuve = epreuve;
-        this.lieu = lieu;
     }
 
     public Long getIdPhase() {
@@ -29,12 +28,12 @@ public class PhaseDTO {
         this.idPhase = idPhase;
     }
 
-    public String getNomPhase() {
-        return nomPhase;
+    public EtapeEpreuveEnum getEtapeEpreuve() {
+        return etapeEpreuve;
     }
 
-    public void setNomPhase(String nomPhase) {
-        this.nomPhase = nomPhase;
+    public void setEtapeEpreuve(EtapeEpreuveEnum etapeEpreuve) {
+        this.etapeEpreuve = etapeEpreuve;
     }
 
     public EpreuveDTO getEpreuve() {
@@ -43,14 +42,6 @@ public class PhaseDTO {
 
     public void setEpreuve(EpreuveDTO epreuve) {
         this.epreuve = epreuve;
-    }
-
-    public LieuDTO getLieu() {
-        return lieu;
-    }
-
-    public void setLieu(LieuDTO lieu) {
-        this.lieu = lieu;
     }
 
     public java.sql.Date getDateDebut() {

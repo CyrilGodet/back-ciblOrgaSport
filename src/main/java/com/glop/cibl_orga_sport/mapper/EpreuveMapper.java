@@ -80,12 +80,15 @@ public class EpreuveMapper {
         ConditionAge conditionAge = new ConditionAge(dto.getAgeMin(), dto.getAgeMax());
         epreuve.setConditionAge(conditionAge);
         epreuve.setNombreEquipeParMatch(dto.getNbPerMatch());
+<<<<<<< HEAD
         epreuve.setNbElimParMatch(dto.getNbElimMatch());
         epreuve.setTailleEquipe(dto.getTailleEquipe());
 
         if (dto.getPhaseOnGoing() != null) {
             epreuve.setPhaseOnGoing(CompetitionPhaseType.valueOf(dto.getPhaseOnGoing().getValue()));
         }
+=======
+>>>>>>> 8ddf0b6 (refactor: nb de participant par match)
 
         return epreuve;
     }

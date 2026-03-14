@@ -482,6 +482,13 @@ public class CompetitionServiceImpl implements CompetitionService {
                         "Le nombre d'équipes éliminées par match doit être inférieur au nombre d'équipes par match pour l'épreuve '"
                                 + epreuve.getNomEpreuve() + "'.");
             }
+
+            // Validation du nombre d'équipes par match
+            if (epreuve.getNombreEquipeParMatch() <= 0) {
+                throw new IllegalStateException(
+                        "Le nombre d'équipes par match doit être supérieur à 0 pour l'épreuve '"
+                                + epreuve.getNomEpreuve() + "'.");
+            }
         }
     }
 

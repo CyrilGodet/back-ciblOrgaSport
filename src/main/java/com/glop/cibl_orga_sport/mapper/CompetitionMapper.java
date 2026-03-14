@@ -104,10 +104,15 @@ public class CompetitionMapper {
                     .collect(Collectors.toList()));
         }
 
+<<<<<<< HEAD
         if (dto.getPhases() != null) {
             competition.setPhases(dto.getPhases().stream()
                     .map(phaseDto -> CompetitionPhaseType.valueOf(phaseDto.getValue()))
                     .collect(Collectors.toList()));
+=======
+        if (dto.getPhaseOnGoing() != null) {
+            competition.setPhaseOnGoing(CompetitionPhaseType.valueOf(dto.getPhaseOnGoing().getValue()));
+>>>>>>> 9b040bb (fix: phase)
         }
 
         return competition;

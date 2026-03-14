@@ -52,6 +52,10 @@ public class Competition {
     @Enumerated(EnumType.STRING)
     private List<CompetitionPhaseType> phases = new ArrayList<>();
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = true)
+    private CompetitionPhaseType phaseOnGoing;
+
     @Embedded
     private Periode periode;
 
@@ -204,6 +208,14 @@ public class Competition {
 
     public void setPhases(List<CompetitionPhaseType> phases) {
         this.phases = phases;
+    }
+
+    public CompetitionPhaseType getPhaseOnGoing() {
+        return phaseOnGoing;
+    }
+
+    public void setPhaseOnGoing(CompetitionPhaseType phaseOnGoing) {
+        this.phaseOnGoing = phaseOnGoing;
     }
 
 }

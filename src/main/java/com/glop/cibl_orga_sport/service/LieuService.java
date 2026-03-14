@@ -1,6 +1,7 @@
 package com.glop.cibl_orga_sport.service;
 
 import com.glop.cibl_orga_sport.data.Lieu;
+import com.glop.cibl_orga_sport.dto.LieuDTO;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,4 +12,6 @@ public interface LieuService {
     boolean deleteLieu(Long id);
     List<Lieu> getAllLieux();
     Optional<Lieu> getLieu(Long id);
+    List<Lieu> searchLieux(String query);
+    Lieu createLieu(LieuDTO lieuDTO);
 }

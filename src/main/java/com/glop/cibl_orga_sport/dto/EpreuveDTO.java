@@ -22,6 +22,7 @@ public class EpreuveDTO {
     private List<ParticipationDTO> participations = new ArrayList<>();
     private int nbPerMatch;
     private int nbElimMatch;
+    private CompetitionPhaseTypeDto phaseOnGoing;
 
     public EpreuveDTO() {
     }
@@ -164,6 +165,14 @@ public class EpreuveDTO {
 
     public void setNbElimMatch(int nbElimMatch) {
         this.nbElimMatch = nbElimMatch;
+    }
+
+    public CompetitionPhaseTypeDto getPhaseOnGoing() {
+        return phaseOnGoing;
+    }
+
+    public void setPhaseOnGoing(CompetitionPhaseTypeDto phaseOnGoing) {
+        this.phaseOnGoing = phaseOnGoing;
     }
 
 }

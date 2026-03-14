@@ -9,4 +9,5 @@ import java.util.List;
 public interface MatchRepository extends JpaRepository<Match, Long> {
     List<Match> findByEtapeEpreuveEpreuveCompetitionIdCompetitionAndStatus(Long competitionId, MatchStatusEnum status);
     List<Match> findByEtapeEpreuveEpreuveCompetitionIdCompetitionAndEtapeEpreuveEtapeEpreuveEnum(Long competitionId, EtapeEpreuveEnum etapeEnum);
+    List<Match> findByEtapeEpreuveEpreuveIdEpreuveAndEtapeEpreuveEtapeEpreuveEnum(Long epreuveId, EtapeEpreuveEnum etapeEnum);
 }

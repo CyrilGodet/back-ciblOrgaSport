@@ -182,6 +182,7 @@ public class ResultatServiceImpl implements ResultatService {
         if (nbQualified == 1) {
             // Un seul gagnant -> L'épreuve est terminée
             epreuve.setStatut(CompetitionStatusEnum.FINISHED);
+            epreuve.setPhaseOnGoing(null); // Plus de phase en cours si fini
             epreuveRepository.save(epreuve);
             logger.info("Épreuve '{}' terminée ! Gagnant: {}", epreuve.getNomEpreuve(), qualifiedTeams.get(0).getNomEquipe());
         } else if (nbQualified > 1) {
@@ -190,11 +191,11 @@ public class ResultatServiceImpl implements ResultatService {
                 generateNextPhaseMatches(nextEtape, qualifiedTeams);
                 etapeEpreuveRepository.save(nextEtape);
 
-                // Mettre à jour la phase en cours de la compétition
-                competition.setPhaseOnGoing(mapEtapeToPhaseOnGoing(nextEtape.getEtapeEpreuveEnum()));
-                competitionRepository.save(competition);
-                logger.info("Phase suivante déterminée: {}.phaseOnGoing = {}", competition.getNameCompetition(),
-                        competition.getPhaseOnGoing());
+                // Mettre à jour la phase en cours de l'épreuve
+                epreuve.setPhaseOnGoing(mapEtapeToPhaseOnGoing(nextEtape.getEtapeEpreuveEnum()));
+                epreuveRepository.save(epreuve);
+                logger.info("Phase suivante déterminée pour '{}' : {}", epreuve.getNomEpreuve(),
+                        epreuve.getPhaseOnGoing());
             } else {
                 logger.info("Pas de phase suivante après {}", etapeEpreuve.getEtapeEpreuveEnum());
             }

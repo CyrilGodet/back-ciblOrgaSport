@@ -8,6 +8,9 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionStatusEnum;
 import com.glop.cibl_orga_sport.data.enumType.DisciplineEnum;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionGenreEnum;
+import com.glop.cibl_orga_sport.data.enumType.CompetitionPhaseType;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -63,6 +66,10 @@ public class Epreuve {
 
     @Column(nullable = false)
     private int nbElimParMatch = 1;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = true)
+    private CompetitionPhaseType phaseOnGoing;
 
     public Epreuve() {
     }
@@ -188,6 +195,14 @@ public class Epreuve {
 
     public void setNbElimParMatch(int nbElimParMatch) {
         this.nbElimParMatch = nbElimParMatch;
+    }
+
+    public CompetitionPhaseType getPhaseOnGoing() {
+        return phaseOnGoing;
+    }
+
+    public void setPhaseOnGoing(CompetitionPhaseType phaseOnGoing) {
+        this.phaseOnGoing = phaseOnGoing;
     }
 
 }

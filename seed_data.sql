@@ -136,3 +136,19 @@ INSERT INTO equipe_sportif VALUES (32,5),(32,7);
 INSERT INTO equipe_sportif VALUES (33,9),(33,11);
 INSERT INTO equipe_sportif VALUES (34,13),(34,15);
 INSERT INTO equipe_sportif VALUES (35,17),(35,19);
+
+-- ============================
+-- Création des lieux
+-- ============================
+
+INSERT INTO lieu (nom_lieu, ville, adresse) VALUES
+('Stade Pierre-Mauroy', 'Lille', '261 Boulevard de Tournai'),
+('Parc des Sports', 'Roubaix', 'Avenue Alfred Motte'),
+('Complexe Sportif Jean Bouin', 'Paris', '20 Avenue du Général Sarrail'),
+('Stade Vélodrome', 'Marseille', '3 Boulevard Michelet'),
+('Stade de Gerland', 'Lyon', '353 Avenue Jean Jaurès'),
+('Complexe Sportif Bordeaux Lac', 'Bordeaux', 'Rue du Petit Barail'),
+('Stade Marcel Picot', 'Nancy', '90 Boulevard Jean Jaurès'),
+('Stade de la Mosson', 'Montpellier', '345 Avenue de Heidelberg'),
+('Complexe Sportif Nantes Métropole', 'Nantes', '2 Boulevard de Berlin'),
+('Piscine Olympique', 'Paris', '1 Avenue des Sports');

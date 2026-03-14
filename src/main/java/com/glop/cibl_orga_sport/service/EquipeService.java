@@ -7,14 +7,10 @@ import java.util.Optional;
 
 public interface EquipeService {
     List<Equipe> getAllEquipes();
-
     Optional<Equipe> getEquipe(Long id);
-
     Equipe createEquipe(String nomEquipe);
-
     Equipe createEquipe(EquipeDTO dto);
-
+    List<Equipe> searchEquipes(String query);
     Equipe updateEquipe(Long id, String nomEquipe);
-
     boolean deleteEquipe(Long id);
 }

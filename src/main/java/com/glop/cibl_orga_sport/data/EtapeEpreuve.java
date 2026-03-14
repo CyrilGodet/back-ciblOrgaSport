@@ -33,7 +33,7 @@ public class EtapeEpreuve {
     @Embedded
     private Periode periode;
 
-    @ManyToOne
+    @ManyToOne(cascade = jakarta.persistence.CascadeType.ALL)
     private Resultat resultat;
 
     @OneToMany(mappedBy = "etapeEpreuve", cascade = jakarta.persistence.CascadeType.ALL, orphanRemoval = true)

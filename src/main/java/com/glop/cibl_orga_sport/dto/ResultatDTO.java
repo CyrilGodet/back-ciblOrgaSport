@@ -1,10 +1,13 @@
 package com.glop.cibl_orga_sport.dto;
 
+import com.glop.cibl_orga_sport.data.enumType.ResultatStatusEnum;
+import java.util.List;
+import java.util.ArrayList;
+
 public class ResultatDTO {
     private Long idResultat;
-    private String score;
-    private String detail;
-    private String vainqueur;
+    private ResultatStatusEnum status = ResultatStatusEnum.DRAFT;
+    private List<ResultatDetailsDTO> details = new ArrayList<>();
 
     public ResultatDTO() {
     }
@@ -17,27 +20,19 @@ public class ResultatDTO {
         this.idResultat = idResultat;
     }
 
-    public String getScore() {
-        return score;
+    public ResultatStatusEnum getStatus() {
+        return status;
     }
 
-    public void setScore(String score) {
-        this.score = score;
+    public void setStatus(ResultatStatusEnum status) {
+        this.status = status;
     }
 
-    public String getDetail() {
-        return detail;
+    public List<ResultatDetailsDTO> getDetails() {
+        return details;
     }
 
-    public void setDetail(String detail) {
-        this.detail = detail;
-    }
-
-    public String getVainqueur() {
-        return vainqueur;
-    }
-
-    public void setVainqueur(String vainqueur) {
-        this.vainqueur = vainqueur;
+    public void setDetails(List<ResultatDetailsDTO> details) {
+        this.details = details;
     }
 }

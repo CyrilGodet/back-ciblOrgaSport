@@ -19,6 +19,8 @@ import com.glop.cibl_orga_sport.repository.CompetitionRepository;
 import com.glop.cibl_orga_sport.repository.EquipeRepository;
 import com.glop.cibl_orga_sport.repository.LieuRepository;
 import com.glop.cibl_orga_sport.repository.ParticipationRepository;
+import com.glop.cibl_orga_sport.repository.MatchRepository;
+import com.glop.cibl_orga_sport.data.enumType.MatchStatusEnum;
 import com.glop.cibl_orga_sport.dto.CompetitionDTO;
 import com.glop.cibl_orga_sport.data.Equipe;
 import com.glop.cibl_orga_sport.data.EtapeEpreuve;
@@ -28,6 +30,7 @@ import com.glop.cibl_orga_sport.data.enumType.ParticipationStatusEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.stream.Collectors;
+import com.glop.cibl_orga_sport.data.enumType.EtapeEpreuveEnum;
 
 @Service
 public class CompetitionServiceImpl implements CompetitionService {
@@ -45,6 +48,9 @@ public class CompetitionServiceImpl implements CompetitionService {
 
     @Autowired
     private ParticipationRepository participationRepository;
+
+    @Autowired
+    private MatchRepository matchRepository;
 
     @Override
     public Competition createCompetition(CompetitionDTO dto) {
@@ -170,8 +176,6 @@ public class CompetitionServiceImpl implements CompetitionService {
                         if (pDto.getEquipe() != null && pDto.getEquipe().getIdEquipe() != null) {
                             Optional<Equipe> equipeOpt = equipeRepository.findById(pDto.getEquipe().getIdEquipe());
                             if (equipeOpt.isPresent()) {
-                                // For update, we might want to check if it exists, but since we cleared
-                                // epreuves, we recreate
                                 Participation p = new Participation();
                                 p.setEpreuve(e);
                                 p.setEquipe(equipeOpt.get());
@@ -251,8 +255,33 @@ public class CompetitionServiceImpl implements CompetitionService {
     }
 
     @Override
+    public List<Competition> getPublishedCompetitions() {
+        return repository.findByStatut(CompetitionStatusEnum.PUBLISH);
+    }
+
+    @Override
     public Optional<Competition> getCompetition(Long id) {
         return repository.findById(id);
+    }
+
+    @Override
+    public List<Match> getOngoingMatches(Long id) {
+        Optional<Competition> competitionOpt = repository.findById(id);
+        if (competitionOpt.isEmpty()) {
+            return new ArrayList<>();
+        }
+        Competition competition = competitionOpt.get();
+        if (competition.getPhaseOnGoing() == null) {
+            return new ArrayList<>();
+        }
+
+        com.glop.cibl_orga_sport.data.enumType.EtapeEpreuveEnum etapeEnum = mapPhaseToEtape(competition.getPhaseOnGoing());
+        return matchRepository.findByEtapeEpreuveEpreuveCompetitionIdCompetitionAndEtapeEpreuveEtapeEpreuveEnum(id, etapeEnum);
+    }
+
+    private com.glop.cibl_orga_sport.data.enumType.EtapeEpreuveEnum mapPhaseToEtape(
+            com.glop.cibl_orga_sport.data.enumType.CompetitionPhaseType phase) {
+        return com.glop.cibl_orga_sport.data.enumType.EtapeEpreuveEnum.valueOf(phase.name());
     }
 
     @Override
@@ -283,6 +312,17 @@ public class CompetitionServiceImpl implements CompetitionService {
 
         competition.setStatut(CompetitionStatusEnum.PUBLISH);
         logger.info("Compétition publiée avec succès (ID: {}). Étapes et matchs initiaux générés.", id);
+        return repository.save(competition);
+    }
+
+    @Override
+    public Competition unpublishCompetition(Long id) {
+        Optional<Competition> competitionOpt = repository.findById(id);
+        if (competitionOpt.isEmpty()) {
+            return null;
+        }
+        Competition competition = competitionOpt.get();
+        competition.setStatut(CompetitionStatusEnum.UNPUBLISHED);
         return repository.save(competition);
     }
 

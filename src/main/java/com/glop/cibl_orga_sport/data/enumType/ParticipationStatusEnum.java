@@ -1,5 +1,5 @@
 package com.glop.cibl_orga_sport.data.enumType;
 
 public enum ParticipationStatusEnum {
-    INSCRIT, DISQUALIFIE, ABANDON, ELIMINE
+    INSCRIT, QUALIFIE, ELIMINE, ABANDON, EXCLUS
 }

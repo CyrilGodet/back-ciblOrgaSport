@@ -20,9 +20,15 @@ public interface CompetitionService {
 
     List<Competition> getAllCompetitions();
 
+    List<Competition> getPublishedCompetitions();
+
     Optional<Competition> getCompetition(Long id);
 
+    List<com.glop.cibl_orga_sport.data.Match> getOngoingMatches(Long id);
+
     Competition publishCompetition(Long id);
+
+    Competition unpublishCompetition(Long id);
 
     Competition startCompetition(Long id);
 

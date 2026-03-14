@@ -1,5 +1,12 @@
 package com.glop.cibl_orga_sport.dto;
 
+import com.glop.cibl_orga_sport.data.Utilisateur;
+
+import lombok.Builder;
+import lombok.Data;
+
+@Builder
+@Data
 public class UtilisateurDTO {
     private Long idUtilisateur;
     private String nom;
@@ -8,62 +15,47 @@ public class UtilisateurDTO {
     private int age;
     private LieuDTO lieu;
 
-    public UtilisateurDTO() {}
+    private String mdp;
 
-    public UtilisateurDTO(Long idUtilisateur, String nom, String prenom, String email, int age, LieuDTO lieu) {
-        this.idUtilisateur = idUtilisateur;
-        this.nom = nom;
-        this.prenom = prenom;
-        this.email = email;
-        this.age = age;
-        this.lieu = lieu;
+    private String verifyMdp;
+
+    private RolesDto roles;
+
+    private int state;
+
+
+    public static UtilisateurDTO fromEntity(Utilisateur user) {
+        if (user == null) {
+            return null;
+        }
+        return UtilisateurDTO.builder()
+                .idUtilisateur(user.getIdUtilisateur())
+                .nom(user.getNom())
+                .prenom(user.getPrenom())
+                .email(user.getEmail())
+                .age(user.getAge())
+                .lieu(LieuDTO.fromEntity(user.getLieu()))
+                .mdp(user.getMdp())
+                .roles(RolesDto.fromEntity(user.getRoles()))
+                .state(user.getState())
+                .build();
     }
 
-    public Long getIdUtilisateur() {
-        return idUtilisateur;
+    public static Utilisateur toEntity(UtilisateurDTO userDto) {
+        if (userDto == null) {
+            return null;
+        }
+        Utilisateur user = new Utilisateur();
+        user.setIdUtilisateur(user.getId());
+        user.setNom(userDto.getNom());
+        user.setPrenom(userDto.getPrenom());
+        user.setEmail(userDto.getEmail());
+        user.setAge(userDto.getAge());
+        user.setLieu(LieuDTO.toEntity(userDto.getLieu()));
+        user.setMdp(userDto.getMdp());
+        user.setRoles(RolesDto.toEntity(userDto.getRoles()));
+        user.setState(userDto.getState());
+        return user;
     }
 
-    public void setIdUtilisateur(Long idUtilisateur) {
-        this.idUtilisateur = idUtilisateur;
-    }
-
-    public String getNom() {
-        return nom;
-    }
-
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
-
-    public String getPrenom() {
-        return prenom;
-    }
-
-    public void setPrenom(String prenom) {
-        this.prenom = prenom;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public LieuDTO getLieu() {
-        return lieu;
-    }
-
-    public void setLieu(LieuDTO lieu) {
-        this.lieu = lieu;
-    }
 }

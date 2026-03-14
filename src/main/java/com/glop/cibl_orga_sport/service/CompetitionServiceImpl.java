@@ -276,6 +276,11 @@ public class CompetitionServiceImpl implements CompetitionService {
         // 2. Initialisation des étapes et matchs
         initializeCompetitionPhases(competition);
 
+        // 3. Définir la phase en cours (la première phase de l'ordre chronologique)
+        if (competition.getPhases() != null && !competition.getPhases().isEmpty()) {
+            competition.setPhaseOnGoing(competition.getPhases().get(0));
+        }
+
         competition.setStatut(CompetitionStatusEnum.PUBLISH);
         logger.info("Compétition publiée avec succès (ID: {}). Étapes et matchs initiaux générés.", id);
         return repository.save(competition);

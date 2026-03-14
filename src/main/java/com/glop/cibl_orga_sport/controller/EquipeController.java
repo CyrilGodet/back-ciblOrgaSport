@@ -36,6 +36,13 @@ public class EquipeController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/search")
+    public List<EquipeDTO> searchEquipes(@RequestParam("q") String query) {
+        return equipeService.searchEquipes(query).stream()
+                .map(EquipeMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
     @PostMapping
     public ResponseEntity<EquipeDTO> createEquipe(@RequestBody EquipeDTO equipeDTO) {
         Equipe created = equipeService.createEquipe(equipeDTO);

@@ -7,13 +7,13 @@ import java.util.List;
 public interface RolesService {
     RolesDto save(RolesDto rolesDto);
 
-    RolesDto update(Integer id, RolesDto rolesDto);
+    RolesDto update(Long id, RolesDto rolesDto);
 
-    RolesDto findById(Integer id);
+    RolesDto findById(Long id);
 
     List<RolesDto> findAll();
 
-    void delete(Integer id);
+    void delete(Long id);
 
     RolesDto findByDesignation(String designation);
 

@@ -1,9 +1,6 @@
 package com.glop.cibl_orga_sport.data;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,6 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 public class Roles {
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idRoles;
 

@@ -39,6 +39,14 @@ public class Utilisateur {
     @JoinColumn(name = "idRoles")
     private Roles roles;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)  // "utilsateur" → "user"
     private List<History> historyList;
+
+    public Utilisateur(String nom, String prenom, String email, int age, Lieu lieu) {
+        this.nom = nom;
+        this.prenom = prenom;
+        this.email = email;
+        this.age = age;
+        this.lieu = lieu;
+    }
 }

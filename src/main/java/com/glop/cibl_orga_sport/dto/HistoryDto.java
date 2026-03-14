@@ -26,7 +26,6 @@ public class HistoryDto {
                 .action(history.getAction())
                 .status(history.getStatus())
                 .user(UtilisateurDTO.fromEntity(history.getUser()))
-                .userConnected(history.getUserConnected())
                 .lastModifiedDate(history.getLastModifiedDate())
                 .build();
         return historyDto;
@@ -40,8 +39,7 @@ public class HistoryDto {
         history.setIdHistory(historyDto.getId());
         history.setAction(historyDto.getAction());
         history.setStatus(historyDto.getStatus());
-        history.setUser(UserDto.toEntity(historyDto.getUser()));
-        history.setUserConnected(historyDto.getUserConnected());
+        history.setUser(UtilisateurDTO.toEntity(historyDto.getUser()));
         history.setLastModifiedDate(historyDto.getLastModifiedDate());
         return history;
     }
@@ -52,7 +50,6 @@ public class HistoryDto {
                 "id=" + id +
                 ", action='" + action + '\'' +
                 ", status" + status +
-                ", linelabel" + lineLabel +
                 ", user" + user +
                 '}';
     }

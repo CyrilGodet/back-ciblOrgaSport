@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 public class Permission{
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idPermission;
 

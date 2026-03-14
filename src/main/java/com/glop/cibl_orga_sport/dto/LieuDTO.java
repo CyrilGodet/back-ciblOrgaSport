@@ -35,4 +35,12 @@ public class LieuDTO {
         lieu.setAdresse(lieuDTO.getAdresse());
         return lieu;
     }
+
+    public LieuDTO(Long idLieu, String nom, String ville, String adresse) {
+        this.idLieu = idLieu;
+        this.nomLieu = nom;
+        this.ville = ville;
+        this.adresse = adresse;
+    }
+
 }

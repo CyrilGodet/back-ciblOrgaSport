@@ -23,6 +23,31 @@ public class UtilisateurDTO {
 
     private int state;
 
+    public UtilisateurDTO() {}
+
+    public UtilisateurDTO(Long idUtilisateur, String nom, String prenom, String email, int age, LieuDTO lieu) {
+        this.idUtilisateur = idUtilisateur;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.email = email;
+        this.age = age;
+        this.lieu = lieu;
+    }
+
+    @Builder
+    public UtilisateurDTO(Long idUtilisateur, String nom, String prenom, String email, int age,
+                          LieuDTO lieu, String mdp, String verifyMdp, RolesDto roles, int state) {
+        this.idUtilisateur = idUtilisateur;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.email = email;
+        this.age = age;
+        this.lieu = lieu;
+        this.mdp = mdp;
+        this.verifyMdp = verifyMdp;
+        this.roles = roles;
+        this.state = state;
+    }
 
     public static UtilisateurDTO fromEntity(Utilisateur user) {
         if (user == null) {
@@ -46,7 +71,7 @@ public class UtilisateurDTO {
             return null;
         }
         Utilisateur user = new Utilisateur();
-        user.setIdUtilisateur(user.getId());
+        user.setIdUtilisateur(userDto.getIdUtilisateur());
         user.setNom(userDto.getNom());
         user.setPrenom(userDto.getPrenom());
         user.setEmail(userDto.getEmail());
@@ -57,5 +82,4 @@ public class UtilisateurDTO {
         user.setState(userDto.getState());
         return user;
     }
-
 }

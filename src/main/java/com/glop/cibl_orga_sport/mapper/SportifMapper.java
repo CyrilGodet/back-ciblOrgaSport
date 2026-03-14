@@ -10,9 +10,7 @@ public class SportifMapper {
             return null;
 
         SportifDTO dto = new SportifDTO();
-        dto.setIdSportif(sportif.getIdSportif());
-        dto.setNom(sportif.getNom());
-        dto.setPrenom(sportif.getPrenom());
+        UtilisateurMapper.mapToDTO(sportif, dto);
         return dto;
     }
 
@@ -21,9 +19,7 @@ public class SportifMapper {
             return null;
 
         Sportif sportif = new Sportif();
-        sportif.setIdSportif(dto.getIdSportif());
-        sportif.setNom(dto.getNom());
-        sportif.setPrenom(dto.getPrenom());
+        UtilisateurMapper.mapToEntity(dto, sportif);
         return sportif;
     }
 }

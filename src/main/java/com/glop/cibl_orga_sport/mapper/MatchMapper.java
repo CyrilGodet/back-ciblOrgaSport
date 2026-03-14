@@ -31,9 +31,8 @@ public class MatchMapper {
             dto.setPeriode(periodeDTO);
         }
 
-        // ResultatMapper logic here or similar
         if (match.getResultat() != null) {
-            // result mapping...
+            dto.setResultat(ResultatMapper.toDTO(match.getResultat()));
         }
 
         dto.setStatus(match.getStatus());
@@ -52,6 +51,10 @@ public class MatchMapper {
                     new java.sql.Date(dto.getPeriode().getDateDebut().getTime()),
                     new java.sql.Date(dto.getPeriode().getDateFin().getTime()));
             match.setPeriode(periode);
+        }
+
+        if (dto.getResultat() != null) {
+            match.setResultat(ResultatMapper.toEntity(dto.getResultat()));
         }
 
         match.setStatus(dto.getStatus());

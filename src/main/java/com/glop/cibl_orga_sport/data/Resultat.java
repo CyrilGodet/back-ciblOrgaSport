@@ -1,11 +1,20 @@
 package com.glop.cibl_orga_sport.data;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.glop.cibl_orga_sport.data.enumType.ResultatStatusEnum;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Resultat {
@@ -14,26 +23,20 @@ public class Resultat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idResultat;
 
-    @ManyToOne
-    private Equipe equipe;
-
-    @ManyToOne
-    private Epreuve epreuve;
-
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private double score;
+    private ResultatStatusEnum status = ResultatStatusEnum.DRAFT;
 
-    @Column(nullable = false)
-    private int rang;
+    @OneToMany(mappedBy = "resultat", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference("resultat-details")
+    private List<ResultatDetails> details = new ArrayList<>();
 
     public Resultat() {
     }
 
-    public Resultat(Equipe equipe, Epreuve epreuve, double score, int rang) {
-        this.equipe = equipe;
-        this.epreuve = epreuve;
-        this.score = score;
-        this.rang = rang;
+    public Resultat(ResultatStatusEnum status) {
+        this.status = status;
+        this.details = new ArrayList<>();
     }
 
     public Long getIdResultat() {
@@ -44,38 +47,29 @@ public class Resultat {
         this.idResultat = idResultat;
     }
 
-    public Equipe getEquipe() {
-        return equipe;
+    public ResultatStatusEnum getStatus() {
+        return status;
     }
 
-    public void setEquipe(Equipe equipe) {
-        this.equipe = equipe;
+    public void setStatus(ResultatStatusEnum status) {
+        this.status = status;
     }
 
-    public Epreuve getEpreuve() {
-        return epreuve;
+    public List<ResultatDetails> getDetails() {
+        return details;
     }
 
-    public void setEpreuve(Epreuve epreuve) {
-        this.epreuve = epreuve;
+    public void setDetails(List<ResultatDetails> details) {
+        this.details = details;
     }
 
-    public double getScore() {
-        return score;
+    public void addDetail(ResultatDetails detail) {
+        details.add(detail);
+        detail.setResultat(this);
     }
 
-    public void setScore(double score) {
-        this.score = score;
+    public void removeDetail(ResultatDetails detail) {
+        details.remove(detail);
+        detail.setResultat(null);
     }
-
-    public int getRang() {
-        return rang;
-    }
-
-    public void setRang(int rang) {
-        this.rang = rang;
-    }
-
-    
-
 }

@@ -43,6 +43,7 @@ public class Competition {
     @Enumerated(EnumType.STRING)
     private List<CompetitionPhaseType> phases = new ArrayList<>();
 
+
     @Embedded
     private Periode periode;
 

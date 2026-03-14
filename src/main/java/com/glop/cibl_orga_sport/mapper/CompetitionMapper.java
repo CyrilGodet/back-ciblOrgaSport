@@ -50,6 +50,7 @@ public class CompetitionMapper {
                     .collect(Collectors.toList()));
         }
 
+
         return dto;
     }
 

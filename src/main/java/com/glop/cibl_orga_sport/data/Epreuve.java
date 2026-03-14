@@ -61,6 +61,9 @@ public class Epreuve {
     @Column(nullable = false)
     private int nombreEquipeParMatch = 2;
 
+    @Column(nullable = false)
+    private int nbElimParMatch = 1;
+
     public Epreuve() {
     }
 
@@ -68,6 +71,7 @@ public class Epreuve {
         this.nomEpreuve = nomEpreuve;
         this.etapesEpreuves = new ArrayList<>();
         this.nombreEquipeParMatch = 2;
+        this.nbElimParMatch = 1;
     }
 
     public Long getIdEpreuve() {
@@ -176,6 +180,14 @@ public class Epreuve {
 
     public void setNombreEquipeParMatch(int nombreEquipeParMatch) {
         this.nombreEquipeParMatch = nombreEquipeParMatch;
+    }
+
+    public int getNbElimParMatch() {
+        return nbElimParMatch;
+    }
+
+    public void setNbElimParMatch(int nbElimParMatch) {
+        this.nbElimParMatch = nbElimParMatch;
     }
 
 }

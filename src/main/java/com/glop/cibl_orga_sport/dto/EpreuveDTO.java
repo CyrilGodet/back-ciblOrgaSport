@@ -21,6 +21,7 @@ public class EpreuveDTO {
     private CompetitionStatusEnum statut;
     private List<ParticipationDTO> participations = new ArrayList<>();
     private int nbPerMatch;
+    private int nbElimMatch;
 
     public EpreuveDTO() {
     }
@@ -155,6 +156,14 @@ public class EpreuveDTO {
 
     public void setNbPerMatch(int nbPerMatch) {
         this.nbPerMatch = nbPerMatch;
+    }
+
+    public int getNbElimMatch() {
+        return nbElimMatch;
+    }
+
+    public void setNbElimMatch(int nbElimMatch) {
+        this.nbElimMatch = nbElimMatch;
     }
 
 }

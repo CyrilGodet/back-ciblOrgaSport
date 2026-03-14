@@ -3,13 +3,17 @@
 -- ============================
 
 -- Suppression des enfants d'abord
-DELETE FROM participation;
-DELETE FROM competition_phases;
-DELETE FROM epreuve;
-DELETE FROM equipe_sportif;
-DELETE FROM sportif;
-DELETE FROM equipe;
-DELETE FROM competition;
+TRUNCATE TABLE
+participation,
+etape_epreuve,
+etape_equipe,
+competition_phases,
+epreuve,
+equipe_sportif,
+sportif,
+equipe,
+competition
+RESTART IDENTITY CASCADE;
 
 -- Réinitialisation des séquences existantes
 ALTER SEQUENCE equipe_id_equipe_seq RESTART WITH 1;

@@ -38,8 +38,7 @@ public class EquipeController {
 
     @PostMapping
     public ResponseEntity<EquipeDTO> createEquipe(@RequestBody EquipeDTO equipeDTO) {
-        Equipe created = equipeService.createEquipe(
-                equipeDTO.getNomEquipe());
+        Equipe created = equipeService.createEquipe(equipeDTO);
         return new ResponseEntity<>(EquipeMapper.toDTO(created), HttpStatus.CREATED);
     }
 

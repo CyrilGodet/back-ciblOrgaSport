@@ -20,13 +20,14 @@ public class EpreuveDTO {
     private int ageMax;
     private CompetitionStatusEnum statut;
     private List<ParticipationDTO> participations = new ArrayList<>();
+    private int nbPerMatch;
 
     public EpreuveDTO() {
     }
 
     public EpreuveDTO(Long idEpreuve, String nomEpreuve, String description, Long competitionId,
             DisciplineEnum discipline, CompetitionGenreEnum genre, Date dateDebut, Date dateFin, int ageMin, int ageMax,
-            CompetitionStatusEnum statut, List<ParticipationDTO> participations) {
+            CompetitionStatusEnum statut, List<ParticipationDTO> participations, int nbPerMatch) {
         this.idEpreuve = idEpreuve;
         this.nomEpreuve = nomEpreuve;
         this.description = description;
@@ -39,6 +40,7 @@ public class EpreuveDTO {
         this.ageMax = ageMax;
         this.statut = statut;
         this.participations = participations != null ? participations : new ArrayList<>();
+        this.nbPerMatch = nbPerMatch;
     }
 
     public Long getIdEpreuve() {
@@ -145,6 +147,14 @@ public class EpreuveDTO {
 
     public void setEtapesEpreuves(List<EtapeEpreuveDTO> etapesEpreuves) {
         this.etapesEpreuves = etapesEpreuves;
+    }
+
+    public int getNbPerMatch() {
+        return nbPerMatch;
+    }
+
+    public void setNbPerMatch(int nbPerMatch) {
+        this.nbPerMatch = nbPerMatch;
     }
 
 }

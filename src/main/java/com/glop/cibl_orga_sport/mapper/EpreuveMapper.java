@@ -20,6 +20,7 @@ public class EpreuveMapper {
         dto.setDiscipline(epreuve.getDiscipline());
         dto.setGenre(epreuve.getGenre());
         dto.setStatut(epreuve.getStatut());
+        dto.setNbPerMatch(epreuve.getNombreEquipeParMatch());
 
         if (epreuve.getCompetition() != null) {
             dto.setCompetitionId(epreuve.getCompetition().getIdCompetition());
@@ -69,6 +70,7 @@ public class EpreuveMapper {
 
         ConditionAge conditionAge = new ConditionAge(dto.getAgeMin(), dto.getAgeMax());
         epreuve.setConditionAge(conditionAge);
+        epreuve.setNombreEquipeParMatch(dto.getNbPerMatch());
 
         return epreuve;
     }

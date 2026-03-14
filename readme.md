@@ -38,3 +38,8 @@ Les identifiants par défaut sont :
 4. Sélectionner la data source Prometheus créée précédemment.
 5. Cliquer sur "Import" pour ajouter le dashboard.
 
+
+
+
+sudo docker exec -it postgresql_database psql -U admin -d glop
+cat seed_data.sql | sudo docker exec -i postgresql_database psql -U admin -d glop

@@ -53,7 +53,7 @@ public class RolesImplService implements RolesService {
     }
 
     @Override
-    public RolesDto update(Integer id, RolesDto rolesDto) {
+    public RolesDto update(Long id, RolesDto rolesDto) {
         log.info("Inside update roles{}", id);
         Optional<Roles> rolesOptional = rolesDao.findById(id);
         if (rolesOptional.isPresent()) {
@@ -70,7 +70,7 @@ public class RolesImplService implements RolesService {
     }
 
     @Override
-    public RolesDto findById(Integer id) {
+    public RolesDto findById(Long id) {
         if (id == null) {
             log.error("Roles ID is null");
             return null;
@@ -92,7 +92,7 @@ public class RolesImplService implements RolesService {
     }
 
     @Override
-    public void delete(Integer id) {
+    public void delete(Long id) {
         if (id == null){
             log.error("Role ID is null");
             return;

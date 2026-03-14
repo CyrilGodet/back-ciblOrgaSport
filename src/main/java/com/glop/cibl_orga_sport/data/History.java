@@ -12,6 +12,7 @@ import java.time.Instant;
 @NoArgsConstructor
 @Entity
 public class History{
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idHistory;
 
@@ -19,7 +20,7 @@ public class History{
     private String status;
 
     @ManyToOne
-    @JoinColumn(name = "idUser")
+    @JoinColumn(name = "idUtilisateur")
     private Utilisateur user;
 
     private String userConnected;

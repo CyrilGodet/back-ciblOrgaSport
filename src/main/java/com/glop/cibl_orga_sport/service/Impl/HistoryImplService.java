@@ -39,7 +39,6 @@ public class HistoryImplService implements HistoryService {
     @Override
     public void saveHistory(String action, String status, Utilisateur user) {
         History history = new History();
-        history.setUserConnected(user.getEmail());
         history.setUser(user);
         history.setAction(action);
         history.setStatus(status);
@@ -50,7 +49,6 @@ public class HistoryImplService implements HistoryService {
     public void saveHistoryLogin(String action, String status, Utilisateur user, String login) {
         String userConnected = getUserConnected();
         History history = new History();
-        history.setUserConnected(userConnected);
         history.setUser(user);
         history.setAction(action);
         history.setStatus(status);

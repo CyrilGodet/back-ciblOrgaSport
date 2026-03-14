@@ -21,12 +21,9 @@ public class EpreuveDTO {
     private CompetitionStatusEnum statut;
     private List<ParticipationDTO> participations = new ArrayList<>();
     private int nbPerMatch;
-<<<<<<< HEAD
     private int nbElimMatch;
     private CompetitionPhaseTypeDto phaseOnGoing;
     private int tailleEquipe;
-=======
->>>>>>> 8ddf0b6 (refactor: nb de participant par match)
 
     public EpreuveDTO() {
     }

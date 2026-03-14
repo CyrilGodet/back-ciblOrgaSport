@@ -81,6 +81,7 @@ public class EpreuveMapper {
         epreuve.setConditionAge(conditionAge);
         epreuve.setNombreEquipeParMatch(dto.getNbPerMatch());
 <<<<<<< HEAD
+<<<<<<< HEAD
         epreuve.setNbElimParMatch(dto.getNbElimMatch());
         epreuve.setTailleEquipe(dto.getTailleEquipe());
 
@@ -89,6 +90,9 @@ public class EpreuveMapper {
         }
 =======
 >>>>>>> 8ddf0b6 (refactor: nb de participant par match)
+=======
+        epreuve.setNbElimParMatch(dto.getNbElimMatch());
+>>>>>>> d764775 (fix: phase)
 
         return epreuve;
     }

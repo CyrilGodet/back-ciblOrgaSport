@@ -56,6 +56,11 @@ public class EquipeServiceImpl implements EquipeService {
     }
 
     @Override
+    public List<Equipe> searchEquipes(String query) {
+        return equipeRepository.findByNomEquipeContainingIgnoreCase(query);
+    }
+
+    @Override
     public Equipe updateEquipe(Long id, String nomEquipe) {
         Optional<Equipe> existing = equipeRepository.findById(id);
         if (existing.isPresent()) {

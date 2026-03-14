@@ -61,6 +61,11 @@ public class CompetitionServiceImpl implements CompetitionService {
 
         if (dto.getEpreuves() != null) {
             dto.getEpreuves().forEach(eDto -> {
+                if (eDto.getNbPerMatch() <= 0) {
+                    throw new IllegalArgumentException(
+                            "Le nombre d'équipes par match (nbPerMatch) doit être supérieur à 0 pour l'épreuve '"
+                                    + eDto.getNomEpreuve() + "'.");
+                }
                 com.glop.cibl_orga_sport.data.Epreuve e = com.glop.cibl_orga_sport.mapper.EpreuveMapper.toEntity(eDto);
                 c.addEpreuve(e);
 
@@ -138,6 +143,11 @@ public class CompetitionServiceImpl implements CompetitionService {
         if (dto.getEpreuves() != null) {
             c.getEpreuves().clear();
             dto.getEpreuves().forEach(eDto -> {
+                if (eDto.getNbPerMatch() <= 0) {
+                    throw new IllegalArgumentException(
+                            "Le nombre d'équipes par match (nbPerMatch) doit être supérieur à 0 pour l'épreuve '"
+                                    + eDto.getNomEpreuve() + "'.");
+                }
                 com.glop.cibl_orga_sport.data.Epreuve e = com.glop.cibl_orga_sport.mapper.EpreuveMapper.toEntity(eDto);
                 c.addEpreuve(e);
 
@@ -308,6 +318,13 @@ public class CompetitionServiceImpl implements CompetitionService {
                 throw new IllegalStateException(
                         "L'épreuve '" + epreuve.getNomEpreuve() + "' doit avoir au moins un participant.");
             }
+
+            // Validation du nombre d'équipes par match
+            if (epreuve.getNombreEquipeParMatch() <= 0) {
+                throw new IllegalStateException(
+                        "Le nombre d'équipes par match doit être supérieur à 0 pour l'épreuve '"
+                                + epreuve.getNomEpreuve() + "'.");
+            }
         }
     }
 
@@ -357,8 +374,6 @@ public class CompetitionServiceImpl implements CompetitionService {
         etape.getEquipes().addAll(equipes);
 
         int nbPerMatch = epreuve.getNombreEquipeParMatch();
-        if (nbPerMatch <= 0)
-            nbPerMatch = 2;
 
         logger.info("Configuration: {} équipes par match.", nbPerMatch);
 

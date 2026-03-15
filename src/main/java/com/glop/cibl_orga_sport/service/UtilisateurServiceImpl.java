@@ -5,16 +5,26 @@ import com.glop.cibl_orga_sport.data.Visiteur;
 import com.glop.cibl_orga_sport.data.Commissaire;
 import com.glop.cibl_orga_sport.data.Lieu;
 import com.glop.cibl_orga_sport.dto.SportifDTO;
+import com.glop.cibl_orga_sport.dto.UtilisateurDTO;
 import com.glop.cibl_orga_sport.dto.VisiteurDTO;
+import com.glop.cibl_orga_sport.exception.EntityNotFoundException;
+import com.glop.cibl_orga_sport.exception.ErrorCodes;
 import com.glop.cibl_orga_sport.repository.UtilisateurRepository;
 import com.glop.cibl_orga_sport.repository.LieuRepository;
 import com.glop.cibl_orga_sport.mapper.SportifMapper;
 import com.glop.cibl_orga_sport.mapper.VisiteurMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
+@RequiredArgsConstructor
 @Service
 public class UtilisateurServiceImpl implements UtilisateurService {
 
@@ -58,4 +68,29 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     public List<Commissaire> getAllCommissaires() {
         return repository.findAllCommissaires();
     }
+
+    @Override
+    public UtilisateurDTO findByEmail(String email) {
+        if (email == null) {
+            log.error("Dear customer, login is null");
+            return null;
+        }
+        return repository.findByEmail(email)
+                .map(utilisateur -> UtilisateurDTO.fromEntity(utilisateur))  // ✅ Lambda
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Aucun utilisateur avec l'email = " + email + " n'a été trouvé dans la BDD",
+                        ErrorCodes.USER_NOT_FOUND));
+    }
+
+    @Override
+    public UserDetailsService userDetailsService() {
+        return new UserDetailsService() {
+            @Override
+            public UserDetails loadUserByUsername(String username) {
+                return repository.findByEmail(username)
+                        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+            }
+        };
+    }
+
 }

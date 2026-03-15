@@ -70,17 +70,9 @@ public class RolesImplService implements RolesService {
     }
 
     @Override
-    public RolesDto findById(Integer id) {
-        if (id == null) {
-            log.error("Roles ID is null");
-            return null;
-        }
-
-        Optional<Roles> roles = rolesDao.findById(id);
-        RolesDto rolesDto = RolesDto.fromEntity(roles.get());
-        return Optional.of(rolesDto).orElseThrow(() ->
-                new EntityNotFoundException("Aucun category avec l'Id = " + id + "dans la base", ErrorCodes.CATEGORY_NOT_FOUND));
-
+    public Roles findById(Integer id) {
+        return rolesDao.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Role introuvable"));
     }
 
     @Override

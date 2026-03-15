@@ -23,4 +23,12 @@ public class Roles {
 
     @OneToMany(mappedBy = "roles")
     private List<Permission> permissionList;
+
+    @Override
+    public String toString() {
+        return "Roles{" +
+                "id=" + idRoles +
+                ", designation='" + designation + '\'' +
+                '}';
+    }
 }

@@ -91,4 +91,15 @@ public class Utilisateur implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    @Override
+    public String toString() {
+        return "Utilisateur{" +
+                "id=" + idUtilisateur +
+                ", nom='" + nom + '\'' +
+                ", prenom='" + prenom + '\'' +
+                ", email='" + email + '\'' +
+                ", state=" + state +
+                '}';
+    }
 }

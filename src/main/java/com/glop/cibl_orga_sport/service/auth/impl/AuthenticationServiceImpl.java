@@ -1,5 +1,6 @@
 package com.glop.cibl_orga_sport.service.auth.impl;
 
+import com.glop.cibl_orga_sport.data.Roles;
 import com.glop.cibl_orga_sport.data.Utilisateur;
 import com.glop.cibl_orga_sport.data.auth.request.SignUpRequest;
 import com.glop.cibl_orga_sport.data.auth.request.SigninRequest;
@@ -46,7 +47,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         List<String> errors = SignUpValidator.validate(request);
         if (!errors.isEmpty()) {
-            log.error("Le request signunp n'est pas valide", request);
+            log.error("Le request signup n'est pas valide", request);
             historyService.saveHistory("sign up", "failed");
             throw new InvalidEntityException("Le requested user n'est pas valide", ErrorCodes.USER_NOT_VALID, errors);
         }
@@ -55,24 +56,29 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             historyService.saveHistory("register User", "failed");
             throw new InvalidEntityException("The passwords do not match.");
         }
+
+        Roles role = rolesService.findById(2);
+
         Utilisateur user = new Utilisateur();
         user.setNom(request.getName());
         user.setPrenom(request.getLastname());
         user.setEmail(request.getLogin());
         user.setMdp(passwordEncoder.encode(request.getMdp()));
         user.setState(0);
-        RolesDto rolesDto = rolesService.findById(2);
-        UtilisateurDTO userDto = UtilisateurDTO.fromEntity(user);
-        userDto.setRoles(rolesDto);
-        userDto.setMdp(passwordEncoder.encode(request.getMdp()));
-        System.out.println("ito ary ilay userDto = " + userDto);
-        Utilisateur user1 = UtilisateurDTO.toEntity(userDto);
-        System.out.println("Dia ito ary ilay user1 avec roles = " + user1);
-        System.out.println("ito ilay sauvegarde = " + userDao.save(user1));
-        var jwt = jwtService.generateToken(user);
-        historyService.saveHistory("register User", "success", user1);
-        return JwtAuthenticationResponse.builder().token(jwt).build();
+        user.setRoles(role);
+
+        Utilisateur savedUser = userDao.save(user);
+        System.out.println("User sauvegardé : " + savedUser);
+
+        var jwt = jwtService.generateToken(savedUser);
+        historyService.saveHistory("register User", "success", savedUser);
+
+        return JwtAuthenticationResponse.builder()
+                .token(jwt)
+                .login(savedUser.getEmail())
+                .build();
     }
+
     //AUTHENTICATION RENVOIE ATTEMPT NEW USER IN USERCONNECTED
     /*
     @Override

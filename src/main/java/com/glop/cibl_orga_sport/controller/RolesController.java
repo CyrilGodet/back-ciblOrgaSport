@@ -1,6 +1,7 @@
 package com.glop.cibl_orga_sport.controller;
 
 import com.glop.cibl_orga_sport.controller.api.RolesApi;
+import com.glop.cibl_orga_sport.data.Roles;
 import com.glop.cibl_orga_sport.dto.RolesDto;
 import com.glop.cibl_orga_sport.service.RolesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,7 @@ public class RolesController {
     }
 
     @GetMapping("/id/{idRoles}")
-    public ResponseEntity<RolesDto> findById(@PathVariable("idRoles") Integer id) {
+    public ResponseEntity<Roles> findById(@PathVariable("idRoles") Integer id) {
         return ResponseEntity.ok(rolesService.findById(id));
     }
 

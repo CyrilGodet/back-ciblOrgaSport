@@ -1,6 +1,7 @@
 package com.glop.cibl_orga_sport.service;
 
 import com.glop.cibl_orga_sport.data.Sportif;
+import com.glop.cibl_orga_sport.data.UserDtoJson;
 import com.glop.cibl_orga_sport.data.Visiteur;
 import com.glop.cibl_orga_sport.data.Commissaire;
 import com.glop.cibl_orga_sport.dto.SportifDTO;
@@ -19,4 +20,10 @@ public interface UtilisateurService {
     UtilisateurDTO findByEmail(String email);
 
     UserDetailsService userDetailsService();
+
+    UtilisateurDTO findById(Integer id);
+
+    UserDtoJson updateNoMdp(Long id, UserDtoJson userDto);
+
+    List<UserDtoJson> findAll();
 }

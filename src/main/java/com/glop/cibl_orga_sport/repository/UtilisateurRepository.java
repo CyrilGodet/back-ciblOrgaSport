@@ -4,6 +4,7 @@ import com.glop.cibl_orga_sport.data.Utilisateur;
 import com.glop.cibl_orga_sport.data.Sportif;
 import com.glop.cibl_orga_sport.data.Visiteur;
 import com.glop.cibl_orga_sport.data.Commissaire;
+import com.glop.cibl_orga_sport.dto.UtilisateurDTO;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

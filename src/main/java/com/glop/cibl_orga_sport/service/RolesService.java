@@ -1,5 +1,6 @@
 package com.glop.cibl_orga_sport.service;
 
+import com.glop.cibl_orga_sport.data.Roles;
 import com.glop.cibl_orga_sport.dto.RolesDto;
 
 import java.util.List;
@@ -9,7 +10,7 @@ public interface RolesService {
 
     RolesDto update(Integer id, RolesDto rolesDto);
 
-    RolesDto findById(Integer id);
+    Roles findById(Integer id);
 
     List<RolesDto> findAll();
 

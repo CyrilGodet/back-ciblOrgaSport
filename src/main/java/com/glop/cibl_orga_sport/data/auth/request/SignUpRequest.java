@@ -26,4 +26,10 @@ public class SignUpRequest {
 
     //@JsonIgnore
     private RolesDto roles;
+
+    @Override
+    public String toString() {
+        return "SignUpRequest(name=" + name + ", login=" + login + ", mdp=***MASQUÉ***)";
+    }
+
 }

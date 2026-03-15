@@ -60,8 +60,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         Roles role = rolesService.findById(2);
 
         Utilisateur user = new Utilisateur();
-        user.setNom(request.getName());
-        user.setPrenom(request.getLastname());
+        user.setNom(request.getLastname());
+        user.setPrenom(request.getName());
         user.setEmail(request.getLogin());
         user.setMdp(passwordEncoder.encode(request.getMdp()));
         user.setState(0);

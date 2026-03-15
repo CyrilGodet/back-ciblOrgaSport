@@ -12,4 +12,9 @@ import lombok.NoArgsConstructor;
 public class SigninRequest {
     private String login;
     private String mdp;
+
+    @Override
+    public String toString() {
+        return "SigninRequest(login=" + login + ", mdp=***MASQUÉ***)";
+    }
 }

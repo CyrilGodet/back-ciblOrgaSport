@@ -8,7 +8,6 @@ import java.util.List;
 
 import static com.glop.cibl_orga_sport.utils.Constants.PERMISSION_ENDPOINT;
 
-@RequestMapping(PERMISSION_ENDPOINT)
 public interface PermissionApi {
     @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<PermissionDto> save(@RequestBody PermissionDto permissionDto);

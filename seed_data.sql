@@ -66,17 +66,26 @@ INSERT INTO lieu (nom_lieu, ville, adresse) VALUES
 ('visiteur@glop.com', 'Marseille', 'Accueil');
 
 -- ============================
--- Création des équipes
+-- Création des équipes (Maintenant via Polymorphisme Participant)
 -- ============================
 
-INSERT INTO equipe (nom_equipe) VALUES
-('Les Foulées Rapides'), ('Sprint Nord'), ('Les Solitaires du Stade'), ('Run Power'), ('Les Gazelles'),
-('Les Flèches Rouges'), ('Ultra Solo'), ('Les Coureurs Libres'), ('Solo Performance'), ('Nord Running'),
-('Speed Force'), ('Les Endurants'), ('Solo Elite'), ('Run Storm'), ('Les Turbos'),
-('Les Rapides'), ('Solo Horizon'), ('Les Sprinteurs'), ('Endurance Max'), ('Solo Victory'),
-('Duo Dynamique'), ('Les Binômes Rapides'), ('Double Impact'), ('Les Frères de Piste'), ('Duo Nordique'),
-('Les Inséparables'), ('Double Endurance'), ('Les Fusées'), ('Duo Sprint'), ('Les Compagnons de Course'),
-('Twin Speed'), ('Les Coureurs Unis'), ('Double Energie'), ('Duo Horizon'), ('Les Alliés du Run');
+-- First we create the Participants, then the ParticipantEquipe
+-- Let's create Participants for all 35 teams. 
+-- We assume IDs will be 1 to 35 for these teams in the participant table.
+
+INSERT INTO participant (id_participant) VALUES (1), (2), (3), (4), (5), (6), (7), (8), (9), (10),
+(11), (12), (13), (14), (15), (16), (17), (18), (19), (20),
+(21), (22), (23), (24), (25), (26), (27), (28), (29), (30),
+(31), (32), (33), (34), (35);
+
+INSERT INTO participant_equipe (nom_equipe, id_participant) VALUES
+('Les Foulées Rapides', 1), ('Sprint Nord', 2), ('Les Solitaires du Stade', 3), ('Run Power', 4), ('Les Gazelles', 5),
+('Les Flèches Rouges', 6), ('Ultra Solo', 7), ('Les Coureurs Libres', 8), ('Solo Performance', 9), ('Nord Running', 10),
+('Speed Force', 11), ('Les Endurants', 12), ('Solo Elite', 13), ('Run Storm', 14), ('Les Turbos', 15),
+('Les Rapides', 16), ('Solo Horizon', 17), ('Les Sprinteurs', 18), ('Endurance Max', 19), ('Solo Victory', 20),
+('Duo Dynamique', 21), ('Les Binômes Rapides', 22), ('Double Impact', 23), ('Les Frères de Piste', 24), ('Duo Nordique', 25),
+('Les Inséparables', 26), ('Double Endurance', 27), ('Les Fusées', 28), ('Duo Sprint', 29), ('Les Compagnons de Course', 30),
+('Twin Speed', 31), ('Les Coureurs Unis', 32), ('Double Energie', 33), ('Duo Horizon', 34), ('Les Alliés du Run', 35);
 
 -- ============================
 -- Création des utilisateurs
@@ -108,14 +117,24 @@ INSERT INTO utilisateur (nom, prenom, email, age, user_type, id_lieu) VALUES
 ('Bob', 'Visiteur', 'visiteur@glop.com', 20, 'VISITEUR', 33);
 
 -- ============================
--- Liaisons équipes ↔ sportifs
+-- Liaisons équipes ↔ sportifs (Via participant_equipe_sportif)
 -- ============================
 
 -- Solo (1-20)
-INSERT INTO equipe_sportif VALUES (1,1),(2,2),(3,3),(4,4),(5,5),(6,6),(7,7),(8,8),(9,9),(10,10),
+-- Table should be renamed to participant_equipe_sportif or similar based on mapping, in Java it is `equipe_sportif` on ParticipantEquipe
+INSERT INTO equipe_sportif (equipe_id, sportif_id) VALUES (1,1),(2,2),(3,3),(4,4),(5,5),(6,6),(7,7),(8,8),(9,9),(10,10),
 (11,11),(12,12),(13,13),(14,14),(15,15),(16,16),(17,17),(18,18),(19,19),(20,20);
 
 -- Duo (21-35)
-INSERT INTO equipe_sportif VALUES (21,1),(21,2),(22,3),(22,4),(23,5),(23,6),(24,7),(24,8),(25,9),(25,10),
+INSERT INTO equipe_sportif (equipe_id, sportif_id) VALUES (21,1),(21,2),(22,3),(22,4),(23,5),(23,6),(24,7),(24,8),(25,9),(25,10),
 (26,11),(26,12),(27,13),(27,14),(28,15),(28,16),(29,17),(29,18),(30,19),(30,20),(31,1),(31,3),
 (32,5),(32,7),(33,9),(33,11),(34,13),(34,15),(35,17),(35,19);
+
+-- Also create ParticipantSportif entries for all sportifs (1-20)
+-- Need to map IDs correctly. Let's assume Participant IDs 36 to 55 for sportifs.
+INSERT INTO participant (id_participant) VALUES (36), (37), (38), (39), (40), (41), (42), (43), (44), (45),
+(46), (47), (48), (49), (50), (51), (52), (53), (54), (55);
+
+INSERT INTO participant_sportif (sportif_id, id_participant) VALUES 
+(1, 36), (2, 37), (3, 38), (4, 39), (5, 40), (6, 41), (7, 42), (8, 43), (9, 44), (10, 45),
+(11, 46), (12, 47), (13, 48), (14, 49), (15, 50), (16, 51), (17, 52), (18, 53), (19, 54), (20, 55);

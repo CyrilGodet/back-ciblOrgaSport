@@ -12,7 +12,7 @@ public class ResultatDetailsMapper {
 
         ResultatDetailsDTO dto = new ResultatDetailsDTO();
         dto.setIdResultatDetails(entity.getIdResultatDetails());
-        dto.setEquipe(EquipeMapper.toDTO(entity.getEquipe()));
+        dto.setParticipant(ParticipantMapper.toDTO(entity.getParticipant()));
         dto.setRang(entity.getRang());
         dto.setStatus(entity.getStatus());
 
@@ -26,7 +26,7 @@ public class ResultatDetailsMapper {
 
         ResultatDetails entity = new ResultatDetails();
         entity.setIdResultatDetails(dto.getIdResultatDetails());
-        entity.setEquipe(EquipeMapper.toEntity(dto.getEquipe()));
+        entity.setParticipant(ParticipantMapper.toEntity(dto.getParticipant()));
         entity.setRang(dto.getRang());
         entity.setStatus(dto.getStatus());
 

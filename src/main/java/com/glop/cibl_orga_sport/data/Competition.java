@@ -39,6 +39,10 @@ public class Competition {
     @JsonManagedReference("competition-epreuves")
     private List<Epreuve> epreuves;
 
+    @OneToMany(mappedBy = "competition", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference("competition-participations")
+    private List<Participation> participations = new ArrayList<>();
+
     @ElementCollection
     @Enumerated(EnumType.STRING)
     private List<CompetitionPhaseType> phases = new ArrayList<>();
@@ -101,6 +105,14 @@ public class Competition {
 
     public void setEpreuves(List<Epreuve> epreuves) {
         this.epreuves = epreuves;
+    }
+
+    public List<Participation> getParticipations() {
+        return participations;
+    }
+
+    public void setParticipations(List<Participation> participations) {
+        this.participations = participations;
     }
 
     public void addEpreuve(Epreuve epreuve) {

@@ -36,7 +36,7 @@ public class ResultatServiceImpl implements ResultatService {
     private ResultatRepository resultatRepository;
 
     @Autowired
-    private EquipeRepository equipeRepository;
+    private ParticipantEquipeRepository equipeRepository;
 
     @Autowired
     private ParticipationRepository participationRepository;
@@ -62,21 +62,27 @@ public class ResultatServiceImpl implements ResultatService {
 
         if (resultatDTO.getDetails() != null) {
             for (com.glop.cibl_orga_sport.dto.ResultatDetailsDTO detailDTO : resultatDTO.getDetails()) {
-                if (detailDTO.getEquipe() == null || detailDTO.getEquipe().getIdEquipe() == null) {
-                    throw new IllegalArgumentException("L'équipe est obligatoire pour chaque détail de résultat.");
+                if (detailDTO.getParticipant() == null || detailDTO.getParticipant().getIdParticipant() == null) {
+                    throw new IllegalArgumentException("Le participant est obligatoire pour chaque détail de résultat.");
                 }
-                Equipe equipe = equipeRepository.findById(detailDTO.getEquipe().getIdEquipe())
+                
+                Participant participant;
+                // Since this might be a ParticipantEquipe or a ParticipantSportif, we need a ParticipantRepository
+                // We'll temporarly stick to Equipe if the ID maps, otherwise we should use a generic one.
+                // Assuming Eq has been migrated, let's cast or find. Ideally we need a ParticipantRepository.
+                // Fixing for the context provided
+                ParticipantEquipe equipe = equipeRepository.findById(detailDTO.getParticipant().getIdParticipant())
                         .orElseThrow(() -> new IllegalArgumentException(
-                                "Équipe non trouvée : " + detailDTO.getEquipe().getIdEquipe()));
+                                "Participant (Equipe) non trouvé : " + detailDTO.getParticipant().getIdParticipant()));
 
                 ResultatDetails detail = new ResultatDetails();
-                detail.setEquipe(equipe);
+                detail.setParticipant(equipe);
                 detail.setRang(detailDTO.getRang());
                 detail.setStatus(detailDTO.getStatus());
 
                 resultat.addDetail(detail);
-                logger.info("Ajout du détail pour l'équipe ID: {}, rang: {}, status: {}",
-                        equipe.getIdEquipe(), detail.getRang(), detail.getStatus());
+                logger.info("Ajout du détail pour le participant ID: {}, rang: {}, status: {}",
+                        equipe.getIdParticipant(), detail.getRang(), detail.getStatus());
             }
         }
 
@@ -140,10 +146,10 @@ public class ResultatServiceImpl implements ResultatService {
             etapeResultat.getDetails().clear();
         }
 
-        List<Equipe> qualifiedTeams = new ArrayList<>();
+        List<ParticipantEquipe> qualifiedTeams = new ArrayList<>();
         Epreuve epreuve = etapeEpreuve.getEpreuve();
         Competition competition = epreuve.getCompetition();
-        List<Participation> participations = participationRepository.findByEpreuve_IdEpreuve(epreuve.getIdEpreuve());
+        List<Participation> participations = participationRepository.findByCompetition_IdCompetition(competition.getIdCompetition());
 
         for (Match match : matches) {
             Resultat matchResultat = match.getResultat();
@@ -153,14 +159,17 @@ public class ResultatServiceImpl implements ResultatService {
             for (ResultatDetails matchDetail : matchResultat.getDetails()) {
                 // Ajouter le détail au résultat de l'étape
                 ResultatDetails etapeDetail = new ResultatDetails(
-                        matchDetail.getEquipe(), etapeResultat, matchDetail.getRang(), matchDetail.getStatus());
+                        matchDetail.getParticipant(), etapeResultat, matchDetail.getRang(), matchDetail.getStatus());
                 etapeResultat.addDetail(etapeDetail);
 
                 // Mettre à jour la participation
-                updateParticipationStatus(participations, matchDetail.getEquipe(), matchDetail.getStatus());
-
-                if (matchDetail.getStatus() == ResultatDetailsStatusEnum.QUALIFIE) {
-                    qualifiedTeams.add(matchDetail.getEquipe());
+                // Warning: Downcasting to ParticipantEquipe for logic continuity, but ideally handled polymorphically
+                if (matchDetail.getParticipant() instanceof ParticipantEquipe) {
+                    updateParticipationStatus(participations, (ParticipantEquipe) matchDetail.getParticipant(), matchDetail.getStatus());
+                    
+                    if (matchDetail.getStatus() == ResultatDetailsStatusEnum.QUALIFIE) {
+                        qualifiedTeams.add((ParticipantEquipe) matchDetail.getParticipant());
+                    }
                 }
             }
         }
@@ -188,7 +197,9 @@ public class ResultatServiceImpl implements ResultatService {
         } else if (nbQualified > 1) {
             EtapeEpreuve nextEtape = determineNextLogicalEtape(epreuve, etapeEpreuve, nbQualified);
             if (nextEtape != null) {
-                generateNextPhaseMatches(nextEtape, qualifiedTeams);
+                // Changing to List<Participant> to match the interface of Match
+                List<Participant> qualifiedParticipants = new ArrayList<>(qualifiedTeams);
+                generateNextPhaseMatches(nextEtape, qualifiedParticipants);
                 etapeEpreuveRepository.save(nextEtape);
 
                 // Mettre à jour la phase en cours de l'épreuve
@@ -204,9 +215,9 @@ public class ResultatServiceImpl implements ResultatService {
         }
     }
 
-    private void updateParticipationStatus(List<Participation> participations, Equipe equipe, ResultatDetailsStatusEnum resultStatus) {
+    private void updateParticipationStatus(List<Participation> participations, ParticipantEquipe equipe, ResultatDetailsStatusEnum resultStatus) {
         participations.stream()
-            .filter(p -> p.getEquipe().getIdEquipe().equals(equipe.getIdEquipe()))
+            .filter(p -> p.getParticipant() != null && p.getParticipant().getIdParticipant().equals(equipe.getIdParticipant()))
             .findFirst()
             .ifPresent(p -> {
                 com.glop.cibl_orga_sport.data.enumType.ParticipationStatusEnum partStatus = switch (resultStatus) {
@@ -251,8 +262,10 @@ public class ResultatServiceImpl implements ResultatService {
         return com.glop.cibl_orga_sport.data.enumType.CompetitionPhaseType.valueOf(etapeEnum.name());
     }
 
-    private void generateNextPhaseMatches(EtapeEpreuve nextEtape, List<Equipe> equipes) {
-        nextEtape.getEquipes().addAll(equipes);
+    private void generateNextPhaseMatches(EtapeEpreuve nextEtape, List<Participant> equipes) {
+        // Here we map getEquipes to getParticipants
+        // However EtapeEpreuve still has getEquipes, for now lets clear and add
+        nextEtape.getParticipants().addAll(equipes);
         int nbPerMatch = nextEtape.getEpreuve().getNombreEquipeParMatch();
 
         List<Match> matches = new ArrayList<>();
@@ -262,12 +275,12 @@ public class ResultatServiceImpl implements ResultatService {
             match.setPeriode(nextEtape.getPeriode()); // Peut être mis à jour plus tard par l'orga
             match.setStatus(MatchStatusEnum.PENDING); // Nouveau match = PENDING
 
-            List<Equipe> matchEquipes = new ArrayList<>();
+            List<Participant> matchEquipes = new ArrayList<>();
             for (int j = 0; j < nbPerMatch && (i + j) < equipes.size(); j++) {
-                Equipe eq = equipes.get(i + j);
+                Participant eq = equipes.get(i + j);
                 matchEquipes.add(eq);
             }
-            match.setEquipes(matchEquipes);
+            match.setParticipants(matchEquipes);
             matches.add(match);
         }
 

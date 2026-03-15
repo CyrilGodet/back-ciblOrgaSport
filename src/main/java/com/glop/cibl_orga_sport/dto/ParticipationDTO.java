@@ -4,17 +4,17 @@ import com.glop.cibl_orga_sport.data.enumType.ParticipationStatusEnum;
 
 public class ParticipationDTO {
     private Long idParticipation;
-    private Long epreuveId;
-    private EquipeDTO equipe;
+    private Long competitionId;
+    private ParticipantDTO participant;
     private ParticipationStatusEnum statut;
 
     public ParticipationDTO() {
     }
 
-    public ParticipationDTO(Long idParticipation, Long epreuveId, EquipeDTO equipe, ParticipationStatusEnum statut) {
+    public ParticipationDTO(Long idParticipation, Long competitionId, ParticipantDTO participant, ParticipationStatusEnum statut) {
         this.idParticipation = idParticipation;
-        this.epreuveId = epreuveId;
-        this.equipe = equipe;
+        this.competitionId = competitionId;
+        this.participant = participant;
         this.statut = statut;
     }
 
@@ -26,20 +26,20 @@ public class ParticipationDTO {
         this.idParticipation = idParticipation;
     }
 
-    public Long getEpreuveId() {
-        return epreuveId;
+    public Long getCompetitionId() {
+        return competitionId;
     }
 
-    public void setEpreuveId(Long epreuveId) {
-        this.epreuveId = epreuveId;
+    public void setCompetitionId(Long competitionId) {
+        this.competitionId = competitionId;
     }
 
-    public EquipeDTO getEquipe() {
-        return equipe;
+    public ParticipantDTO getParticipant() {
+        return participant;
     }
 
-    public void setEquipe(EquipeDTO equipe) {
-        this.equipe = equipe;
+    public void setParticipant(ParticipantDTO participant) {
+        this.participant = participant;
     }
 
     public ParticipationStatusEnum getStatut() {

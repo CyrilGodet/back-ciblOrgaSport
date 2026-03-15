@@ -20,12 +20,11 @@ public class Participation {
     private Long idParticipation;
 
     @ManyToOne
-    @JsonBackReference("epreuve-participations")
-    private Epreuve epreuve;
+    @JsonBackReference("competition-participations")
+    private Competition competition;
 
     @ManyToOne
-    @JsonBackReference("equipe-participations")
-    private Equipe equipe;
+    private Participant participant;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -34,9 +33,9 @@ public class Participation {
     public Participation() {
     }
 
-    public Participation(Epreuve epreuve, Equipe equipe, ParticipationStatusEnum statut) {
-        this.epreuve = epreuve;
-        this.equipe = equipe;
+    public Participation(Competition competition, Participant participant, ParticipationStatusEnum statut) {
+        this.competition = competition;
+        this.participant = participant;
         this.statut = statut;
     }
 
@@ -48,20 +47,20 @@ public class Participation {
         this.idParticipation = idParticipation;
     }
 
-    public Epreuve getEpreuve() {
-        return epreuve;
+    public Competition getCompetition() {
+        return competition;
     }
 
-    public void setEpreuve(Epreuve epreuve) {
-        this.epreuve = epreuve;
+    public void setCompetition(Competition competition) {
+        this.competition = competition;
     }
 
-    public Equipe getEquipe() {
-        return equipe;
+    public Participant getParticipant() {
+        return participant;
     }
 
-    public void setEquipe(Equipe equipe) {
-        this.equipe = equipe;
+    public void setParticipant(Participant participant) {
+        this.participant = participant;
     }
 
     public ParticipationStatusEnum getStatut() {

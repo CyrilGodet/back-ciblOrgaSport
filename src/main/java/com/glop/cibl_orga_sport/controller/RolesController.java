@@ -13,46 +13,50 @@ import java.util.List;
 
 import static com.glop.cibl_orga_sport.utils.Constants.ROLES_ENDPOINT;
 
-@CrossOrigin(origins = "http//localhost:4200")
+import com.glop.cibl_orga_sport.dto.RolesDto;
+import com.glop.cibl_orga_sport.service.RolesService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
+import static com.glop.cibl_orga_sport.utils.Constants.ROLES_ENDPOINT;
+
 @RestController
-@RequestMapping(ROLES_ENDPOINT)
-public class RolesController implements RolesApi {
-    private RolesService rolesService;
+@RequestMapping(ROLES_ENDPOINT)  // ✅ "/api/roles"
+@CrossOrigin(origins = "http://localhost:4200")
+public class RolesController {
 
     @Autowired
-    public RolesController(RolesService rolesService) {
-        this.rolesService = rolesService;
-    }
+    private RolesService rolesService;
 
-    @Override
-    public ResponseEntity<RolesDto> save(RolesDto rolesDto) {
+    @PostMapping("/create")
+    public ResponseEntity<RolesDto> save(@RequestBody RolesDto rolesDto) {
         return ResponseEntity.ok(rolesService.save(rolesDto));
     }
 
-    @Override
-    public ResponseEntity<RolesDto> update(Long id, RolesDto rolesDto) {
-        return ResponseEntity.ok(rolesService.update(id,rolesDto));
+    @PutMapping("/update/{id}")
+    public ResponseEntity<RolesDto> update(@PathVariable("id") Long id, @RequestBody RolesDto rolesDto) {
+        return ResponseEntity.ok(rolesService.update(id, rolesDto));
     }
 
-    @Override
-    public ResponseEntity<RolesDto> findById(Long id) {
+    @GetMapping("/id/{idRoles}")
+    public ResponseEntity<RolesDto> findById(@PathVariable("idRoles") Long id) {
         return ResponseEntity.ok(rolesService.findById(id));
-
     }
 
-    @Override
+    @GetMapping("/all")
     public ResponseEntity<List<RolesDto>> findAll() {
-        return ResponseEntity.ok((rolesService.findAll()));
+        return ResponseEntity.ok(rolesService.findAll());
     }
 
-    @Override
-    public ResponseEntity<RolesDto> delete(Long id) {
+    @DeleteMapping("/delete/{idRoles}")
+    public ResponseEntity<RolesDto> delete(@PathVariable("idRoles") Long id) {
         rolesService.delete(id);
-        return ResponseEntity.ok(RolesDto.builder().build());
+        return ResponseEntity.ok().build();
     }
 
-    @Override
-    public ResponseEntity<RolesDto> findDesignation(String designation) {
+    @GetMapping("/{designation}")
+    public ResponseEntity<RolesDto> findDesignation(@PathVariable("designation") String designation) {
         return ResponseEntity.ok(rolesService.findByDesignation(designation));
     }
 }

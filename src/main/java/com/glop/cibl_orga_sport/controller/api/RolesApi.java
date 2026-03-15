@@ -10,7 +10,6 @@ import java.util.List;
 import static com.glop.cibl_orga_sport.utils.Constants.ROLES_ENDPOINT;
 
 
-@RequestMapping(ROLES_ENDPOINT)
 public interface RolesApi {
     @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<RolesDto> save(@RequestBody RolesDto rolesDto);

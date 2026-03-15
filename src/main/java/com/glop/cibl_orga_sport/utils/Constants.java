@@ -1,7 +1,7 @@
 package com.glop.cibl_orga_sport.utils;
 
 public interface Constants {
-    String APP_NAME = "opaleTech";
+    String APP_NAME = "api";
     String ROLES_ENDPOINT = APP_NAME + "/roles";
     String PERMISSION_ENDPOINT = APP_NAME +"/permission";
     String HISTORY_ENDPOINT = APP_NAME +"/history";

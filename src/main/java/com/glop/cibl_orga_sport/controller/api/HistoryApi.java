@@ -10,7 +10,6 @@ import java.util.List;
 
 import static com.glop.cibl_orga_sport.utils.Constants.HISTORY_ENDPOINT;
 
-@RequestMapping(HISTORY_ENDPOINT)
 public interface HistoryApi {
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<List<HistoryDto>> findAll();

@@ -29,23 +29,6 @@ public class SecurityConfiguration {
                 //.authorizeHttpRequests(request -> request.requestMatchers("/api/v1/auth/**")
                 .authorizeHttpRequests(request -> request.requestMatchers("/**")
                         .permitAll().anyRequest().authenticated())
-
-
-                /*
-               http.csrf(csrf -> csrf.disable())
-                        .authorizeHttpRequests((requests) -> requests
-                                .requestMatchers("/mvolaProfile/label/all").hasAuthority("amdinistrator")
-                                .requestMatchers("/mvolaProfile/lineLabel/all").hasAuthority("amdinistrator")
-                               .requestMatchers("/mvolaProfile/users/all").hasAuthority("amdinistrator")
-                                .requestMatchers("/mvolaProfile/users/update/{id}").hasAuthority("amdinistrator")
-                                .requestMatchers("/api/v1/auth/**")
-                                .permitAll().anyRequest().authenticated()
-                        )
-
-
-                 */
-
-
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(

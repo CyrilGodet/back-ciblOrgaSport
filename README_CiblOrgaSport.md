@@ -63,18 +63,6 @@ autoriser la connexion.
 
 ------------------------------------------------------------------------
 
-# Stack technique
-
-  Technologie          Description
-  -------------------- --------------------------------
-  **Spring Boot 3+**   Backend Java
-  **PostgreSQL**       Base de données
-  **JWT**              Authentification
-  **Swagger**          Documentation API
-  **Docker**           Environnement de développement
-
-------------------------------------------------------------------------
-
 # Documentation API
 
 ## Accès Swagger

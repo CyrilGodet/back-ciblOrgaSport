@@ -47,13 +47,13 @@ public class RolesImplService implements RolesService {
         Roles rolesEntity = RolesDto.toEntity(rolesDto);
         Roles savedRoles = rolesDao.save(rolesEntity);
         //historyService.saveHistory("register User", "success", savedRoles);
-        Long id = savedRoles.getIdRoles();
+        Integer id = savedRoles.getIdRoles();
         RolesDto dto = RolesDto.fromEntity(savedRoles);
         return dto;
     }
 
     @Override
-    public RolesDto update(Long id, RolesDto rolesDto) {
+    public RolesDto update(Integer id, RolesDto rolesDto) {
         log.info("Inside update roles{}", id);
         Optional<Roles> rolesOptional = rolesDao.findById(id);
         if (rolesOptional.isPresent()) {
@@ -70,7 +70,7 @@ public class RolesImplService implements RolesService {
     }
 
     @Override
-    public RolesDto findById(Long id) {
+    public RolesDto findById(Integer id) {
         if (id == null) {
             log.error("Roles ID is null");
             return null;
@@ -92,7 +92,7 @@ public class RolesImplService implements RolesService {
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Integer id) {
         if (id == null){
             log.error("Role ID is null");
             return;

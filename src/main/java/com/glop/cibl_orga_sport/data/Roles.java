@@ -14,7 +14,7 @@ import java.util.List;
 public class Roles {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idRoles;
+    private Integer idRoles;
 
     private String designation;
 

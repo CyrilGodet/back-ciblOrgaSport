@@ -40,7 +40,7 @@ public class PermissionImplService implements PermissionService {
             log.error("permission is not valid", permissionDto);
             throw new InvalidEntityException("permission is not valid", ErrorCodes.PERMISSION_NOT_VALID, errors);
         }
-        Long idRoles = permissionDto.getRoles().getId();
+        Integer idRoles = permissionDto.getRoles().getId();
         Optional<Roles> role = rolesDao.findById(idRoles);
         Permission permissionEntity = PermissionDto.toEntity(permissionDto);
         permissionEntity.setRoles(role.get());

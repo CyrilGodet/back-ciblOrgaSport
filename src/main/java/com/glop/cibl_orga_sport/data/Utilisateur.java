@@ -2,6 +2,7 @@ package com.glop.cibl_orga_sport.data;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import lombok.*;
@@ -43,8 +44,9 @@ public class Utilisateur implements UserDetails {
     @JoinColumn(name = "idRoles")
     private Roles roles;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)  // "utilsateur" → "user"
-    private List<History> historyList;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
+    private List<History> historyList = new ArrayList<>();
+
 
     public Utilisateur(String nom, String prenom, String email, int age, Lieu lieu) {
         this.nom = nom;

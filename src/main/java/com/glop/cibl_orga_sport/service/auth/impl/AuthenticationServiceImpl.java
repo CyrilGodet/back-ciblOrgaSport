@@ -61,7 +61,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setEmail(request.getLogin());
         user.setMdp(passwordEncoder.encode(request.getMdp()));
         user.setState(0);
-        RolesDto rolesDto = rolesService.findById(1L);
+        RolesDto rolesDto = rolesService.findById(2);
         UtilisateurDTO userDto = UtilisateurDTO.fromEntity(user);
         userDto.setRoles(rolesDto);
         userDto.setMdp(passwordEncoder.encode(request.getMdp()));

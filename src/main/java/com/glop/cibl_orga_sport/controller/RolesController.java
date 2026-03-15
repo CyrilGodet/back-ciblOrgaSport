@@ -35,12 +35,12 @@ public class RolesController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<RolesDto> update(@PathVariable("id") Long id, @RequestBody RolesDto rolesDto) {
+    public ResponseEntity<RolesDto> update(@PathVariable("id") Integer id, @RequestBody RolesDto rolesDto) {
         return ResponseEntity.ok(rolesService.update(id, rolesDto));
     }
 
     @GetMapping("/id/{idRoles}")
-    public ResponseEntity<RolesDto> findById(@PathVariable("idRoles") Long id) {
+    public ResponseEntity<RolesDto> findById(@PathVariable("idRoles") Integer id) {
         return ResponseEntity.ok(rolesService.findById(id));
     }
 
@@ -50,7 +50,7 @@ public class RolesController {
     }
 
     @DeleteMapping("/delete/{idRoles}")
-    public ResponseEntity<RolesDto> delete(@PathVariable("idRoles") Long id) {
+    public ResponseEntity<RolesDto> delete(@PathVariable("idRoles") Integer id) {
         rolesService.delete(id);
         return ResponseEntity.ok().build();
     }

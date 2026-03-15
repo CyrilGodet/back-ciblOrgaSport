@@ -7,6 +7,7 @@ import com.glop.cibl_orga_sport.dto.VisiteurDTO;
 import com.glop.cibl_orga_sport.exception.EntityAlreadyExistException;
 import com.glop.cibl_orga_sport.exception.EntityNotFoundException;
 import com.glop.cibl_orga_sport.exception.ErrorCodes;
+import com.glop.cibl_orga_sport.repository.HistoryDao;
 import com.glop.cibl_orga_sport.repository.RolesDao;
 import com.glop.cibl_orga_sport.repository.UtilisateurRepository;
 import com.glop.cibl_orga_sport.repository.LieuRepository;
@@ -19,6 +20,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +39,23 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     private LieuRepository lieuRepository;
 
     @Autowired
-    private RolesDao rolesRepository;  // 🔥 AJOUTEZ CET AUTOWIRE
+    private RolesDao rolesRepository;
+
+    @Autowired
+    private HistoryDao historyRepository;
+
+    private void createHistoryEntry(Utilisateur user, String action, String status) {
+        History history = new History();
+        history.setAction(action);
+        history.setStatus(status);
+        history.setCreationDate(Instant.now());
+        history.setLastModifiedDate(Instant.now());
+        history.setIdHistory(user.getIdUtilisateur());
+        history.setUserConnected("1");
+        history.setUser(user);
+        historyRepository.save(history);
+    }
+
 
     @Override
     @Transactional

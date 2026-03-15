@@ -5,11 +5,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import java.time.Instant;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 @Entity
 public class History{
     @Id
@@ -25,8 +28,8 @@ public class History{
 
     private String userConnected;
 
+    @Column(name = "creation_date", nullable = false, updatable = false)
     @CreatedDate
-    @Column(name = "creationDate", nullable = false, updatable = false)
     private Instant creationDate;
 
     @LastModifiedDate

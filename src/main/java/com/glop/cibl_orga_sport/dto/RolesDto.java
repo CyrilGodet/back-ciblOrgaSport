@@ -8,7 +8,7 @@ import lombok.Data;
 @Builder
 @Data
 public class RolesDto {
-    private Long id;
+    private Integer id;
     private String designation;
 
     public static RolesDto fromEntity(Roles roles) {

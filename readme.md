@@ -6,161 +6,40 @@
 
 docker compose up -d
 
-### Lancer l’application
+### Arrêt de Docker
 
-mvn spring-boot:run
+docker compose down
 
-# API Utilisateurs – Gestion d’authentification et de rôles
+### Accès à la base de données
 
-## Description
+docker exec -it back-ciblorgasport-postgres-1 psql -U admin -d glop
 
-Cette API permet de gérer des utilisateurs avec un système d’authentification et des rôles prédéfinis.
 
-Deux rôles sont créés au départ :
+### Accès à Grafana
 
--   **admin**
--   **spectateur** (id = 2) 👉 attribué automatiquement par défaut à chaque nouvel utilisateur.
+Ouvrir un navigateur web et aller à l'adresse : http://localhost:3000
+Les identifiants par défaut sont :
+- Utilisateur : admin
+- Mot de passe : admin
 
-L’utilisateur nouvellement créé est mis dans un **state = 0**, c’est-à-dire en attente de validation par un administrateur.
+#### Créer un data source pour Prometheus
+1. Cliquer sur l'icône d'engrenage (Configuration) dans le menu de gauche.
+2. Sélectionner "Data Sources".
+3. Cliquer sur "Add data source".
+4. Choisir "Prometheus" dans la liste des types de data source.
+5. Dans le champ "URL", entrer : http://prometheus:9090
+6. Cliquer sur "Save & Test" pour vérifier la connexion.
 
-L’administrateur peut ensuite modifier le state à **10** pour activer le compte.
 
-## Stack technique
+#### Créer un dashboard pour visualiser les métriques
+1. Dans le menu de gauche, cliquer sur "Dashboard".
+2. Cliquer sur "New". et "import"
+3. Mettre l'id pour avoir les metrics de springboot : 12900 et cliquer sur "Load"
+4. Sélectionner la data source Prometheus créée précédemment.
+5. Cliquer sur "Import" pour ajouter le dashboard.
 
--   **Backend:** Spring Boot 3+
--   **Base de données:** PostgreSQL
--   **Authentification:** JWT (JSON Web Token)
--   **Port par défaut:** `8080`
 
-# Documentation de l’API
 
-## Accès à l’interface Swagger
 
-L’API est interactive et documentée via Swagger UI :
-
-[http://localhost:8080/swagger-ui/index.html](https://www.google.com/search?q=http://localhost:8080/swagger-ui/index.html)
-
-## Endpoints principaux
-
-### Création des rôles
-
-> **Note :** À exécuter au démarrage pour initialiser le système.
-
-**URL** : `/api/roles/create`
-
-**Méthode** : `POST`
-
-**Corps de la requête (Exemple pour Admin) :**
-
-JSON
-
-
-
-{
-"designation": "admin"
-}
-
-### Inscription (Signup)
-
-Tout nouvel utilisateur reçoit l'ID de rôle **2** ("spectateur") par défaut.
-
-**URL** : `/api/v1/auth/signup`
-
-**Méthode** : `POST`
-
-**Corps de la requête (Body minimal) :**
-
-JSON
-
-
-
-{
-"name": "maggy",
-"lastname": "ANDRIA",
-"login": "maggy",
-"mdp": "string",
-"verifyMdp": "string"
-}
-
-**Réponse attendue (201 Created) :**
-
-JSON
-
-
-
-{
-"login": "maggy",
-"token": "eyJhbGciOiJIUzI1NiJ9..."
-}
-
-### Validation par l'Administrateur
-
-Par défaut, le compte est créé avec `state: 0`. L'administrateur doit passer ce statut à **10** pour permettre la connexion.
-
-**URL** : `/api/utilisateurs/user/{id}`
-
-**Méthode** : `PUT`
-
-**Corps de la requête pour activation :**
-
-JSON
-
-
-
-{
-"id": 1,
-"name": "ANDRIA",
-"lastname": "maggy",
-"login": "maggy",
-"roles": {
-"id": 2,
-"designation": "spectateur"
-},
-"state": 10
-}
-
-### Connexion (Signin)
-
-Une fois le `state` à **10**, l'utilisateur peut s'authentifier pour obtenir un jeton d'accès.
-
-**URL** : `/api/v1/auth/signin`
-
-**Méthode** : `POST`
-
-**Corps de la requête :**
-
-JSON
-
-
-
-{
-"login": "maggy",
-"mdp": "string"
-}
-
-**Réponse attendue :**
-
-JSON
-
-
-
-{
-"login": "maggy",
-"token": "eyJhbGciOiJIUzI1NiJ9..."
-}
-
-## Test rapide avec Postman
-
-Un fichier de collection nommé `postman_collection.json` est disponible à la racine du projet.
-
-**Pour l’utiliser :**
-
-1.  Ouvrir **Postman**.
-2.  **Importer** le fichier `.json`.
-3.  Utiliser le **Runner** de collection pour exécuter les requêtes dans cet ordre précis :
-
--   `Create Role Admin`
--   `Create Role Spectateur`
--   `Signup User`
--   `Validate User (PUT)`
--   `Signin User`
+sudo docker exec -it postgresql_database psql -U admin -d glop
+cat seed_data.sql | sudo docker exec -i postgresql_database psql -U admin -d glop

@@ -24,6 +24,7 @@ public class EpreuveMapper {
         dto.setStatut(epreuve.getStatut());
         dto.setNbPerMatch(epreuve.getNombreEquipeParMatch());
         dto.setNbElimMatch(epreuve.getNbElimParMatch());
+        dto.setTailleEquipe(epreuve.getTailleEquipe());
 
         if (epreuve.getCompetition() != null) {
             dto.setCompetitionId(epreuve.getCompetition().getIdCompetition());
@@ -52,7 +53,8 @@ public class EpreuveMapper {
         }
 
         if (epreuve.getPhaseOnGoing() != null) {
-            dto.setPhaseOnGoing(new CompetitionPhaseTypeDto(epreuve.getPhaseOnGoing().name(), epreuve.getPhaseOnGoing().getLabel()));
+            dto.setPhaseOnGoing(new CompetitionPhaseTypeDto(epreuve.getPhaseOnGoing().name(),
+                    epreuve.getPhaseOnGoing().getLabel()));
         }
 
         return dto;

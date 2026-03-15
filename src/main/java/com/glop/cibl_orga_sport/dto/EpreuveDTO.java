@@ -176,4 +176,12 @@ public class EpreuveDTO {
         this.phaseOnGoing = phaseOnGoing;
     }
 
+    public int getTailleEquipe() {
+        return tailleEquipe;
+    }
+
+    public void setTailleEquipe(int tailleEquipe) {
+        this.tailleEquipe = tailleEquipe;
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.glop.cibl_orga_sport.service;
 
+import com.glop.cibl_orga_sport.data.ParticipantSportif;
 import com.glop.cibl_orga_sport.data.Sportif;
 import com.glop.cibl_orga_sport.data.Visiteur;
 import com.glop.cibl_orga_sport.data.Commissaire;
@@ -13,4 +14,6 @@ public interface UtilisateurService {
     List<Sportif> getAllSportifs();
     List<Visiteur> getAllVisiteurs();
     List<Commissaire> getAllCommissaires();
+    List<Sportif> searchSportifs(String query);
+    List<ParticipantSportif> searchParticipantSportifs(String query);
 }

@@ -1,11 +1,9 @@
 package com.glop.cibl_orga_sport.controller;
 
 import com.glop.cibl_orga_sport.data.Sportif;
-import com.glop.cibl_orga_sport.data.UserDtoJson;
 import com.glop.cibl_orga_sport.data.Visiteur;
 import com.glop.cibl_orga_sport.data.Commissaire;
 import com.glop.cibl_orga_sport.dto.SportifDTO;
-import com.glop.cibl_orga_sport.dto.UtilisateurDTO;
 import com.glop.cibl_orga_sport.dto.VisiteurDTO;
 import com.glop.cibl_orga_sport.dto.CommissaireDTO;
 import com.glop.cibl_orga_sport.mapper.SportifMapper;
@@ -13,7 +11,6 @@ import com.glop.cibl_orga_sport.mapper.VisiteurMapper;
 import com.glop.cibl_orga_sport.mapper.CommissaireMapper;
 import com.glop.cibl_orga_sport.service.UtilisateurService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -58,18 +55,4 @@ public class UtilisateurController {
                 .map(SportifMapper::toDTO)
                 .collect(Collectors.toList());
     }
-
-    @PutMapping(value = "/user/{id}", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<UserDtoJson> updateUser(@PathVariable("id") Long id, @RequestBody UserDtoJson dto) {
-        UserDtoJson updated = service.updateNoMdp(id, dto);
-        return ResponseEntity.ok(updated);
-    }
-
-    @GetMapping
-    public ResponseEntity<List<UserDtoJson>> findAll() {
-        List<UserDtoJson> users = service.findAll();
-        return ResponseEntity.ok(users);
-    }
-
-
 }

@@ -12,6 +12,7 @@ import com.glop.cibl_orga_sport.data.Competition;
 import com.glop.cibl_orga_sport.data.Periode;
 import com.glop.cibl_orga_sport.data.Lieu;
 import com.glop.cibl_orga_sport.data.ConditionAge;
+import com.glop.cibl_orga_sport.data.Epreuve;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionStatusEnum;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionGenreEnum;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionSportEnum;
@@ -272,12 +273,16 @@ public class CompetitionServiceImpl implements CompetitionService {
             return new ArrayList<>();
         }
         Competition competition = competitionOpt.get();
-        if (competition.getPhaseOnGoing() == null) {
-            return new ArrayList<>();
-        }
+        List<Match> allOngoingMatches = new ArrayList<>();
 
-        com.glop.cibl_orga_sport.data.enumType.EtapeEpreuveEnum etapeEnum = mapPhaseToEtape(competition.getPhaseOnGoing());
-        return matchRepository.findByEtapeEpreuveEpreuveCompetitionIdCompetitionAndEtapeEpreuveEtapeEpreuveEnum(id, etapeEnum);
+        for (Epreuve epreuve : competition.getEpreuves()) {
+            if (epreuve.getPhaseOnGoing() != null) {
+                com.glop.cibl_orga_sport.data.enumType.EtapeEpreuveEnum etapeEnum = mapPhaseToEtape(epreuve.getPhaseOnGoing());
+                List<Match> epreuveMatches = matchRepository.findByEtapeEpreuveEpreuveIdEpreuveAndEtapeEpreuveEtapeEpreuveEnum(epreuve.getIdEpreuve(), etapeEnum);
+                allOngoingMatches.addAll(epreuveMatches);
+            }
+        }
+        return allOngoingMatches;
     }
 
     private com.glop.cibl_orga_sport.data.enumType.EtapeEpreuveEnum mapPhaseToEtape(
@@ -305,11 +310,6 @@ public class CompetitionServiceImpl implements CompetitionService {
 
         // 2. Initialisation des étapes et matchs
         initializeCompetitionPhases(competition);
-
-        // 3. Définir la phase en cours (la première phase de l'ordre chronologique)
-        if (competition.getPhases() != null && !competition.getPhases().isEmpty()) {
-            competition.setPhaseOnGoing(competition.getPhases().get(0));
-        }
 
         competition.setStatut(CompetitionStatusEnum.PUBLISH);
         logger.info("Compétition publiée avec succès (ID: {}). Étapes et matchs initiaux générés.", id);
@@ -428,6 +428,7 @@ public class CompetitionServiceImpl implements CompetitionService {
 
                 if (i == 0) {
                     firstEtape = etape;
+                    epreuve.setPhaseOnGoing(mapEtapeToPhase(etapeEnum));
                 }
             }
 

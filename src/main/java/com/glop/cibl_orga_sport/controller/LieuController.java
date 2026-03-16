@@ -37,10 +37,17 @@ public class LieuController {
                    .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/search")
+    public List<LieuDTO> searchLieux(@RequestParam("q") String query) {
+        return lieuService.searchLieux(query).stream()
+                .map(LieuMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
     @PostMapping
-    public ResponseEntity<LieuDTO> createLieu(@RequestBody LieuDTO lieuDTO) {
-        Lieu lieu = lieuService.createLieu(lieuDTO.getNomLieu(), lieuDTO.getVille(), lieuDTO.getAdresse());
-        return ResponseEntity.status(HttpStatus.CREATED).body(LieuMapper.toDTO(lieu));
+    public LieuDTO createLieu(@RequestBody LieuDTO lieuDTO) {
+        Lieu lieu = lieuService.createLieu(lieuDTO);
+        return LieuMapper.toDTO(lieu);
     }
 
     @PutMapping("/{id}")

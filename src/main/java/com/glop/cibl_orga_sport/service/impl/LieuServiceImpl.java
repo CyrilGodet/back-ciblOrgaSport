@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.glop.cibl_orga_sport.data.Lieu;
+import com.glop.cibl_orga_sport.dto.LieuDTO;
 import com.glop.cibl_orga_sport.repository.LieuRepository;
 import com.glop.cibl_orga_sport.service.LieuService;
 
@@ -58,5 +59,16 @@ public class LieuServiceImpl implements LieuService {
     @Override
     public Optional<Lieu> getLieu(Long id) {
         return repository.findById(id);
+    }
+
+    @Override
+    public List<Lieu> searchLieux(String query) {
+        return repository.findByNomLieuContainingIgnoreCase(query);
+    }
+
+    @Override
+    public Lieu createLieu(LieuDTO lieuDTO) {
+        Lieu l = new Lieu(lieuDTO.getNomLieu(), lieuDTO.getVille(), lieuDTO.getAdresse());
+        return repository.save(l);
     }
 }

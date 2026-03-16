@@ -4,6 +4,8 @@ import com.glop.cibl_orga_sport.data.Epreuve;
 import com.glop.cibl_orga_sport.data.Periode;
 import com.glop.cibl_orga_sport.data.ConditionAge;
 import com.glop.cibl_orga_sport.dto.EpreuveDTO;
+import com.glop.cibl_orga_sport.data.enumType.CompetitionPhaseType;
+import com.glop.cibl_orga_sport.dto.CompetitionPhaseTypeDto;
 import java.sql.Date;
 import java.util.stream.Collectors;
 
@@ -49,6 +51,10 @@ public class EpreuveMapper {
                     .collect(java.util.stream.Collectors.toList()));
         }
 
+        if (epreuve.getPhaseOnGoing() != null) {
+            dto.setPhaseOnGoing(new CompetitionPhaseTypeDto(epreuve.getPhaseOnGoing().name(), epreuve.getPhaseOnGoing().getLabel()));
+        }
+
         return dto;
     }
 
@@ -73,6 +79,10 @@ public class EpreuveMapper {
         epreuve.setConditionAge(conditionAge);
         epreuve.setNombreEquipeParMatch(dto.getNbPerMatch());
         epreuve.setNbElimParMatch(dto.getNbElimMatch());
+
+        if (dto.getPhaseOnGoing() != null) {
+            epreuve.setPhaseOnGoing(CompetitionPhaseType.valueOf(dto.getPhaseOnGoing().getValue()));
+        }
 
         return epreuve;
     }

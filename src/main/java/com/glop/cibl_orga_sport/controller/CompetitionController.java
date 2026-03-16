@@ -13,9 +13,11 @@ import com.glop.cibl_orga_sport.data.Competition;
 import com.glop.cibl_orga_sport.dto.CompetitionDTO;
 import com.glop.cibl_orga_sport.dto.EpreuveDTO;
 import com.glop.cibl_orga_sport.dto.PhaseDTO;
+import com.glop.cibl_orga_sport.dto.MatchDTO;
 import com.glop.cibl_orga_sport.mapper.CompetitionMapper;
 import com.glop.cibl_orga_sport.mapper.EpreuveMapper;
 import com.glop.cibl_orga_sport.mapper.PhaseMapper;
+import com.glop.cibl_orga_sport.mapper.MatchMapper;
 import com.glop.cibl_orga_sport.service.CompetitionService;
 import com.glop.cibl_orga_sport.service.EpreuveService;
 import com.glop.cibl_orga_sport.service.PhaseService;
@@ -38,6 +40,20 @@ public class CompetitionController {
     public List<CompetitionDTO> getAllCompetitions() {
         return service.getAllCompetitions().stream()
                 .map(CompetitionMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/published")
+    public List<CompetitionDTO> getPublishedCompetitions() {
+        return service.getPublishedCompetitions().stream()
+                .map(CompetitionMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/{id}/matchs")
+    public List<MatchDTO> getOngoingMatches(@PathVariable Long id) {
+        return service.getOngoingMatches(id).stream()
+                .map(MatchMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
@@ -97,6 +113,15 @@ public class CompetitionController {
         Competition published = service.publishCompetition(id);
         if (published != null) {
             return ResponseEntity.ok(CompetitionMapper.toDTO(published));
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
+    @PatchMapping("/{id}/unpublish")
+    public ResponseEntity<CompetitionDTO> unpublishCompetition(@PathVariable Long id) {
+        Competition unpublished = service.unpublishCompetition(id);
+        if (unpublished != null) {
+            return ResponseEntity.ok(CompetitionMapper.toDTO(unpublished));
         }
         return ResponseEntity.badRequest().build();
     }

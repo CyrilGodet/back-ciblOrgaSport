@@ -30,7 +30,7 @@ public class Match {
     @Embedded
     private Periode periode;
 
-    @ManyToOne
+    @ManyToOne(cascade = jakarta.persistence.CascadeType.ALL)
     private Resultat resultat;
 
     @ManyToMany

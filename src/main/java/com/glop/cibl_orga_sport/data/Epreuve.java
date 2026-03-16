@@ -48,9 +48,8 @@ public class Epreuve {
     @JsonManagedReference("epreuve-phases")
     private List<EtapeEpreuve> etapesEpreuves;
 
-    @OneToMany(mappedBy = "epreuve", cascade = jakarta.persistence.CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference("epreuve-participations")
-    private List<Participation> participations = new ArrayList<>();
+    @Column(nullable = false)
+    private int tailleEquipe = 1;
 
     @Column(nullable = false)
     private DisciplineEnum discipline;
@@ -173,12 +172,12 @@ public class Epreuve {
         this.conditionAge = conditionAge;
     }
 
-    public List<Participation> getParticipations() {
-        return participations;
+    public int getTailleEquipe() {
+        return tailleEquipe;
     }
 
-    public void setParticipations(List<Participation> participations) {
-        this.participations = participations;
+    public void setTailleEquipe(int tailleEquipe) {
+        this.tailleEquipe = tailleEquipe;
     }
 
     public int getNombreEquipeParMatch() {

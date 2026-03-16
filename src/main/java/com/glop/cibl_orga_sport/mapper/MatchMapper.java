@@ -18,9 +18,9 @@ public class MatchMapper {
             dto.setEtapeEpreuveId(match.getEtapeEpreuve().getIdEtapeEpreuve());
         }
 
-        if (match.getEquipes() != null) {
-            dto.setEquipes(match.getEquipes().stream()
-                    .map(EquipeMapper::toDTO)
+        if (match.getParticipants() != null) {
+            dto.setParticipants(match.getParticipants().stream()
+                    .map(ParticipantMapper::toDTO)
                     .collect(Collectors.toList()));
         }
 

@@ -23,6 +23,7 @@ public class EpreuveDTO {
     private int nbPerMatch;
     private int nbElimMatch;
     private CompetitionPhaseTypeDto phaseOnGoing;
+    private int tailleEquipe;
 
     public EpreuveDTO() {
     }

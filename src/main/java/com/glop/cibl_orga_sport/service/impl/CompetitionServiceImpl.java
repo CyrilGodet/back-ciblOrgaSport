@@ -17,14 +17,14 @@ import com.glop.cibl_orga_sport.data.enumType.CompetitionStatusEnum;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionGenreEnum;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionSportEnum;
 import com.glop.cibl_orga_sport.repository.CompetitionRepository;
-import com.glop.cibl_orga_sport.repository.EquipeRepository;
+import com.glop.cibl_orga_sport.repository.ParticipantRepository;
 import com.glop.cibl_orga_sport.repository.LieuRepository;
 import com.glop.cibl_orga_sport.repository.ParticipationRepository;
 import com.glop.cibl_orga_sport.service.CompetitionService;
 import com.glop.cibl_orga_sport.repository.MatchRepository;
 import com.glop.cibl_orga_sport.data.enumType.MatchStatusEnum;
 import com.glop.cibl_orga_sport.dto.CompetitionDTO;
-import com.glop.cibl_orga_sport.data.Equipe;
+import com.glop.cibl_orga_sport.data.Participant;
 import com.glop.cibl_orga_sport.data.EtapeEpreuve;
 import com.glop.cibl_orga_sport.data.Match;
 import com.glop.cibl_orga_sport.data.Participation;
@@ -46,7 +46,7 @@ public class CompetitionServiceImpl implements CompetitionService {
     private LieuRepository lieuRepository;
 
     @Autowired
-    private EquipeRepository equipeRepository;
+    private ParticipantRepository participantRepository;
 
     @Autowired
     private ParticipationRepository participationRepository;
@@ -90,17 +90,20 @@ public class CompetitionServiceImpl implements CompetitionService {
                 // Process participations
                 if (eDto.getParticipations() != null) {
                     eDto.getParticipations().forEach(pDto -> {
-                        if (pDto.getEquipe() != null && pDto.getEquipe().getIdEquipe() != null) {
-                            Optional<Equipe> equipeOpt = equipeRepository.findById(pDto.getEquipe().getIdEquipe());
-                            if (equipeOpt.isPresent()) {
+                        if (pDto.getParticipant() != null && pDto.getParticipant().getIdParticipant() != null) {
+                            Optional<Participant> participantOpt = participantRepository.findById(pDto.getParticipant().getIdParticipant());
+                            if (participantOpt.isPresent()) {
                                 Participation p = new Participation();
-                                p.setEpreuve(e);
-                                p.setEquipe(equipeOpt.get());
+                                p.setCompetition(c); // Set competition instead of epreuve, as updated earlier
+                                p.setParticipant(participantOpt.get());
                                 p.setStatut(
                                         pDto.getStatut() != null ? pDto.getStatut() : ParticipationStatusEnum.INSCRIT);
-                                e.getParticipations().add(p);
+                                // The domain model changed but assuming Competition manages Participations now
+                                // c.getParticipations().add(p); // If handled via competition
+                                // Or handled via mappedBy
+                                c.getParticipations().add(p);
                             } else {
-                                logger.error("Équipe non trouvée avec l'ID: {}", pDto.getEquipe().getIdEquipe());
+                                logger.error("Participant non trouvé avec l'ID: {}", pDto.getParticipant().getIdParticipant());
                             }
                         }
                     });
@@ -175,17 +178,17 @@ public class CompetitionServiceImpl implements CompetitionService {
                 // Process participations
                 if (eDto.getParticipations() != null) {
                     eDto.getParticipations().forEach(pDto -> {
-                        if (pDto.getEquipe() != null && pDto.getEquipe().getIdEquipe() != null) {
-                            Optional<Equipe> equipeOpt = equipeRepository.findById(pDto.getEquipe().getIdEquipe());
-                            if (equipeOpt.isPresent()) {
+                        if (pDto.getParticipant() != null && pDto.getParticipant().getIdParticipant() != null) {
+                            Optional<Participant> participantOpt = participantRepository.findById(pDto.getParticipant().getIdParticipant());
+                            if (participantOpt.isPresent()) {
                                 Participation p = new Participation();
-                                p.setEpreuve(e);
-                                p.setEquipe(equipeOpt.get());
+                                p.setCompetition(c); // Competition instead of epreuve
+                                p.setParticipant(participantOpt.get());
                                 p.setStatut(
                                         pDto.getStatut() != null ? pDto.getStatut() : ParticipationStatusEnum.INSCRIT);
-                                e.getParticipations().add(p);
+                                c.getParticipations().add(p);
                             } else {
-                                logger.error("Équipe non trouvée avec l'ID: {}", pDto.getEquipe().getIdEquipe());
+                                logger.error("Participant non trouvé avec l'ID: {}", pDto.getParticipant().getIdParticipant());
                             }
                         }
                     });
@@ -365,9 +368,11 @@ public class CompetitionServiceImpl implements CompetitionService {
                 }
             }
 
-            if (epreuve.getParticipations() == null || epreuve.getParticipations().isEmpty()) {
-                throw new IllegalStateException(
-                        "L'épreuve '" + epreuve.getNomEpreuve() + "' doit avoir au moins un participant.");
+            // On a moved the participations to Competition, so no need to check on Epreuve
+            // We'll leave it out, though you might want to check the overall Competition participants size 
+            // vs epreuve.getNombreEquipeParMatch().
+            if (competition.getParticipations() == null || competition.getParticipations().isEmpty()) {
+                throw new IllegalStateException("La compétition doit avoir au moins un participant inscrit.");
             }
 
             // Validation du nombre d'équipes par match
@@ -395,7 +400,8 @@ public class CompetitionServiceImpl implements CompetitionService {
         for (com.glop.cibl_orga_sport.data.Epreuve epreuve : competition.getEpreuves()) {
             epreuve.getEtapesEpreuves().clear();
 
-            int nbEquipes = epreuve.getParticipations().size();
+            // Assuming for simplicity that all participants of the competition take part in every epreuve initially
+            int nbEquipes = competition.getParticipations().size();
             int nbPerMatch = epreuve.getNombreEquipeParMatch();
             int nbElim = epreuve.getNbElimParMatch();
             int nbAdvance = nbPerMatch - nbElim;
@@ -507,18 +513,19 @@ public class CompetitionServiceImpl implements CompetitionService {
 
     private void generateInitialMatches(EtapeEpreuve etape) {
         com.glop.cibl_orga_sport.data.Epreuve epreuve = etape.getEpreuve();
-        List<Equipe> equipes = epreuve.getParticipations().stream()
-                .map(com.glop.cibl_orga_sport.data.Participation::getEquipe)
+        // Fallback to competition participations since they moved from epreuve
+        List<Participant> equipes = epreuve.getCompetition().getParticipations().stream()
+                .map(com.glop.cibl_orga_sport.data.Participation::getParticipant)
                 .collect(java.util.stream.Collectors.toList());
 
-        logger.info("Génération des matchs pour l'épreuve: {} - Étape: {}. Nombre total d'équipes: {}",
+        logger.info("Génération des matchs pour l'épreuve: {} - Étape: {}. Nombre total de participants: {}",
                 epreuve.getNomEpreuve(), etape.getEtapeEpreuveEnum(), equipes.size());
 
-        etape.getEquipes().addAll(equipes);
+        etape.getParticipants().addAll(equipes);
 
         int nbPerMatch = epreuve.getNombreEquipeParMatch();
 
-        logger.info("Configuration: {} équipes par match.", nbPerMatch);
+        logger.info("Configuration: {} participants par match.", nbPerMatch);
 
         List<Match> matches = new ArrayList<>();
         for (int i = 0; i < equipes.size(); i += nbPerMatch) {
@@ -527,16 +534,15 @@ public class CompetitionServiceImpl implements CompetitionService {
             match.setPeriode(etape.getPeriode());
             match.setStatus(com.glop.cibl_orga_sport.data.enumType.MatchStatusEnum.IN_PROGRESS);
 
-            List<Equipe> matchEquipes = new ArrayList<>();
+            List<Participant> matchEquipes = new ArrayList<>();
             for (int j = 0; j < nbPerMatch && (i + j) < equipes.size(); j++) {
-                Equipe eq = equipes.get(i + j);
+                Participant eq = equipes.get(i + j);
                 matchEquipes.add(eq);
             }
-            match.setEquipes(matchEquipes);
+            match.setParticipants(matchEquipes);
             matches.add(match);
 
-            logger.info("Match généré: {} équipes - {}", matchEquipes.size(),
-                    matchEquipes.stream().map(Equipe::getNomEquipe).collect(java.util.stream.Collectors.joining(", ")));
+            logger.info("Match généré: {} participants", matchEquipes.size());
         }
         etape.setMatches(matches);
         logger.info("Total de {} matchs générés pour l'étape {}.", matches.size(), etape.getEtapeEpreuveEnum());

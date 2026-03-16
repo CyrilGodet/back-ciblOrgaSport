@@ -31,9 +31,9 @@ public class EtapeEpreuveMapper {
                     .collect(Collectors.toList()));
         }
 
-        if (etape.getEquipes() != null) {
-            dto.setEquipes(etape.getEquipes().stream()
-                    .map(EquipeMapper::toDTO)
+        if (etape.getParticipants() != null) {
+            dto.setParticipants(etape.getParticipants().stream()
+                    .map(ParticipantMapper::toDTO)
                     .collect(Collectors.toList()));
         }
 

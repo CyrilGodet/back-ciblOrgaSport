@@ -4,11 +4,11 @@
 
 ### Lancement de Docker
 
-docker-compose up -d
+docker compose up -d
 
 ### Arrêt de Docker
 
-docker-compose down
+docker compose down
 
 ### Accès à la base de données
 

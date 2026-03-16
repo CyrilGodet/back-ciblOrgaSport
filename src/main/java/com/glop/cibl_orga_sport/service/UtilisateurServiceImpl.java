@@ -4,10 +4,13 @@ import com.glop.cibl_orga_sport.data.Sportif;
 import com.glop.cibl_orga_sport.data.Visiteur;
 import com.glop.cibl_orga_sport.data.Commissaire;
 import com.glop.cibl_orga_sport.data.Lieu;
+import com.glop.cibl_orga_sport.data.ParticipantSportif;
 import com.glop.cibl_orga_sport.dto.SportifDTO;
 import com.glop.cibl_orga_sport.dto.VisiteurDTO;
 import com.glop.cibl_orga_sport.repository.UtilisateurRepository;
 import com.glop.cibl_orga_sport.repository.LieuRepository;
+import com.glop.cibl_orga_sport.repository.SportifRepository;
+import com.glop.cibl_orga_sport.repository.ParticipantSportifRepository;
 import com.glop.cibl_orga_sport.mapper.SportifMapper;
 import com.glop.cibl_orga_sport.mapper.VisiteurMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,12 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     private UtilisateurRepository repository;
 
     @Autowired
+    private SportifRepository sportifRepository;
+
+    @Autowired
+    private ParticipantSportifRepository participantSportifRepository;
+
+    @Autowired
     private LieuRepository lieuRepository;
 
     @Override
@@ -31,7 +40,10 @@ public class UtilisateurServiceImpl implements UtilisateurService {
             Optional<Lieu> lieu = lieuRepository.findById(dto.getLieu().getIdLieu());
             lieu.ifPresent(sportif::setLieu);
         }
-        return repository.save(sportif);
+        Sportif savedSportif = repository.save(sportif);
+        ParticipantSportif participantSportif = new ParticipantSportif(savedSportif);
+        participantSportifRepository.save(participantSportif);
+        return savedSportif;
     }
 
     @Override
@@ -57,5 +69,16 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     @Override
     public List<Commissaire> getAllCommissaires() {
         return repository.findAllCommissaires();
+    }
+
+    @Override
+    public List<Sportif> searchSportifs(String query) {
+        return sportifRepository.findByNomContainingIgnoreCaseOrPrenomContainingIgnoreCaseOrEmailContainingIgnoreCase(
+                query, query, query);
+    }
+
+    @Override
+    public List<ParticipantSportif> searchParticipantSportifs(String query) {
+        return participantSportifRepository.searchParticipantSportifs(query);
     }
 }

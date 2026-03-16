@@ -24,6 +24,7 @@ public class EpreuveMapper {
         dto.setStatut(epreuve.getStatut());
         dto.setNbPerMatch(epreuve.getNombreEquipeParMatch());
         dto.setNbElimMatch(epreuve.getNbElimParMatch());
+        dto.setTailleEquipe(epreuve.getTailleEquipe());
 
         if (epreuve.getCompetition() != null) {
             dto.setCompetitionId(epreuve.getCompetition().getIdCompetition());
@@ -39,8 +40,8 @@ public class EpreuveMapper {
             dto.setAgeMax(epreuve.getConditionAge().getAgeMax());
         }
 
-        if (epreuve.getParticipations() != null) {
-            dto.setParticipations(epreuve.getParticipations().stream()
+        if (epreuve.getCompetition() != null && epreuve.getCompetition().getParticipations() != null) {
+            dto.setParticipations(epreuve.getCompetition().getParticipations().stream()
                     .map(ParticipationMapper::toDTO)
                     .collect(java.util.stream.Collectors.toList()));
         }
@@ -52,7 +53,8 @@ public class EpreuveMapper {
         }
 
         if (epreuve.getPhaseOnGoing() != null) {
-            dto.setPhaseOnGoing(new CompetitionPhaseTypeDto(epreuve.getPhaseOnGoing().name(), epreuve.getPhaseOnGoing().getLabel()));
+            dto.setPhaseOnGoing(new CompetitionPhaseTypeDto(epreuve.getPhaseOnGoing().name(),
+                    epreuve.getPhaseOnGoing().getLabel()));
         }
 
         return dto;
@@ -79,6 +81,7 @@ public class EpreuveMapper {
         epreuve.setConditionAge(conditionAge);
         epreuve.setNombreEquipeParMatch(dto.getNbPerMatch());
         epreuve.setNbElimParMatch(dto.getNbElimMatch());
+        epreuve.setTailleEquipe(dto.getTailleEquipe());
 
         if (dto.getPhaseOnGoing() != null) {
             epreuve.setPhaseOnGoing(CompetitionPhaseType.valueOf(dto.getPhaseOnGoing().getValue()));

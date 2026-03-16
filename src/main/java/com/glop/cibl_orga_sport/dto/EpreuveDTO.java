@@ -23,6 +23,7 @@ public class EpreuveDTO {
     private int nbPerMatch;
     private int nbElimMatch;
     private CompetitionPhaseTypeDto phaseOnGoing;
+    private int tailleEquipe;
 
     public EpreuveDTO() {
     }
@@ -173,6 +174,14 @@ public class EpreuveDTO {
 
     public void setPhaseOnGoing(CompetitionPhaseTypeDto phaseOnGoing) {
         this.phaseOnGoing = phaseOnGoing;
+    }
+
+    public int getTailleEquipe() {
+        return tailleEquipe;
+    }
+
+    public void setTailleEquipe(int tailleEquipe) {
+        this.tailleEquipe = tailleEquipe;
     }
 
 }

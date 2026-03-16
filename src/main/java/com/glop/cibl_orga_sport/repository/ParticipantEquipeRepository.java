@@ -9,4 +9,7 @@ import java.util.List;
 @Repository
 public interface ParticipantEquipeRepository extends JpaRepository<ParticipantEquipe, Long> {
     List<ParticipantEquipe> findByNomEquipeContainingIgnoreCase(String query);
+
+    @org.springframework.data.jpa.repository.Query("SELECT pe FROM ParticipantEquipe pe WHERE LOWER(pe.nomEquipe) LIKE LOWER(CONCAT('%', :query, '%')) AND SIZE(pe.sportifs) = :size")
+    List<ParticipantEquipe> findByNomEquipeContainingIgnoreCaseAndTaille(String query, int size);
 }

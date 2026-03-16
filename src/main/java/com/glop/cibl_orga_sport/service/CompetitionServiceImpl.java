@@ -85,33 +85,88 @@ public class CompetitionServiceImpl implements CompetitionService {
                 }
                 com.glop.cibl_orga_sport.data.Epreuve e = com.glop.cibl_orga_sport.mapper.EpreuveMapper.toEntity(eDto);
                 c.addEpreuve(e);
-
-                // Process participations
-                if (eDto.getParticipations() != null) {
-                    eDto.getParticipations().forEach(pDto -> {
-                        if (pDto.getParticipant() != null && pDto.getParticipant().getIdParticipant() != null) {
-                            Optional<Participant> participantOpt = participantRepository.findById(pDto.getParticipant().getIdParticipant());
-                            if (participantOpt.isPresent()) {
-                                Participation p = new Participation();
-                                p.setCompetition(c); // Set competition instead of epreuve, as updated earlier
-                                p.setParticipant(participantOpt.get());
-                                p.setStatut(
-                                        pDto.getStatut() != null ? pDto.getStatut() : ParticipationStatusEnum.INSCRIT);
-                                // The domain model changed but assuming Competition manages Participations now
-                                // c.getParticipations().add(p); // If handled via competition
-                                // Or handled via mappedBy
-                                c.getParticipations().add(p);
-                            } else {
-                                logger.error("Participant non trouvé avec l'ID: {}", pDto.getParticipant().getIdParticipant());
-                            }
-                        }
-                    });
-                }
             });
         }
 
+        // Process participations at competition level
+        processParticipations(c, dto.getParticipations());
+
         System.out.println("Création compétition : " + dto.getNameCompetition());
         return repository.save(c);
+    }
+
+    private void processParticipations(Competition c, List<com.glop.cibl_orga_sport.dto.ParticipationDTO> participations) {
+        System.out.println("Processing participations for competition: " + c.getNameCompetition());
+        if (participations == null) {
+            System.out.println("No participations in DTO");
+            return;
+        }
+        System.out.println("Number of participations in DTO: " + participations.size());
+
+        // Clear existing if needed (already cleared in update)
+        List<Long> existingIds = c.getParticipations().stream()
+            .map(p -> p.getParticipant().getIdParticipant())
+            .collect(Collectors.toList());
+        System.out.println("Existing participant IDs in competition entity: " + existingIds);
+
+        for (com.glop.cibl_orga_sport.dto.ParticipationDTO pDto : participations) {
+            if (pDto.getParticipant() != null && pDto.getParticipant().getIdParticipant() != null) {
+                Long pId = pDto.getParticipant().getIdParticipant();
+                System.out.println("Processing participant ID: " + pId);
+                
+                // Duplicate check
+                if (existingIds.contains(pId)) {
+                    System.out.println("Participant " + pId + " already in existingIds, skipping.");
+                    continue;
+                }
+
+                Optional<Participant> participantOpt = participantRepository.findById(pId);
+                if (participantOpt.isPresent()) {
+                    Participant participant = participantOpt.get();
+                    System.out.println("Found participant in DB: " + participant.getIdParticipant());
+                    
+                    // Validate team size
+                    validateParticipantSize(c, participant);
+
+                    Participation p = new Participation();
+                    p.setCompetition(c);
+                    p.setParticipant(participant);
+                    p.setStatut(pDto.getStatut() != null ? pDto.getStatut() : ParticipationStatusEnum.INSCRIT);
+                    c.getParticipations().add(p);
+                    existingIds.add(pId);
+                    System.out.println("Added participation for participant " + pId + " to competition " + c.getNameCompetition());
+                } else {
+                    System.out.println("Participant NOT found in DB with ID: " + pId);
+                    logger.error("Participant non trouvé avec l'ID: {}", pId);
+                }
+            } else {
+                System.out.println("Participation DTO has null participant or null ID");
+            }
+        }
+        System.out.println("Total participations in competition after processing: " + c.getParticipations().size());
+    }
+
+    private void validateParticipantSize(Competition c, Participant p) {
+        if (c.getEpreuves().isEmpty()) return;
+        
+        // Use first epreuve for common rules if any, or iterate all
+        // The user mentioned tailleEquipe in EpreuveDTO/Entity
+        for (Epreuve e : c.getEpreuves()) {
+            int targetSize = e.getTailleEquipe();
+            if (targetSize == 1) {
+                if (!(p instanceof com.glop.cibl_orga_sport.data.ParticipantSportif)) {
+                    throw new IllegalArgumentException("L'épreuve '" + e.getNomEpreuve() + "' est solo (taille 1). Participant doit être un sportif.");
+                }
+            } else {
+                if (!(p instanceof com.glop.cibl_orga_sport.data.ParticipantEquipe)) {
+                   throw new IllegalArgumentException("L'épreuve '" + e.getNomEpreuve() + "' est en équipe (taille " + targetSize + ").");
+                }
+                com.glop.cibl_orga_sport.data.ParticipantEquipe pe = (com.glop.cibl_orga_sport.data.ParticipantEquipe) p;
+                if (pe.getSportifs().size() != targetSize) {
+                    throw new IllegalArgumentException("L'équipe '" + pe.getNomEquipe() + "' doit avoir exactement " + targetSize + " membres (actuellement " + pe.getSportifs().size() + ").");
+                }
+            }
+        }
     }
 
     @Override
@@ -173,27 +228,12 @@ public class CompetitionServiceImpl implements CompetitionService {
                 }
                 com.glop.cibl_orga_sport.data.Epreuve e = com.glop.cibl_orga_sport.mapper.EpreuveMapper.toEntity(eDto);
                 c.addEpreuve(e);
-
-                // Process participations
-                if (eDto.getParticipations() != null) {
-                    eDto.getParticipations().forEach(pDto -> {
-                        if (pDto.getParticipant() != null && pDto.getParticipant().getIdParticipant() != null) {
-                            Optional<Participant> participantOpt = participantRepository.findById(pDto.getParticipant().getIdParticipant());
-                            if (participantOpt.isPresent()) {
-                                Participation p = new Participation();
-                                p.setCompetition(c); // Competition instead of epreuve
-                                p.setParticipant(participantOpt.get());
-                                p.setStatut(
-                                        pDto.getStatut() != null ? pDto.getStatut() : ParticipationStatusEnum.INSCRIT);
-                                c.getParticipations().add(p);
-                            } else {
-                                logger.error("Participant non trouvé avec l'ID: {}", pDto.getParticipant().getIdParticipant());
-                            }
-                        }
-                    });
-                }
             });
         }
+
+        // Cleanup and process participations
+        c.getParticipations().clear();
+        processParticipations(c, dto.getParticipations());
 
         System.out.println("Modification compétition : " + id);
         return repository.save(c);

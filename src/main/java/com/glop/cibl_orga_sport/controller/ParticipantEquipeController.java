@@ -37,8 +37,9 @@ public class ParticipantEquipeController {
     }
 
     @GetMapping("/search")
-    public List<ParticipantEquipeDTO> searchEquipes(@RequestParam("q") String query) {
-        return equipeService.searchEquipes(query).stream()
+    public List<ParticipantEquipeDTO> searchEquipes(@RequestParam("q") String query,
+            @RequestParam(value = "taille", required = false) Integer taille) {
+        return equipeService.searchEquipes(query, taille).stream()
                 .map(ParticipantEquipeMapper::toDTO)
                 .collect(Collectors.toList());
     }

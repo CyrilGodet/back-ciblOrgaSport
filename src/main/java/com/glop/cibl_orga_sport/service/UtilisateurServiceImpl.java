@@ -41,7 +41,6 @@ public class UtilisateurServiceImpl implements UtilisateurService {
             lieu.ifPresent(sportif::setLieu);
         }
         Sportif savedSportif = repository.save(sportif);
-        // Automatically create a ParticipantSportif wrapper
         ParticipantSportif participantSportif = new ParticipantSportif(savedSportif);
         participantSportifRepository.save(participantSportif);
         return savedSportif;

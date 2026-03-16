@@ -4,12 +4,9 @@ import com.glop.cibl_orga_sport.data.Equipe;
 import com.glop.cibl_orga_sport.data.Sportif;
 import com.glop.cibl_orga_sport.dto.EquipeDTO;
 import com.glop.cibl_orga_sport.repository.EquipeRepository;
-<<<<<<< HEAD:src/main/java/com/glop/cibl_orga_sport/service/impl/EquipeServiceImpl.java
-import com.glop.cibl_orga_sport.service.EquipeService;
-import com.glop.cibl_orga_sport.repository.CompetitionRepository;
-=======
 import com.glop.cibl_orga_sport.repository.UtilisateurRepository;
->>>>>>> 3f81d04 (lieu + compte):src/main/java/com/glop/cibl_orga_sport/service/EquipeServiceImpl.java
+import com.glop.cibl_orga_sport.service.EquipeService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

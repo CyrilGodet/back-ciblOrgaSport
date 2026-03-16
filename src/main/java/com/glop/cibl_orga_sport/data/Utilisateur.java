@@ -2,19 +2,10 @@ package com.glop.cibl_orga_sport.data;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
-public class Utilisateur implements UserDetails {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "user_type")
+public abstract class Utilisateur {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,21 +23,11 @@ public class Utilisateur implements UserDetails {
     @Column
     private int age;
 
-    private String mdp;
-
-    private int state;
-
     @ManyToOne
     @JoinColumn(name = "id_lieu")
     private Lieu lieu;
 
-    @ManyToOne
-    @JoinColumn(name = "idRoles")
-    private Roles roles;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
-    private List<History> historyList = new ArrayList<>();
-
+    public Utilisateur() {}
 
     public Utilisateur(String nom, String prenom, String email, int age, Lieu lieu) {
         this.nom = nom;
@@ -56,50 +37,51 @@ public class Utilisateur implements UserDetails {
         this.lieu = lieu;
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(roles.getDesignation()));
+    public Long getIdUtilisateur() {
+        return idUtilisateur;
     }
 
-    @Override
-    public String getPassword() {
-        return mdp;
+    public void setIdUtilisateur(Long idUtilisateur) {
+        this.idUtilisateur = idUtilisateur;
     }
 
+    public String getNom() {
+        return nom;
+    }
 
-    @Override
-    public String getUsername() {
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public String getPrenom() {
+        return prenom;
+    }
+
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
+    }
+
+    public String getEmail() {
         return email;
     }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
+    public int getAge() {
+        return age;
     }
 
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
+    public void setAge(int age) {
+        this.age = age;
     }
 
-    @Override
-    public boolean isEnabled() {
-        return true;
+    public Lieu getLieu() {
+        return lieu;
     }
 
-    @Override
-    public String toString() {
-        return "Utilisateur{" +
-                "id=" + idUtilisateur +
-                ", nom='" + nom + '\'' +
-                ", prenom='" + prenom + '\'' +
-                ", email='" + email + '\'' +
-                ", state=" + state +
-                '}';
+    public void setLieu(Lieu lieu) {
+        this.lieu = lieu;
     }
 }

@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/equipes")
 @CrossOrigin(origins = "http://localhost:4200")
 public class EquipeController {
-    
+
     @Autowired
     private EquipeService equipeService;
 
@@ -36,29 +36,18 @@ public class EquipeController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/competition/{competitionId}")
-    public List<EquipeDTO> getEquipesByCompetition(@PathVariable Long competitionId) {
-        return equipeService.getEquipesByCompetitionId(competitionId).stream()
-                .map(EquipeMapper::toDTO)
-                .collect(Collectors.toList());
-    }
-
     @PostMapping
     public ResponseEntity<EquipeDTO> createEquipe(@RequestBody EquipeDTO equipeDTO) {
         Equipe created = equipeService.createEquipe(
-                equipeDTO.getNomEquipe(),
-                equipeDTO.getCompetitionId()
-        );
-        return ResponseEntity.status(HttpStatus.CREATED).body(EquipeMapper.toDTO(created));
+                equipeDTO.getNomEquipe());
+        return new ResponseEntity<>(EquipeMapper.toDTO(created), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<EquipeDTO> updateEquipe(@PathVariable Long id, @RequestBody EquipeDTO equipeDTO) {
         Equipe updated = equipeService.updateEquipe(
                 id,
-                equipeDTO.getNomEquipe(),
-                equipeDTO.getCompetitionId()
-        );
+                equipeDTO.getNomEquipe());
         if (updated != null) {
             return ResponseEntity.ok(EquipeMapper.toDTO(updated));
         }

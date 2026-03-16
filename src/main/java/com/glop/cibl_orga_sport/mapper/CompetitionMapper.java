@@ -57,7 +57,9 @@ public class CompetitionMapper {
         }
 
         if (competition.getPhases() != null) {
-            dto.setPhases(new ArrayList<>(competition.getPhases()));
+            dto.setPhases(competition.getPhases().stream()
+                    .map(phase -> new CompetitionPhaseTypeDto(phase.name(), phase.getLabel()))
+                    .collect(Collectors.toList()));
         }
 
         return dto;
@@ -103,7 +105,9 @@ public class CompetitionMapper {
         }
 
         if (dto.getPhases() != null) {
-            competition.setPhases(new ArrayList<>(dto.getPhases()));
+            competition.setPhases(dto.getPhases().stream()
+                    .map(phaseDto -> CompetitionPhaseType.valueOf(phaseDto.getValue()))
+                    .collect(Collectors.toList()));
         }
 
         return competition;

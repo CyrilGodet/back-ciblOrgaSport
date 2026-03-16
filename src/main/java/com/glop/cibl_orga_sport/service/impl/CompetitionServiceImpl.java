@@ -106,7 +106,10 @@ public class CompetitionServiceImpl implements CompetitionService {
         processParticipations(c);
 
         if (dto.getPhases() != null) {
-            c.setPhases(new ArrayList<>(dto.getPhases()));
+            c.setPhases(dto.getPhases().stream()
+                    .map(phaseDto -> com.glop.cibl_orga_sport.data.enumType.CompetitionPhaseType
+                            .valueOf(phaseDto.getValue()))
+                    .collect(java.util.stream.Collectors.toList()));
         }
 
         System.out.println("Création compétition : " + dto.getNameCompetition());
@@ -276,7 +279,10 @@ public class CompetitionServiceImpl implements CompetitionService {
 
         if (dto.getPhases() != null) {
             c.getPhases().clear();
-            c.getPhases().addAll(dto.getPhases());
+            c.getPhases().addAll(dto.getPhases().stream()
+                    .map(phaseDto -> com.glop.cibl_orga_sport.data.enumType.CompetitionPhaseType
+                            .valueOf(phaseDto.getValue()))
+                    .collect(java.util.stream.Collectors.toList()));
         }
 
         System.out.println("Modification compétition : " + id);

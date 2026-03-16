@@ -18,6 +18,16 @@ public class Sportif extends Utilisateur {
     @JsonBackReference("equipe-sportifs")
     private List<ParticipantEquipe> equipes = new ArrayList<>();
 
+    @Column(nullable = false)
+    private String nom;
+
+    @Column(nullable = false)
+    private String prenom;
+
+    @ManyToMany(mappedBy = "participants")
+    @JsonBackReference("equipe-sportifs")
+    private List<Equipe> equipes = new ArrayList<>();
+
     public Sportif() {
         super();
     }
@@ -34,6 +44,30 @@ public class Sportif extends Utilisateur {
     }
 
     public void setEquipes(List<ParticipantEquipe> equipes) {
+        this.equipes = equipes;
+    }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public String getPrenom() {
+        return prenom;
+    }
+
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
+    }
+
+    public List<Equipe> getEquipes() {
+        return equipes;
+    }
+
+    public void setEquipes(List<Equipe> equipes) {
         this.equipes = equipes;
     }
 }

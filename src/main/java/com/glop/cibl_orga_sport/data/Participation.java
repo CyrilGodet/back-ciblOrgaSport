@@ -10,6 +10,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
@@ -25,6 +26,10 @@ public class Participation {
 
     @ManyToOne
     private Participant participant;
+
+    @ManyToOne
+    @JoinColumn(name = "epreuve_id")
+    private Epreuve epreuve;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -70,4 +75,12 @@ public class Participation {
     public void setStatut(ParticipationStatusEnum statut) {
         this.statut = statut;
     }
+
+    public Epreuve getEpreuve() {
+    return epreuve;
+}
+
+public void setEpreuve(Epreuve epreuve) {
+    this.epreuve = epreuve;
+}
 }

@@ -48,6 +48,10 @@ public class Epreuve {
     @JsonManagedReference("epreuve-phases")
     private List<EtapeEpreuve> etapesEpreuves;
 
+    @OneToMany(mappedBy = "epreuve", cascade = jakarta.persistence.CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference("epreuve-participations")
+    private List<Participation> participations = new ArrayList<>();
+
     @Column(nullable = false)
     private int tailleEquipe;
 
@@ -203,5 +207,24 @@ public class Epreuve {
     public void setPhaseOnGoing(CompetitionPhaseType phaseOnGoing) {
         this.phaseOnGoing = phaseOnGoing;
     }
+
+        public void addParticipation(Participation p) {
+            participations.add(p);
+            p.setEpreuve(this);
+        }
+
+        public void removeParticipation(Participation p) {
+            participations.remove(p);
+            p.setEpreuve(null);
+        }
+
+
+        public List<Participation> getParticipations() {
+    return participations;
+}
+
+public void setParticipations(List<Participation> participations) {
+    this.participations = participations;
+}
 
 }

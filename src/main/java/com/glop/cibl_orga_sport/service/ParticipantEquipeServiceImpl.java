@@ -55,7 +55,11 @@ public class ParticipantEquipeServiceImpl implements ParticipantEquipeService {
     }
 
     @Override
-    public List<ParticipantEquipe> searchEquipes(String query) {
+    public List<ParticipantEquipe> searchEquipes(String query, Integer tailleEquipe) {
+        if (tailleEquipe != null) {
+            System.out.println("Recherche d'équipes avec taille " + tailleEquipe + " : " + query);
+            return equipeRepository.findByNomEquipeContainingIgnoreCaseAndTaille(query, tailleEquipe);
+        }
         System.out
                 .println("Recherche d'équipes : " + equipeRepository.findByNomEquipeContainingIgnoreCase(query).size());
         return equipeRepository.findByNomEquipeContainingIgnoreCase(query);

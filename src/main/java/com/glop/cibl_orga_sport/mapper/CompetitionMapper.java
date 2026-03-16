@@ -50,6 +50,11 @@ public class CompetitionMapper {
                     .collect(Collectors.toList()));
         }
 
+        if (competition.getParticipations() != null) {
+            dto.setParticipations(competition.getParticipations().stream()
+                    .map(ParticipationMapper::toDTO)
+                    .collect(Collectors.toList()));
+        }
 
         return dto;
     }

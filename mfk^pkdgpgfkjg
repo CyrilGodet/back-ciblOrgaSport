@@ -1,0 +1,62 @@
+* [33m9468363[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mtemp/dev/smgy_from_dev[m[33m, [m[1;31morigin/temp/dev/smgy_from_dev[m[33m)[m exception & utils & swagger
+*   [33mb7e603c[m Merge pull request #7 from CyrilGodet/back-v2
+[32m|[m[33m\[m  
+[32m|[m *   [33m267781a[m[33m ([m[1;31morigin/back-v2[m[33m)[m Merge branch 'develop' into back-v2
+[32m|[m [34m|[m[32m\[m  
+[32m|[m [34m|[m[32m/[m  
+[32m|[m[32m/[m[34m|[m   
+* [34m|[m   [33m2103a73[m Merge pull request #6 from CyrilGodet/back-v2
+[36m|[m[1;31m\[m [34m\[m  
+* [1;31m|[m [34m|[m [33m5b7b629[m[33m ([m[1;32mdevelop[m[33m)[m ajout volume pour grafana
+* [1;31m|[m [34m|[m [33m7be874d[m update docker compose
+* [1;31m|[m [34m|[m [33m54aa89a[m Update README with Docker commands and Grafana access
+* [1;31m|[m [34m|[m [33mb0e1c52[m modification DockerFile pour lancer le projet
+[1;31m|[m [1;31m|[m * [33m3366e16[m fix
+[1;31m|[m [1;31m|[m * [33m3f81d04[m lieu + compte
+[1;31m|[m [1;31m|[m * [33m104b908[m lieu
+[1;31m|[m [1;31m|[m * [33ma45b775[m wip
+[1;31m|[m [1;31m|[m * [33m98e43fb[m fix: phase
+[1;31m|[m [1;31m|[m * [33m85dac8d[m fix: phase
+[1;31m|[m [1;31m|[m * [33m4a81d63[m refactor: nb de participant par match
+[1;31m|[m [1;31m|[m[1;31m/[m  
+[1;31m|[m * [33m6b11709[m[33m ([m[1;32mback-v2[m[33m)[m wip
+[1;31m|[m * [33ma3b105d[m suppression d'une compétition
+[1;31m|[m * [33me79f489[m ajout des equipes
+[1;31m|[m * [33m5e4abae[m wip: participation
+[1;31m|[m * [33m97f0269[m ajout des phases
+[1;31m|[m * [33mf672980[m back-v2
+[1;31m|[m * [33mbc21e7d[m[33m ([m[1;31morigin/feature/competition[m[33m, [m[1;31morigin/demo-02-03[m[33m, [m[1;32mtmp[m[33m, [m[1;32mdemo-02-03[m[33m)[m ajout gestion equipes
+[1;31m|[m * [33m0dae40a[m ajout discipine water-polo
+[1;31m|[m * [33m0277604[m mise à jour dto
+[1;31m|[m * [33m6aa70b7[m modification statut epreuve/competition
+[1;31m|[m * [33mcc05371[m ajout contraintes statut competition
+[1;31m|[m * [33m22d5834[m corrections problemes tests
+[1;31m|[m * [33m2c045da[m mise à jour entités
+[1;31m|[m * [33m3c27df1[m modification contraintes entites
+[1;31m|[m * [33me97eb55[m ajout contrainte entites
+[1;31m|[m * [33m8ba117f[m ajout details entites Competition/Epreuve
+[1;31m|[m[1;31m/[m  
+*   [33mb177589[m Merge pull request #2 from CyrilGodet/monitoring
+[1;32m|[m[1;33m\[m  
+[1;32m|[m * [33md4cd9a7[m update readme
+[1;32m|[m * [33mf123030[m[33m ([m[1;31morigin/monitoring[m[33m)[m modification docker-compose
+[1;32m|[m * [33med24db8[m mise en place du monitoring pour l'eco-conception
+* [1;33m|[m [33mf6fbfd3[m Merge pull request #1 from CyrilGodet/suppression_templates_thymeleaf
+[1;34m|[m[1;33m\[m[1;33m|[m 
+[1;34m|[m * [33mf314ca5[m[33m ([m[1;31morigin/suppression_templates_thymeleaf[m[33m, [m[1;32msuppression_templates_thymeleaf[m[33m)[m date dans la phase
+[1;34m|[m * [33me2a2a31[m feat: ajout de deux api
+[1;34m|[m * [33m51800aa[m add tests
+[1;34m|[m * [33m7f86e91[m mise a jour entites pour dependance circulaire
+[1;34m|[m * [33m3a933c9[m mise à jour services
+[1;34m|[m * [33mcfefd62[m mise à jour services
+[1;34m|[m * [33mfc16ec7[m ajout LieuRepository
+[1;34m|[m * [33m83fea80[m ajout dto et mapper pour traduire entite vers front afin d'eviter les dependances circulaires
+[1;34m|[m * [33m363db84[m ajout lieu pour une phase
+[1;34m|[m * [33m47fa686[m suppression templates thymeleaf
+[1;34m|[m[1;34m/[m  
+* [33m751dd07[m modification relation entre competition et epreuve
+* [33m77594d3[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/feat/sportif[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m, [m[1;32mfeat/sportif[m[33m)[m ajout crud pour competition, etape, categorie et phase
+* [33m09cb838[m update .gitignore
+* [33md7f3ca2[m remove /bin folder
+* [33m7d7fec7[m [KBS] chore: init
+* [33mb7d7e71[m first commit

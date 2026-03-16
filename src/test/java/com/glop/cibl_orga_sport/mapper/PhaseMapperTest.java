@@ -22,7 +22,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class PhaseMapperTest {
 
     private Competition createCompetition(String name, Long id) {
-        Competition competition = new Competition(name, null, new Periode(Date.valueOf("2026-01-01"), Date.valueOf("2026-01-10")), null, null, null, null, null);
+        Competition competition = new Competition(name, null,
+                new Periode(Date.valueOf("2026-01-01"), Date.valueOf("2026-01-10")), null, null, null, null, null);
         competition.setIdCompetition(id);
         return competition;
     }
@@ -53,8 +54,7 @@ class PhaseMapperTest {
                 18,
                 99,
                 CompetitionStatusEnum.DRAFT,
-                null
-        );
+                null);
     }
 
     private EpreuveDTO createEpreuveDTO(String name, Long id, CompetitionDTO competitionDTO) {
@@ -62,19 +62,19 @@ class PhaseMapperTest {
                 id,
                 name,
                 "Description test",
-                competitionDTO,
+                competitionDTO.getIdCompetition(),
                 DisciplineEnum.NAGE_LIBRE,
                 CompetitionGenreEnum.HOMME,
                 new java.util.Date(),
                 new java.util.Date(),
                 18,
                 99,
-                CompetitionStatusEnum.DRAFT
-        );
+                CompetitionStatusEnum.DRAFT);
     }
 
     private PhaseDTO createPhaseDTO(Long id, EpreuveDTO epreuveDTO) {
-        return new PhaseDTO(id, EtapeEpreuveEnum.FINALE, Date.valueOf("2026-01-05"), Date.valueOf("2026-01-06"), epreuveDTO);
+        return new PhaseDTO(id, EtapeEpreuveEnum.FINALE, Date.valueOf("2026-01-05"), Date.valueOf("2026-01-06"),
+                epreuveDTO);
     }
 
     @Test

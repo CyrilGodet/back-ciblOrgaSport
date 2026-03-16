@@ -4,6 +4,8 @@ import java.sql.Date;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionStatusEnum;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionGenreEnum;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionSportEnum;
+import java.util.List;
+import java.util.ArrayList;
 
 public class CompetitionDTO {
     private Long idCompetition;
@@ -17,10 +19,15 @@ public class CompetitionDTO {
     private int ageMax;
     private CompetitionStatusEnum statut;
     private LieuDTO lieu;
+    private List<EpreuveDTO> epreuves = new ArrayList<>();
+    private List<EquipeDTO> equipes = new ArrayList<>();
 
-    public CompetitionDTO() {}
+    public CompetitionDTO() {
+    }
 
-    public CompetitionDTO(Long idCompetition, String nameCompetition, String description, CompetitionSportEnum sport, Date dateDebut, Date dateFin, CompetitionGenreEnum genre, int ageMin, int ageMax, CompetitionStatusEnum statut, LieuDTO lieu) {
+    public CompetitionDTO(Long idCompetition, String nameCompetition, String description, CompetitionSportEnum sport,
+            Date dateDebut, Date dateFin, CompetitionGenreEnum genre, int ageMin, int ageMax,
+            CompetitionStatusEnum statut, LieuDTO lieu) {
         this.idCompetition = idCompetition;
         this.nameCompetition = nameCompetition;
         this.description = description;
@@ -32,6 +39,26 @@ public class CompetitionDTO {
         this.ageMax = ageMax;
         this.statut = statut;
         this.lieu = lieu;
+        this.epreuves = new ArrayList<>();
+        this.equipes = new ArrayList<>();
+    }
+
+    public CompetitionDTO(Long idCompetition, String nameCompetition, String description, CompetitionSportEnum sport,
+            Date dateDebut, Date dateFin, CompetitionGenreEnum genre, int ageMin, int ageMax,
+            CompetitionStatusEnum statut, LieuDTO lieu, List<EpreuveDTO> epreuves, List<EquipeDTO> equipes) {
+        this.idCompetition = idCompetition;
+        this.nameCompetition = nameCompetition;
+        this.description = description;
+        this.sport = sport;
+        this.dateDebut = dateDebut;
+        this.dateFin = dateFin;
+        this.genre = genre;
+        this.ageMin = ageMin;
+        this.ageMax = ageMax;
+        this.statut = statut;
+        this.lieu = lieu;
+        this.epreuves = epreuves != null ? epreuves : new ArrayList<>();
+        this.equipes = equipes != null ? equipes : new ArrayList<>();
     }
 
     public Long getIdCompetition() {
@@ -120,5 +147,21 @@ public class CompetitionDTO {
 
     public void setLieu(LieuDTO lieu) {
         this.lieu = lieu;
+    }
+
+    public List<EpreuveDTO> getEpreuves() {
+        return epreuves;
+    }
+
+    public void setEpreuves(List<EpreuveDTO> epreuves) {
+        this.epreuves = epreuves;
+    }
+
+    public List<EquipeDTO> getEquipes() {
+        return equipes;
+    }
+
+    public void setEquipes(List<EquipeDTO> equipes) {
+        this.equipes = equipes;
     }
 }

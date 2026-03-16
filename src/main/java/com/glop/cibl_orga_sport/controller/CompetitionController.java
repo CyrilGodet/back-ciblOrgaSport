@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -64,37 +65,14 @@ public class CompetitionController {
 
     @PostMapping
     public ResponseEntity<CompetitionDTO> createCompetition(@RequestBody CompetitionDTO competitionDTO) {
-        Long lieuId = competitionDTO.getLieu() != null ? competitionDTO.getLieu().getIdLieu() : null;
-        Competition competition = service.createCompetition(
-                competitionDTO.getNameCompetition(),
-                competitionDTO.getDescription(),
-                competitionDTO.getSport(),
-                competitionDTO.getDateDebut(),
-                competitionDTO.getDateFin(),
-                competitionDTO.getGenre(),
-                competitionDTO.getAgeMin(),
-                competitionDTO.getAgeMax(),
-                lieuId
-        );
-        return ResponseEntity.status(201).body(CompetitionMapper.toDTO(competition));
+        Competition competition = service.createCompetition(competitionDTO);
+        return new ResponseEntity<>(CompetitionMapper.toDTO(competition), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CompetitionDTO> updateCompetition(@PathVariable Long id, @RequestBody CompetitionDTO competitionDTO) {
-        Long lieuId = competitionDTO.getLieu() != null ? competitionDTO.getLieu().getIdLieu() : null;
-        Competition updated = service.updateCompetition(
-                id,
-                competitionDTO.getNameCompetition(),
-                competitionDTO.getDescription(),
-                competitionDTO.getSport(),
-                competitionDTO.getDateDebut(),
-                competitionDTO.getDateFin(),
-                competitionDTO.getGenre(),
-                competitionDTO.getAgeMin(),
-                competitionDTO.getAgeMax(),
-                competitionDTO.getStatut(),
-                lieuId
-        );
+    public ResponseEntity<CompetitionDTO> updateCompetition(@PathVariable Long id,
+            @RequestBody CompetitionDTO competitionDTO) {
+        Competition updated = service.updateCompetition(id, competitionDTO);
         if (updated != null) {
             return ResponseEntity.ok(CompetitionMapper.toDTO(updated));
         }

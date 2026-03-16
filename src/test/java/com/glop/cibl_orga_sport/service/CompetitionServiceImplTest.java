@@ -7,6 +7,7 @@ import com.glop.cibl_orga_sport.data.ConditionAge;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionStatusEnum;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionGenreEnum;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionSportEnum;
+import com.glop.cibl_orga_sport.dto.CompetitionDTO;
 import com.glop.cibl_orga_sport.repository.CompetitionRepository;
 import com.glop.cibl_orga_sport.service.impl.CompetitionServiceImpl;
 
@@ -39,32 +40,31 @@ class CompetitionServiceImplTest {
         Periode periode = new Periode(Date.valueOf("2026-01-01"), Date.valueOf("2026-01-10"));
         Lieu lieu = new Lieu(null, "Ville", "test");
         ConditionAge conditionAge = new ConditionAge(18, 99);
-        
+
         Competition competition = new Competition(
-            "Championnats du monde de natation",
-            "Description test",
-            periode,
-            lieu,
-            conditionAge,
-            CompetitionGenreEnum.HOMME,
-            CompetitionStatusEnum.DRAFT,
-            CompetitionSportEnum.NATATION
-        );
+                "Championnats du monde de natation",
+                "Description test",
+                periode,
+                lieu,
+                conditionAge,
+                CompetitionGenreEnum.HOMME,
+                CompetitionStatusEnum.DRAFT,
+                CompetitionSportEnum.NATATION);
         competition.setIdCompetition(1L);
 
         when(competitionRepository.save(any(Competition.class))).thenReturn(competition);
 
-        Competition result = competitionService.createCompetition(
-                "Championnats du monde de natation",
-                "Description test",
-                CompetitionSportEnum.NATATION,
-                Date.valueOf("2026-01-01"),
-                Date.valueOf("2026-01-10"),
-                CompetitionGenreEnum.HOMME,
-                18,
-                99,
-                null
-        );
+        CompetitionDTO dto = new CompetitionDTO();
+        dto.setNameCompetition("Championnats du monde de natation");
+        dto.setDescription("Description test");
+        dto.setSport(CompetitionSportEnum.NATATION);
+        dto.setDateDebut(Date.valueOf("2026-01-01"));
+        dto.setDateFin(Date.valueOf("2026-01-10"));
+        dto.setGenre(CompetitionGenreEnum.HOMME);
+        dto.setAgeMin(18);
+        dto.setAgeMax(99);
+
+        Competition result = competitionService.createCompetition(dto);
 
         assertNotNull(result);
         assertEquals("Championnats du monde de natation", result.getNameCompetition());
@@ -76,7 +76,8 @@ class CompetitionServiceImplTest {
     @Test
     void testGetAllCompetitions() {
         Periode periode1 = new Periode(Date.valueOf("2026-01-01"), Date.valueOf("2026-01-10"));
-        Competition competition1 = new Competition("Championnats du monde de natation", null, periode1, null, null, null, null, null);
+        Competition competition1 = new Competition("Championnats du monde de natation", null, periode1, null, null,
+                null, null, null);
         competition1.setIdCompetition(1L);
 
         Periode periode2 = new Periode(Date.valueOf("2026-07-01"), Date.valueOf("2026-08-01"));
@@ -95,7 +96,8 @@ class CompetitionServiceImplTest {
     @Test
     void testGetCompetition() {
         Periode periode = new Periode(Date.valueOf("2026-01-01"), Date.valueOf("2026-01-10"));
-        Competition competition = new Competition("Championnats du monde de natation", null, periode, null, null, null, null, null);
+        Competition competition = new Competition("Championnats du monde de natation", null, periode, null, null, null,
+                null, null);
         competition.setIdCompetition(1L);
 
         when(competitionRepository.findById(1L)).thenReturn(Optional.of(competition));
@@ -111,25 +113,25 @@ class CompetitionServiceImplTest {
         Periode periode = new Periode(Date.valueOf("2026-01-01"), Date.valueOf("2026-01-10"));
         Lieu lieu = new Lieu(null, "Ville", "1 rue test");
         ConditionAge conditionAge = new ConditionAge(18, 99);
-        Competition existingCompetition = new Competition("Championnats du monde de natation", null, periode, lieu, conditionAge, null, CompetitionStatusEnum.DRAFT, null);
+        Competition existingCompetition = new Competition("Championnats du monde de natation", null, periode, lieu,
+                conditionAge, null, CompetitionStatusEnum.DRAFT, null);
         existingCompetition.setIdCompetition(1L);
 
         when(competitionRepository.findById(1L)).thenReturn(Optional.of(existingCompetition));
         when(competitionRepository.save(any(Competition.class))).thenReturn(existingCompetition);
 
-        Competition result = competitionService.updateCompetition(
-                1L,
-                "Championnats du monde de natation Modifié",
-                "Description modifiée",
-                CompetitionSportEnum.NATATION,
-                Date.valueOf("2026-02-01"),
-                Date.valueOf("2026-02-10"),
-                CompetitionGenreEnum.MIXTE,
-                18,
-                99,
-                CompetitionStatusEnum.IN_PROGRESS,
-                null
-        );
+        CompetitionDTO dto = new CompetitionDTO();
+        dto.setNameCompetition("Championnats du monde de natation Modifié");
+        dto.setDescription("Description modifiée");
+        dto.setSport(CompetitionSportEnum.NATATION);
+        dto.setDateDebut(Date.valueOf("2026-02-01"));
+        dto.setDateFin(Date.valueOf("2026-02-10"));
+        dto.setGenre(CompetitionGenreEnum.MIXTE);
+        dto.setAgeMin(18);
+        dto.setAgeMax(99);
+        dto.setStatut(CompetitionStatusEnum.IN_PROGRESS);
+
+        Competition result = competitionService.updateCompetition(1L, dto);
 
         assertNotNull(result);
         assertEquals("Championnats du monde de natation Modifié", result.getNameCompetition());
@@ -141,19 +143,18 @@ class CompetitionServiceImplTest {
     void testUpdateCompetition_NotFound() {
         when(competitionRepository.findById(999L)).thenReturn(Optional.empty());
 
-        Competition result = competitionService.updateCompetition(
-                999L,
-                "Championnats du monde de natation",
-                "Description",
-                CompetitionSportEnum.NATATION,
-                Date.valueOf("2026-01-01"),
-                Date.valueOf("2026-01-10"),
-                CompetitionGenreEnum.HOMME,
-                18,
-                99,
-                CompetitionStatusEnum.DRAFT,
-                null
-        );
+        CompetitionDTO dto = new CompetitionDTO();
+        dto.setNameCompetition("Championnats du monde de natation");
+        dto.setDescription("Description");
+        dto.setSport(CompetitionSportEnum.NATATION);
+        dto.setDateDebut(Date.valueOf("2026-01-01"));
+        dto.setDateFin(Date.valueOf("2026-01-10"));
+        dto.setGenre(CompetitionGenreEnum.HOMME);
+        dto.setAgeMin(18);
+        dto.setAgeMax(99);
+        dto.setStatut(CompetitionStatusEnum.DRAFT);
+
+        Competition result = competitionService.updateCompetition(999L, dto);
 
         assertNull(result);
     }
@@ -161,7 +162,8 @@ class CompetitionServiceImplTest {
     @Test
     void testDeleteCompetition() {
         Periode periode = new Periode(Date.valueOf("2026-01-01"), Date.valueOf("2026-01-10"));
-        Competition competition = new Competition("Championnats du monde de natation", null, periode, null, null, null, CompetitionStatusEnum.DRAFT, null);
+        Competition competition = new Competition("Championnats du monde de natation", null, periode, null, null, null,
+                CompetitionStatusEnum.DRAFT, null);
         competition.setIdCompetition(1L);
 
         when(competitionRepository.findById(1L)).thenReturn(Optional.of(competition));
@@ -183,7 +185,8 @@ class CompetitionServiceImplTest {
     @Test
     void testPublishCompetition() {
         Periode periode = new Periode(Date.valueOf("2026-01-01"), Date.valueOf("2026-01-10"));
-        Competition competition = new Competition("Championnats du monde de natation", null, periode, null, null, null, CompetitionStatusEnum.DRAFT, null);
+        Competition competition = new Competition("Championnats du monde de natation", null, periode, null, null, null,
+                CompetitionStatusEnum.DRAFT, null);
         competition.setIdCompetition(1L);
 
         when(competitionRepository.findById(1L)).thenReturn(Optional.of(competition));
@@ -198,7 +201,8 @@ class CompetitionServiceImplTest {
     @Test
     void testPublishCompetition_AlreadyPublished() {
         Periode periode = new Periode(Date.valueOf("2026-01-01"), Date.valueOf("2026-01-10"));
-        Competition competition = new Competition("Championnats du monde de natation", null, periode, null, null, null, CompetitionStatusEnum.PUBLISH, null);
+        Competition competition = new Competition("Championnats du monde de natation", null, periode, null, null, null,
+                CompetitionStatusEnum.PUBLISH, null);
         competition.setIdCompetition(1L);
 
         when(competitionRepository.findById(1L)).thenReturn(Optional.of(competition));
@@ -211,7 +215,8 @@ class CompetitionServiceImplTest {
     @Test
     void testStartCompetition() {
         Periode periode = new Periode(Date.valueOf("2026-01-01"), Date.valueOf("2026-01-10"));
-        Competition competition = new Competition("Championnats du monde de natation", null, periode, null, null, null, CompetitionStatusEnum.PUBLISH, null);
+        Competition competition = new Competition("Championnats du monde de natation", null, periode, null, null, null,
+                CompetitionStatusEnum.PUBLISH, null);
         competition.setIdCompetition(1L);
 
         when(competitionRepository.findById(1L)).thenReturn(Optional.of(competition));
@@ -226,7 +231,8 @@ class CompetitionServiceImplTest {
     @Test
     void testStartCompetition_NotPublished() {
         Periode periode = new Periode(Date.valueOf("2026-01-01"), Date.valueOf("2026-01-10"));
-        Competition competition = new Competition("Championnats du monde de natation", null, periode, null, null, null, CompetitionStatusEnum.DRAFT, null);
+        Competition competition = new Competition("Championnats du monde de natation", null, periode, null, null, null,
+                CompetitionStatusEnum.DRAFT, null);
         competition.setIdCompetition(1L);
 
         when(competitionRepository.findById(1L)).thenReturn(Optional.of(competition));
@@ -239,7 +245,8 @@ class CompetitionServiceImplTest {
     @Test
     void testFinishCompetition() {
         Periode periode = new Periode(Date.valueOf("2026-01-01"), Date.valueOf("2026-01-10"));
-        Competition competition = new Competition("Championnats du monde de natation", null, periode, null, null, null, CompetitionStatusEnum.IN_PROGRESS, null);
+        Competition competition = new Competition("Championnats du monde de natation", null, periode, null, null, null,
+                CompetitionStatusEnum.IN_PROGRESS, null);
         competition.setIdCompetition(1L);
 
         when(competitionRepository.findById(1L)).thenReturn(Optional.of(competition));
@@ -254,7 +261,8 @@ class CompetitionServiceImplTest {
     @Test
     void testFinishCompetition_NotInProgress() {
         Periode periode = new Periode(Date.valueOf("2026-01-01"), Date.valueOf("2026-01-10"));
-        Competition competition = new Competition("Championnats du monde de natation", null, periode, null, null, null, CompetitionStatusEnum.PUBLISH, null);
+        Competition competition = new Competition("Championnats du monde de natation", null, periode, null, null, null,
+                CompetitionStatusEnum.PUBLISH, null);
         competition.setIdCompetition(1L);
 
         when(competitionRepository.findById(1L)).thenReturn(Optional.of(competition));

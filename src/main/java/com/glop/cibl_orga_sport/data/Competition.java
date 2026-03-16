@@ -16,10 +16,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.CascadeType;
 
 @Entity
 public class Competition {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idCompetition;
@@ -30,11 +31,11 @@ public class Competition {
     @Column(nullable = true)
     private String description;
 
-    @OneToMany(mappedBy = "competition")
+    @OneToMany(mappedBy = "competition", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference("competition-epreuves")
     private List<Epreuve> epreuves;
 
-    @OneToMany(mappedBy = "competition")
+    @OneToMany(mappedBy = "competition", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference("competition-equipes")
     private List<Equipe> equipes;
 
@@ -56,10 +57,12 @@ public class Competition {
     @Column(nullable = false)
     private CompetitionSportEnum sport;
 
-    public Competition() {}
+    public Competition() {
+    }
 
     public Competition(String nameCompetition, String description, Periode periode, Lieu lieu,
-            ConditionAge conditionAge, CompetitionGenreEnum genre, CompetitionStatusEnum statut, CompetitionSportEnum sport) {
+            ConditionAge conditionAge, CompetitionGenreEnum genre, CompetitionStatusEnum statut,
+            CompetitionSportEnum sport) {
         this.nameCompetition = nameCompetition;
         this.description = description;
         this.periode = periode;
@@ -102,7 +105,7 @@ public class Competition {
     }
 
     public void removeEpreuve(Epreuve epreuve) throws IllegalAccessException {
-        if(!this.epreuves.remove(epreuve)) {
+        if (!this.epreuves.remove(epreuve)) {
             throw new IllegalAccessException("L'épreuve n'est pas associée à cette compétition.");
         }
         epreuve.setCompetition(null);
@@ -171,5 +174,5 @@ public class Competition {
     public void setEquipes(List<Equipe> equipes) {
         this.equipes = equipes;
     }
-    
+
 }

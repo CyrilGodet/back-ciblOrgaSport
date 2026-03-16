@@ -17,6 +17,7 @@ import com.glop.cibl_orga_sport.data.enumType.CompetitionSportEnum;
 import com.glop.cibl_orga_sport.repository.CompetitionRepository;
 import com.glop.cibl_orga_sport.repository.LieuRepository;
 import com.glop.cibl_orga_sport.service.CompetitionService;
+import com.glop.cibl_orga_sport.dto.CompetitionDTO;
 
 @Service
 public class CompetitionServiceImpl implements CompetitionService {
@@ -28,72 +29,124 @@ public class CompetitionServiceImpl implements CompetitionService {
     private LieuRepository lieuRepository;
 
     @Override
-    public Competition createCompetition(String name, String description, CompetitionSportEnum sport, Date dateDebut, Date dateFin, 
-                                        CompetitionGenreEnum genre, int ageMin, int ageMax, Long lieuId) {
-        if (dateDebut != null && dateFin != null && dateDebut.after(dateFin)) {
+    public Competition createCompetition(CompetitionDTO dto) {
+        if (dto.getDateDebut() != null && dto.getDateFin() != null && dto.getDateDebut().after(dto.getDateFin())) {
             throw new IllegalArgumentException("La date de début doit être avant la date de fin");
         }
-        
-        Periode periode = new Periode(dateDebut, dateFin);
-        Lieu lieu = null;
-        if (lieuId != null) {
-            lieu = lieuRepository.findById(lieuId).orElse(null);
+
+        Periode periode = new Periode(dto.getDateDebut(), dto.getDateFin());
+        Lieu lieu = getOrCreateLieu(dto.getLieu());
+        ConditionAge conditionAge = new ConditionAge(dto.getAgeMin(), dto.getAgeMax());
+
+        Competition c = new Competition(dto.getNameCompetition(), dto.getDescription(), periode, lieu, conditionAge,
+                dto.getGenre(), CompetitionStatusEnum.DRAFT, dto.getSport());
+
+        if (dto.getEpreuves() != null) {
+            dto.getEpreuves().forEach(eDto -> {
+                com.glop.cibl_orga_sport.data.Epreuve e = com.glop.cibl_orga_sport.mapper.EpreuveMapper.toEntity(eDto);
+                c.addEpreuve(e);
+            });
         }
-        ConditionAge conditionAge = new ConditionAge(ageMin, ageMax);
-        
-        Competition c = new Competition(name, description, periode, lieu, conditionAge, genre, CompetitionStatusEnum.DRAFT, sport);
-        
-        System.out.println("Création compétition : " + name);
+
+        if (dto.getEquipes() != null) {
+            dto.getEquipes().forEach(eqDto -> {
+                com.glop.cibl_orga_sport.data.Equipe eq = com.glop.cibl_orga_sport.mapper.EquipeMapper.toEntity(eqDto);
+                eq.setCompetition(c);
+                c.getEquipes().add(eq);
+            });
+        }
+
+        System.out.println("Création compétition : " + dto.getNameCompetition());
         return repository.save(c);
     }
 
     @Override
-    public Competition updateCompetition(Long id, String name, String description, CompetitionSportEnum sport, Date dateDebut, Date dateFin, 
-                                        CompetitionGenreEnum genre, int ageMin, int ageMax, CompetitionStatusEnum statut, Long lieuId) {
-        if (dateDebut != null && dateFin != null && dateDebut.after(dateFin)) {
+    public Competition updateCompetition(Long id, CompetitionDTO dto) {
+        Competition c = repository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Compétition non trouvée : " + id));
+
+        if (c.getStatut() != CompetitionStatusEnum.DRAFT) {
+            System.out.println("Impossible de modifier une compétition qui n'est pas en DRAFT : " + id);
+            return c;
+        }
+
+        if (dto.getDateDebut() != null && dto.getDateFin() != null && dto.getDateDebut().after(dto.getDateFin())) {
             throw new IllegalArgumentException("La date de début doit être avant la date de fin");
         }
-        Optional<Competition> existingCompetition = repository.findById(id);
-        if (existingCompetition.isPresent()) {
-            Competition c = existingCompetition.get();
 
-            if(c.getStatut() != CompetitionStatusEnum.DRAFT) {
-                System.out.println("Impossible de modifier une compétition publiée : " + id);
-                return c;
-            }
+        c.setNameCompetition(dto.getNameCompetition());
+        c.setDescription(dto.getDescription());
+        c.setSport(dto.getSport());
+        c.setGenre(dto.getGenre());
+        c.setStatut(dto.getStatut());
 
-            c.setNameCompetition(name);
-            c.setDescription(description);
-            c.setSport(sport);
-            
-            if (dateDebut != null && dateFin != null) {
-                if (c.getPeriode() == null) {
-                    c.setPeriode(new Periode(dateDebut, dateFin));
-                } else {
-                    c.getPeriode().setDateDebut(dateDebut);
-                    c.getPeriode().setDateFin(dateFin);
-                }
-            }
-            
-            if (lieuId != null) {
-                Lieu lieu = lieuRepository.findById(lieuId).orElse(null);
-                c.setLieu(lieu);
-            }
-            
-            if (c.getConditionAge() == null) {
-                c.setConditionAge(new ConditionAge(ageMin, ageMax));
+        if (dto.getDateDebut() != null && dto.getDateFin() != null) {
+            if (c.getPeriode() == null) {
+                c.setPeriode(new Periode(dto.getDateDebut(), dto.getDateFin()));
             } else {
-                c.getConditionAge().setAgeMin(ageMin);
-                c.getConditionAge().setAgeMax(ageMax);
+                c.getPeriode().setDateDebut(dto.getDateDebut());
+                c.getPeriode().setDateFin(dto.getDateFin());
             }
-            
-            c.setGenre(genre);
-            c.setStatut(statut);
-            
-            System.out.println("Modification compétition : " + id);
-            return repository.save(c);
         }
-        System.out.println("Compétition non trouvée : " + id);
+
+        c.setLieu(getOrCreateLieu(dto.getLieu()));
+
+        if (c.getConditionAge() == null) {
+            c.setConditionAge(new ConditionAge(dto.getAgeMin(), dto.getAgeMax()));
+        } else {
+            c.getConditionAge().setAgeMin(dto.getAgeMin());
+            c.getConditionAge().setAgeMax(dto.getAgeMax());
+        }
+
+        // Mise à jour des épreuves
+        if (dto.getEpreuves() != null) {
+            c.getEpreuves().clear();
+            dto.getEpreuves().forEach(eDto -> {
+                com.glop.cibl_orga_sport.data.Epreuve e = com.glop.cibl_orga_sport.mapper.EpreuveMapper.toEntity(eDto);
+                c.addEpreuve(e);
+            });
+        }
+
+        // Mise à jour des équipes
+        if (dto.getEquipes() != null) {
+            c.getEquipes().clear();
+            dto.getEquipes().forEach(eqDto -> {
+                com.glop.cibl_orga_sport.data.Equipe eq = com.glop.cibl_orga_sport.mapper.EquipeMapper.toEntity(eqDto);
+                eq.setCompetition(c);
+                c.getEquipes().add(eq);
+            });
+        }
+
+        System.out.println("Modification compétition : " + id);
+        return repository.save(c);
+    }
+
+    private Lieu getOrCreateLieu(com.glop.cibl_orga_sport.dto.LieuDTO lieuDTO) {
+        if (lieuDTO == null) {
+            return null;
+        }
+
+        // 1. Recherche par ID si présent
+        if (lieuDTO.getIdLieu() != null) {
+            Optional<Lieu> lieuOpt = lieuRepository.findById(lieuDTO.getIdLieu());
+            if (lieuOpt.isPresent()) {
+                return lieuOpt.get();
+            }
+        }
+
+        // 2. Recherche par Nom et Ville si présent
+        if (lieuDTO.getNomLieu() != null && lieuDTO.getVille() != null) {
+            Optional<Lieu> lieuOpt = lieuRepository.findByNomLieuAndVille(lieuDTO.getNomLieu(), lieuDTO.getVille());
+            if (lieuOpt.isPresent()) {
+                return lieuOpt.get();
+            }
+
+            // 3. Création si non trouvé
+            Lieu newLieu = new Lieu(lieuDTO.getNomLieu(), lieuDTO.getVille(), lieuDTO.getAdresse());
+            System.out.println("Création automatique du lieu : " + lieuDTO.getNomLieu());
+            return lieuRepository.save(newLieu);
+        }
+
         return null;
     }
 
@@ -103,7 +156,7 @@ public class CompetitionServiceImpl implements CompetitionService {
         if (c.isPresent()) {
             Competition competition = c.get();
 
-            if(competition.getStatut() != CompetitionStatusEnum.DRAFT) {
+            if (competition.getStatut() != CompetitionStatusEnum.DRAFT) {
                 System.out.println("Impossible de supprimer une compétition publiée : " + id);
                 competition.setStatut(CompetitionStatusEnum.CANCELLED);
                 repository.save(competition);
@@ -111,8 +164,8 @@ public class CompetitionServiceImpl implements CompetitionService {
             }
 
             if (competition.getEpreuves() != null && !competition.getEpreuves().isEmpty()) {
-                throw new IllegalStateException("Impossible de supprimer cette compétition car elle est liée à " + 
-                    competition.getEpreuves().size() + " épreuve(s) existante(s).");
+                throw new IllegalStateException("Impossible de supprimer cette compétition car elle est liée à " +
+                        competition.getEpreuves().size() + " épreuve(s) existante(s).");
             }
             repository.deleteById(id);
             System.out.println("Compétition supprimée : " + id);
@@ -183,4 +236,3 @@ public class CompetitionServiceImpl implements CompetitionService {
         return null;
     }
 }
-

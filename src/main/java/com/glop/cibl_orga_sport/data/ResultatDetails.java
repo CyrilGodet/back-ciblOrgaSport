@@ -36,13 +36,8 @@ public class ResultatDetails {
     public ResultatDetails() {
     }
 
-<<<<<<< HEAD
     public ResultatDetails(Participant participant, Resultat resultat, int rang, ResultatDetailsStatusEnum status) {
         this.participant = participant;
-=======
-    public ResultatDetails(Equipe equipe, Resultat resultat, int rang, ResultatDetailsStatusEnum status) {
-        this.equipe = equipe;
->>>>>>> 90fc9e0 (rebase)
         this.resultat = resultat;
         this.rang = rang;
         this.status = status;
@@ -56,21 +51,12 @@ public class ResultatDetails {
         this.idResultatDetails = idResultatDetails;
     }
 
-<<<<<<< HEAD
     public Participant getParticipant() {
         return participant;
     }
 
     public void setParticipant(Participant participant) {
         this.participant = participant;
-=======
-    public Equipe getEquipe() {
-        return equipe;
-    }
-
-    public void setEquipe(Equipe equipe) {
-        this.equipe = equipe;
->>>>>>> 90fc9e0 (rebase)
     }
 
     public Resultat getResultat() {

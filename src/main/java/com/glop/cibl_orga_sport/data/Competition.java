@@ -188,7 +188,6 @@ public class Competition {
         this.conditionAge = conditionAge;
     }
 
-<<<<<<< HEAD
     public List<CompetitionPhaseType> getPhases() {
         return phases;
     }
@@ -197,8 +196,6 @@ public class Competition {
         this.phases = phases;
     }
 
-=======
->>>>>>> 110aeac (rebase)
     public List<CompetitionPhaseType> getPhases() {
         return phases;
     }

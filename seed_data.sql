@@ -2,7 +2,6 @@
 -- RESET COMPLET DE LA BASE
 -- ============================
 
-
 -- Suppression des enfants d'abord
 -- TRUNCATE TABLE
 -- participation,

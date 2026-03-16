@@ -10,7 +10,7 @@ public interface ParticipantEquipeService {
     Optional<ParticipantEquipe> getEquipe(Long id);
     ParticipantEquipe createEquipe(String nomEquipe);
     ParticipantEquipe createEquipe(ParticipantEquipeDTO dto);
-    List<ParticipantEquipe> searchEquipes(String query);
+    List<ParticipantEquipe> searchEquipes(String query, Integer tailleEquipe);
     ParticipantEquipe updateEquipe(Long id, String nomEquipe);
     boolean deleteEquipe(Long id);
 }

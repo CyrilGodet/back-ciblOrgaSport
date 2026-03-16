@@ -105,6 +105,7 @@ public class CompetitionMapper {
         }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         if (dto.getPhases() != null) {
             competition.setPhases(dto.getPhases().stream()
                     .map(phaseDto -> CompetitionPhaseType.valueOf(phaseDto.getValue()))
@@ -115,6 +116,8 @@ public class CompetitionMapper {
 >>>>>>> 9b040bb (fix: phase)
         }
 
+=======
+>>>>>>> a2fc153 (rebase)
         return competition;
     }
 }

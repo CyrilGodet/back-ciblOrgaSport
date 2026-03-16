@@ -94,6 +94,10 @@ public class EpreuveMapper {
         epreuve.setNbElimParMatch(dto.getNbElimMatch());
 >>>>>>> d764775 (fix: phase)
 
+        if (dto.getPhaseOnGoing() != null) {
+            epreuve.setPhaseOnGoing(CompetitionPhaseType.valueOf(dto.getPhaseOnGoing().getValue()));
+        }
+
         return epreuve;
     }
 }

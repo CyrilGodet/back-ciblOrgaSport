@@ -22,7 +22,6 @@ public class CompetitionDTO {
     private List<EpreuveDTO> epreuves = new ArrayList<>();
     private List<ParticipationDTO> participations = new ArrayList<>();
     private List<CompetitionPhaseTypeDto> phases = new ArrayList<>();
-    private CompetitionPhaseTypeDto phaseOnGoing;
 
     public CompetitionDTO() {
     }
@@ -43,7 +42,6 @@ public class CompetitionDTO {
         this.lieu = lieu;
         this.epreuves = new ArrayList<>();
         this.phases = new ArrayList<>();
-        this.phaseOnGoing = null;
     }
 
     public CompetitionDTO(Long idCompetition, String nameCompetition, String description, CompetitionSportEnum sport,
@@ -63,7 +61,6 @@ public class CompetitionDTO {
         this.lieu = lieu;
         this.epreuves = epreuves != null ? epreuves : new ArrayList<>();
         this.phases = phases != null ? phases : new ArrayList<>();
-        this.phaseOnGoing = null;
     }
 
     public Long getIdCompetition() {

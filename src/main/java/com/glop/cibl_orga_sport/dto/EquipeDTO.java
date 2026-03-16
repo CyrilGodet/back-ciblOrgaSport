@@ -1,17 +1,19 @@
 package com.glop.cibl_orga_sport.dto;
 
+import java.util.List;
+import java.util.ArrayList;
+
 public class EquipeDTO {
     private Long idEquipe;
     private String nomEquipe;
-    private Long competitionId;
+    private List<SportifDTO> participants = new ArrayList<>();
 
     public EquipeDTO() {
     }
 
-    public EquipeDTO(Long idEquipe, String nomEquipe, Long competitionId) {
+    public EquipeDTO(Long idEquipe, String nomEquipe) {
         this.idEquipe = idEquipe;
         this.nomEquipe = nomEquipe;
-        this.competitionId = competitionId;
     }
 
     public Long getIdEquipe() {
@@ -30,11 +32,11 @@ public class EquipeDTO {
         this.nomEquipe = nomEquipe;
     }
 
-    public Long getCompetitionId() {
-        return competitionId;
+    public List<SportifDTO> getParticipants() {
+        return participants;
     }
 
-    public void setCompetitionId(Long competitionId) {
-        this.competitionId = competitionId;
+    public void setParticipants(List<SportifDTO> participants) {
+        this.participants = participants;
     }
 }

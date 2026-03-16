@@ -49,16 +49,11 @@ public class CompetitionServiceImpl implements CompetitionService {
             });
         }
 
-        if (dto.getEquipes() != null) {
-            dto.getEquipes().forEach(eqDto -> {
-                com.glop.cibl_orga_sport.data.Equipe eq = com.glop.cibl_orga_sport.mapper.EquipeMapper.toEntity(eqDto);
-                eq.setCompetition(c);
-                c.getEquipes().add(eq);
-            });
-        }
-
         if (dto.getPhases() != null) {
-            c.setPhases(new ArrayList<>(dto.getPhases()));
+            c.setPhases(dto.getPhases().stream()
+                    .map(phaseDto -> com.glop.cibl_orga_sport.data.enumType.CompetitionPhaseType
+                            .valueOf(phaseDto.getValue()))
+                    .collect(java.util.stream.Collectors.toList()));
         }
 
         System.out.println("Création compétition : " + dto.getNameCompetition());
@@ -112,19 +107,12 @@ public class CompetitionServiceImpl implements CompetitionService {
             });
         }
 
-        // Mise à jour des équipes
-        if (dto.getEquipes() != null) {
-            c.getEquipes().clear();
-            dto.getEquipes().forEach(eqDto -> {
-                com.glop.cibl_orga_sport.data.Equipe eq = com.glop.cibl_orga_sport.mapper.EquipeMapper.toEntity(eqDto);
-                eq.setCompetition(c);
-                c.getEquipes().add(eq);
-            });
-        }
-
         if (dto.getPhases() != null) {
             c.getPhases().clear();
-            c.getPhases().addAll(dto.getPhases());
+            c.getPhases().addAll(dto.getPhases().stream()
+                    .map(phaseDto -> com.glop.cibl_orga_sport.data.enumType.CompetitionPhaseType
+                            .valueOf(phaseDto.getValue()))
+                    .collect(java.util.stream.Collectors.toList()));
         }
 
         System.out.println("Modification compétition : " + id);

@@ -7,9 +7,12 @@ import java.util.Optional;
 
 public interface EquipeService {
     List<Equipe> getAllEquipes();
+
     Optional<Equipe> getEquipe(Long id);
-    List<Equipe> getEquipesByCompetitionId(Long competitionId);
-    Equipe createEquipe(String nomEquipe, Long competitionId);
-    Equipe updateEquipe(Long id, String nomEquipe, Long competitionId);
+
+    Equipe createEquipe(String nomEquipe);
+
+    Equipe updateEquipe(Long id, String nomEquipe);
+
     boolean deleteEquipe(Long id);
 }

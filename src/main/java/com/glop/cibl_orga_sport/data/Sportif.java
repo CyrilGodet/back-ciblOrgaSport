@@ -1,9 +1,14 @@
 package com.glop.cibl_orga_sport.data;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import java.util.List;
+import java.util.ArrayList;
 
 @Entity
 public class Sportif extends Personne {
@@ -11,6 +16,16 @@ public class Sportif extends Personne {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idSportif;
+
+    @Column(nullable = false)
+    private String nom;
+
+    @Column(nullable = false)
+    private String prenom;
+
+    @ManyToMany(mappedBy = "participants")
+    @JsonBackReference("equipe-sportifs")
+    private List<Equipe> equipes = new ArrayList<>();
 
     public Sportif() {
         super();
@@ -26,5 +41,29 @@ public class Sportif extends Personne {
 
     public void setIdSportif(Long idSportif) {
         this.idSportif = idSportif;
+    }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public String getPrenom() {
+        return prenom;
+    }
+
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
+    }
+
+    public List<Equipe> getEquipes() {
+        return equipes;
+    }
+
+    public void setEquipes(List<Equipe> equipes) {
+        this.equipes = equipes;
     }
 }

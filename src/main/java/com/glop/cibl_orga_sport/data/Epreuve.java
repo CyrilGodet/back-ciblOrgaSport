@@ -49,7 +49,7 @@ public class Epreuve {
     private List<EtapeEpreuve> etapesEpreuves;
 
     @Column(nullable = false)
-    private int tailleEquipe = 1;
+    private int tailleEquipe;
 
     @Column(nullable = false)
     private int tailleEquipe;

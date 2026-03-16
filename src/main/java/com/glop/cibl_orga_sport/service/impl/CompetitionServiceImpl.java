@@ -105,6 +105,9 @@ public class CompetitionServiceImpl implements CompetitionService {
         // Process participations at competition level
         processParticipations(c);
 
+        // Process participations at competition level
+        processParticipations(c, dto.getParticipations());
+
         System.out.println("Création compétition : " + dto.getNameCompetition());
         return repository.save(c);
     }
@@ -269,6 +272,10 @@ public class CompetitionServiceImpl implements CompetitionService {
         // Cleanup and process participations
         c.getParticipations().clear();
         processParticipations(c);
+
+        // Cleanup and process participations
+        c.getParticipations().clear();
+        processParticipations(c, dto.getParticipations());
 
         System.out.println("Modification compétition : " + id);
         return repository.save(c);

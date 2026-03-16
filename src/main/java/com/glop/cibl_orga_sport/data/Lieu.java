@@ -6,12 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
-@AllArgsConstructor
 @Entity
 public class Lieu {
 
@@ -36,4 +31,35 @@ public class Lieu {
         this.adresse = adresse;
     }
 
+    public Long getIdLieu() {
+        return idLieu;
+    }
+
+    public void setIdLieu(Long idLieu) {
+        this.idLieu = idLieu;
+    }
+
+    public String getNomLieu() {
+        return nomLieu;
+    }
+
+    public void setNomLieu(String nomLieu) {
+        this.nomLieu = nomLieu;
+    }
+
+    public String getVille() {
+        return ville;
+    }
+
+    public void setVille(String ville) {
+        this.ville = ville;
+    }
+
+    public String getAdresse() {
+        return adresse;
+    }
+
+    public void setAdresse(String adresse) {
+        this.adresse = adresse;
+    }
 }

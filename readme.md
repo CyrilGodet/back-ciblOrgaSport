@@ -39,16 +39,20 @@ Les identifiants par défaut sont :
 5. Cliquer sur "Import" pour ajouter le dashboard.
 
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
->>>>>>> 455a3a9 (rebase)
 
 
 sudo docker exec -it postgresql_database psql -U admin -d glop
 cat seed_data.sql | sudo docker exec -i postgresql_database psql -U admin -d glop
-<<<<<<< HEAD
-=======
->>>>>>> 4a81d63 (refactor: nb de participant par match)
->>>>>>> 455a3a9 (rebase)
+
+
+cat seed_data.sql |  docker exec -i postgresql_database psql -U admin -d glop
+
+
+
+FAC:
+docker compose up -d postgres
+mvn clean install run 
+cat seed_data.sql |  docker exec -i back-ciblorgasport-postgres-1   psql -U admin -d glop
+
+
+

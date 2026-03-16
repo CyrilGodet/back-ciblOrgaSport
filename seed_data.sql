@@ -122,13 +122,27 @@ INSERT INTO utilisateur (nom, prenom, email, age, user_type, id_lieu) VALUES
 
 -- Solo (1-20)
 -- Table should be renamed to participant_equipe_sportif or similar based on mapping, in Java it is `equipe_sportif` on ParticipantEquipe
-INSERT INTO equipe_sportif (equipe_id, sportif_id) VALUES (1,1),(2,2),(3,3),(4,4),(5,5),(6,6),(7,7),(8,8),(9,9),(10,10),
-(11,11),(12,12),(13,13),(14,14),(15,15),(16,16),(17,17),(18,18),(19,19),(20,20);
+--INSERT INTO equipe_sportif (equipe_id, sportif_id) VALUES (1,1),(2,2),(3,3),(4,4),(5,5),(6,6),(7,7),(8,8),(9,9),(10,10),
+--(11,11),(12,12),(13,13),(14,14),(15,15),(16,16),(17,17),(18,18),(19,19),(20,20);
 
 -- Duo (21-35)
 INSERT INTO equipe_sportif (equipe_id, sportif_id) VALUES (21,1),(21,2),(22,3),(22,4),(23,5),(23,6),(24,7),(24,8),(25,9),(25,10),
 (26,11),(26,12),(27,13),(27,14),(28,15),(28,16),(29,17),(29,18),(30,19),(30,20),(31,1),(31,3),
 (32,5),(32,7),(33,9),(33,11),(34,13),(34,15),(35,17),(35,19);
+
+
+-- Équipes de 3 joueurs
+INSERT INTO equipe_sportif (equipe_id, sportif_id) VALUES
+(11,1),(11,2),(11,3),
+(12,4),(12,5),(12,6),
+(13,7),(13,8),(13,9),
+(14,10),(14,11),(14,12),
+(15,13),(15,14),(15,15),
+(16,16),(16,17),(16,18),
+(17,19),(17,20),(17,1),
+(18,2),(18,3),(18,4),
+(19,5),(19,6),(19,7),
+(20,8),(20,9),(20,10);
 
 -- Also create ParticipantSportif entries for all sportifs (1-20)
 -- Need to map IDs correctly. Let's assume Participant IDs 36 to 55 for sportifs.

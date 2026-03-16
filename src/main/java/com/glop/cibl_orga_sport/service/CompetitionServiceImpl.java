@@ -2,7 +2,9 @@ package com.glop.cibl_orga_sport.service;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,8 @@ import com.glop.cibl_orga_sport.repository.ParticipationRepository;
 import com.glop.cibl_orga_sport.repository.MatchRepository;
 import com.glop.cibl_orga_sport.data.enumType.MatchStatusEnum;
 import com.glop.cibl_orga_sport.dto.CompetitionDTO;
+import com.glop.cibl_orga_sport.dto.ParticipationDTO;
+import com.glop.cibl_orga_sport.mapper.EpreuveMapper;
 import com.glop.cibl_orga_sport.data.Participant;
 import com.glop.cibl_orga_sport.data.EtapeEpreuve;
 import com.glop.cibl_orga_sport.data.Match;
@@ -68,82 +72,103 @@ public class CompetitionServiceImpl implements CompetitionService {
 
         if (dto.getEpreuves() != null) {
             dto.getEpreuves().forEach(eDto -> {
-                if (eDto.getNbPerMatch() <= 0) {
-                    throw new IllegalArgumentException(
-                            "Le nombre d'équipes par match (nbPerMatch) doit être supérieur à 0 pour l'épreuve '"
-                                    + eDto.getNomEpreuve() + "'.");
-                }
-                if (eDto.getNbElimMatch() <= 0) {
-                    throw new IllegalArgumentException(
-                            "Le nombre d'équipes éliminées par match (nbElimMatch) doit être supérieur à 0 pour l'épreuve '"
-                                    + eDto.getNomEpreuve() + "'.");
-                }
-                if (eDto.getNbElimMatch() >= eDto.getNbPerMatch()) {
-                    throw new IllegalArgumentException(
-                            "Le nombre d'équipes éliminées par match (nbElimMatch) doit être inférieur à nbPerMatch pour l'épreuve '"
-                                    + eDto.getNomEpreuve() + "'.");
-                }
-                com.glop.cibl_orga_sport.data.Epreuve e = com.glop.cibl_orga_sport.mapper.EpreuveMapper.toEntity(eDto);
-                c.addEpreuve(e);
-            });
+
+    Epreuve e = EpreuveMapper.toEntity(eDto);
+
+    // Ajouter les participations
+    if (eDto.getParticipations() != null) {
+
+        for (ParticipationDTO pDto : eDto.getParticipations()) {
+
+            Long pId = pDto.getParticipant().getIdParticipant();
+
+            Participant participant = participantRepository.findById(pId)
+                    .orElseThrow(() -> new IllegalArgumentException("Participant non trouvé : " + pId));
+
+            Participation participation = new Participation();
+            participation.setParticipant(participant);
+            participation.setCompetition(c);
+            participation.setEpreuve(e);
+            participation.setStatut(
+                    pDto.getStatut() != null
+                            ? pDto.getStatut()
+                            : ParticipationStatusEnum.INSCRIT);
+
+            e.addParticipation(participation);
+        }
+    }
+
+    c.addEpreuve(e);
+});
         }
 
         // Process participations at competition level
-        processParticipations(c, dto.getParticipations());
+        processParticipations(c);
 
         System.out.println("Création compétition : " + dto.getNameCompetition());
         return repository.save(c);
     }
 
-    private void processParticipations(Competition c, List<com.glop.cibl_orga_sport.dto.ParticipationDTO> participations) {
+    private void processParticipations(Competition c) {
+
         System.out.println("Processing participations for competition: " + c.getNameCompetition());
-        if (participations == null) {
-            System.out.println("No participations in DTO");
+
+        if (c.getEpreuves() == null || c.getEpreuves().isEmpty()) {
+            System.out.println("No epreuves in competition");
             return;
         }
-        System.out.println("Number of participations in DTO: " + participations.size());
 
-        // Clear existing if needed (already cleared in update)
-        List<Long> existingIds = c.getParticipations().stream()
-            .map(p -> p.getParticipant().getIdParticipant())
-            .collect(Collectors.toList());
-        System.out.println("Existing participant IDs in competition entity: " + existingIds);
+        Map<Long, Participation> participationMap = new HashMap<>();
 
-        for (com.glop.cibl_orga_sport.dto.ParticipationDTO pDto : participations) {
-            if (pDto.getParticipant() != null && pDto.getParticipant().getIdParticipant() != null) {
-                Long pId = pDto.getParticipant().getIdParticipant();
-                System.out.println("Processing participant ID: " + pId);
-                
-                // Duplicate check
-                if (existingIds.contains(pId)) {
-                    System.out.println("Participant " + pId + " already in existingIds, skipping.");
+        for (Epreuve e : c.getEpreuves()) {
+
+            if (e.getParticipations() == null) {
+                continue;
+            }
+
+            for (Participation p : e.getParticipations()) {
+
+                if (p.getParticipant() == null || p.getParticipant().getIdParticipant() == null) {
                     continue;
                 }
 
-                Optional<Participant> participantOpt = participantRepository.findById(pId);
-                if (participantOpt.isPresent()) {
-                    Participant participant = participantOpt.get();
-                    System.out.println("Found participant in DB: " + participant.getIdParticipant());
-                    
-                    // Validate team size
-                    validateParticipantSize(c, participant);
+                Long pId = p.getParticipant().getIdParticipant();
 
-                    Participation p = new Participation();
-                    p.setCompetition(c);
-                    p.setParticipant(participant);
-                    p.setStatut(pDto.getStatut() != null ? pDto.getStatut() : ParticipationStatusEnum.INSCRIT);
-                    c.getParticipations().add(p);
-                    existingIds.add(pId);
-                    System.out.println("Added participation for participant " + pId + " to competition " + c.getNameCompetition());
-                } else {
-                    System.out.println("Participant NOT found in DB with ID: " + pId);
-                    logger.error("Participant non trouvé avec l'ID: {}", pId);
+                System.out.println("Processing participant ID: " + pId);
+
+                Participant participant = participantRepository.findById(pId)
+                        .orElseThrow(() -> new IllegalArgumentException("Participant non trouvé : " + pId));
+
+                // validation métier
+                validateParticipantSize(c, participant);
+
+                Participation participation = participationMap.get(pId);
+
+                if (participation == null) {
+
+                    participation = new Participation();
+                    participation.setCompetition(c);
+                    participation.setParticipant(participant);
+                    participation.setStatut(
+                            p.getStatut() != null
+                                    ? p.getStatut()
+                                    : ParticipationStatusEnum.INSCRIT);
+
+                    participationMap.put(pId, participation);
+
+                    System.out.println("Created participation for participant " + pId);
                 }
-            } else {
-                System.out.println("Participation DTO has null participant or null ID");
+
+                // rattacher la participation à l'épreuve
+                p.setCompetition(c);
             }
         }
-        System.out.println("Total participations in competition after processing: " + c.getParticipations().size());
+
+        // participations de la compétition = union des participations des épreuves
+        //c.getParticipations().clear();
+        //c.getParticipations().addAll(participationMap.values());
+
+       // System.out.println("Total participations in competition: " + c.getParticipations().size());
     }
 
     private void validateParticipantSize(Competition c, Participant p) {
@@ -211,29 +236,39 @@ public class CompetitionServiceImpl implements CompetitionService {
         if (dto.getEpreuves() != null) {
             c.getEpreuves().clear();
             dto.getEpreuves().forEach(eDto -> {
-                if (eDto.getNbPerMatch() <= 0) {
-                    throw new IllegalArgumentException(
-                            "Le nombre d'équipes par match (nbPerMatch) doit être supérieur à 0 pour l'épreuve '"
-                                    + eDto.getNomEpreuve() + "'.");
-                }
-                if (eDto.getNbElimMatch() <= 0) {
-                    throw new IllegalArgumentException(
-                            "Le nombre d'équipes éliminées par match (nbElimMatch) doit être supérieur à 0 pour l'épreuve '"
-                                    + eDto.getNomEpreuve() + "'.");
-                }
-                if (eDto.getNbElimMatch() >= eDto.getNbPerMatch()) {
-                    throw new IllegalArgumentException(
-                            "Le nombre d'équipes éliminées par match (nbElimMatch) doit être inférieur à nbPerMatch pour l'épreuve '"
-                                    + eDto.getNomEpreuve() + "'.");
-                }
-                com.glop.cibl_orga_sport.data.Epreuve e = com.glop.cibl_orga_sport.mapper.EpreuveMapper.toEntity(eDto);
-                c.addEpreuve(e);
-            });
+
+    Epreuve e = EpreuveMapper.toEntity(eDto);
+
+    // Ajouter les participations
+    if (eDto.getParticipations() != null) {
+
+        for (ParticipationDTO pDto : eDto.getParticipations()) {
+
+            Long pId = pDto.getParticipant().getIdParticipant();
+
+            Participant participant = participantRepository.findById(pId)
+                    .orElseThrow(() -> new IllegalArgumentException("Participant non trouvé : " + pId));
+
+            Participation participation = new Participation();
+            participation.setParticipant(participant);
+            participation.setCompetition(c);
+            participation.setEpreuve(e);
+            participation.setStatut(
+                    pDto.getStatut() != null
+                            ? pDto.getStatut()
+                            : ParticipationStatusEnum.INSCRIT);
+
+            e.addParticipation(participation);
+        }
+    }
+
+    c.addEpreuve(e);
+});
         }
 
         // Cleanup and process participations
         c.getParticipations().clear();
-        processParticipations(c, dto.getParticipations());
+        processParticipations(c);
 
         System.out.println("Modification compétition : " + id);
         return repository.save(c);

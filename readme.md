@@ -57,3 +57,6 @@ docker compose up -d postgres
 mvn clean install run 
 cat seed_data.sql |  docker exec -i back-ciblorgasport-postgres-1   psql -U admin -d glop
 
+
+
+ cat seed_data.sql | docker exec -i back-ciblorgasport-postgres-1 psql -U admin -d glop

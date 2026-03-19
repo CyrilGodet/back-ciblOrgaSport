@@ -24,10 +24,6 @@ public class Sportif extends Utilisateur {
     @Column(nullable = false)
     private String prenom;
 
-    @ManyToMany(mappedBy = "participants")
-    @JsonBackReference("equipe-sportifs")
-    private List<ParticipantEquipe> equipes = new ArrayList<>();
-
     public Sportif() {
         super();
     }
@@ -37,14 +33,6 @@ public class Sportif extends Utilisateur {
     }
     public Long getIdSportif() {
         return getIdUtilisateur();
-    }
-
-    public List<ParticipantEquipe> getEquipes() {
-        return equipes;
-    }
-
-    public void setEquipes(List<ParticipantEquipe> equipes) {
-        this.equipes = equipes;
     }
 
     public String getNom() {

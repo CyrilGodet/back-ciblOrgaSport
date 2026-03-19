@@ -3,6 +3,7 @@ package com.glop.cibl_orga_sport.dto;
 import java.sql.Date;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionStatusEnum;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionGenreEnum;
+import com.glop.cibl_orga_sport.data.enumType.CompetitionPhaseType;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionSportEnum;
 import java.util.List;
 import java.util.ArrayList;
@@ -159,13 +160,6 @@ public class CompetitionDTO {
         this.epreuves = epreuves;
     }
 
-    public List<CompetitionPhaseTypeDto> getPhases() {
-        return phases;
-    }
-
-    public void setPhases(List<CompetitionPhaseTypeDto> phases) {
-        this.phases = phases;
-    }
 
     public List<ParticipationDTO> getParticipations() {
         return participations;
@@ -175,7 +169,7 @@ public class CompetitionDTO {
         this.participations = participations;
     }
 
-    public List<CompetitionPhaseType> getPhases() {
+    public List<CompetitionPhaseTypeDto> getPhases() {
         return phases;
     }
 

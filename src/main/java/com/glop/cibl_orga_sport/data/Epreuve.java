@@ -56,9 +56,6 @@ public class Epreuve {
     private int tailleEquipe;
 
     @Column(nullable = false)
-    private int tailleEquipe;
-
-    @Column(nullable = false)
     private DisciplineEnum discipline;
 
     @Column(nullable = false)

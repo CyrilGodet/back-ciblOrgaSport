@@ -22,6 +22,7 @@ import com.glop.cibl_orga_sport.repository.CompetitionRepository;
 import com.glop.cibl_orga_sport.repository.ParticipantRepository;
 import com.glop.cibl_orga_sport.repository.LieuRepository;
 import com.glop.cibl_orga_sport.repository.ParticipationRepository;
+import com.glop.cibl_orga_sport.service.CompetitionService;
 import com.glop.cibl_orga_sport.repository.MatchRepository;
 import com.glop.cibl_orga_sport.data.enumType.MatchStatusEnum;
 import com.glop.cibl_orga_sport.dto.CompetitionDTO;

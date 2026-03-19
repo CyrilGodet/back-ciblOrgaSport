@@ -1,4 +1,4 @@
-package com.glop.cibl_orga_sport.service;
+package com.glop.cibl_orga_sport.service.impl;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -22,6 +22,7 @@ import com.glop.cibl_orga_sport.repository.CompetitionRepository;
 import com.glop.cibl_orga_sport.repository.ParticipantRepository;
 import com.glop.cibl_orga_sport.repository.LieuRepository;
 import com.glop.cibl_orga_sport.repository.ParticipationRepository;
+import com.glop.cibl_orga_sport.service.CompetitionService;
 import com.glop.cibl_orga_sport.repository.MatchRepository;
 import com.glop.cibl_orga_sport.data.enumType.MatchStatusEnum;
 import com.glop.cibl_orga_sport.dto.CompetitionDTO;
@@ -101,6 +102,9 @@ public class CompetitionServiceImpl implements CompetitionService {
     c.addEpreuve(e);
 });
         }
+
+        // Process participations at competition level
+        processParticipations(c);
 
         // Process participations at competition level
         processParticipations(c);
@@ -265,6 +269,10 @@ public class CompetitionServiceImpl implements CompetitionService {
     c.addEpreuve(e);
 });
         }
+
+        // Cleanup and process participations
+        c.getParticipations().clear();
+        processParticipations(c);
 
         // Cleanup and process participations
         c.getParticipations().clear();
@@ -447,6 +455,25 @@ public class CompetitionServiceImpl implements CompetitionService {
             // vs epreuve.getNombreEquipeParMatch().
             if (competition.getParticipations() == null || competition.getParticipations().isEmpty()) {
                 throw new IllegalStateException("La compétition doit avoir au moins un participant inscrit.");
+            }
+
+            // Validation du nombre d'équipes par match
+            if (epreuve.getNombreEquipeParMatch() <= 0) {
+                throw new IllegalStateException(
+                        "Le nombre d'équipes par match doit être supérieur à 0 pour l'épreuve '"
+                                + epreuve.getNomEpreuve() + "'.");
+            }
+
+            // Validation du nombre d'équipes éliminées par match
+            if (epreuve.getNbElimParMatch() <= 0) {
+                throw new IllegalStateException(
+                        "Le nombre d'équipes éliminées par match doit être supérieur à 0 pour l'épreuve '"
+                                + epreuve.getNomEpreuve() + "'.");
+            }
+            if (epreuve.getNbElimParMatch() >= epreuve.getNombreEquipeParMatch()) {
+                throw new IllegalStateException(
+                        "Le nombre d'équipes éliminées par match doit être inférieur au nombre d'équipes par match pour l'épreuve '"
+                                + epreuve.getNomEpreuve() + "'.");
             }
 
             // Validation du nombre d'équipes par match

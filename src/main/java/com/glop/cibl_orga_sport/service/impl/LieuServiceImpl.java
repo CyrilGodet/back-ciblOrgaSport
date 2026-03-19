@@ -1,4 +1,4 @@
-package com.glop.cibl_orga_sport.service;
+package com.glop.cibl_orga_sport.service.impl;
 
 import java.util.List;
 import java.util.Optional;
@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.glop.cibl_orga_sport.data.Lieu;
 import com.glop.cibl_orga_sport.dto.LieuDTO;
 import com.glop.cibl_orga_sport.repository.LieuRepository;
+import com.glop.cibl_orga_sport.service.LieuService;
 
 @Service
 public class LieuServiceImpl implements LieuService {

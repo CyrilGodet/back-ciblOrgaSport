@@ -1,4 +1,4 @@
-package com.glop.cibl_orga_sport.service;
+package com.glop.cibl_orga_sport.service.impl;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,6 +12,7 @@ import com.glop.cibl_orga_sport.data.Periode;
 import com.glop.cibl_orga_sport.data.Resultat;
 import com.glop.cibl_orga_sport.data.enumType.EtapeEpreuveEnum;
 import com.glop.cibl_orga_sport.repository.PhaseRepository;
+import com.glop.cibl_orga_sport.service.PhaseService;
 
 import java.sql.Date;
 

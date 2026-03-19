@@ -152,3 +152,140 @@ INSERT INTO participant (id_participant) VALUES (36), (37), (38), (39), (40), (4
 INSERT INTO participant_sportif (sportif_id, id_participant) VALUES 
 (1, 36), (2, 37), (3, 38), (4, 39), (5, 40), (6, 41), (7, 42), (8, 43), (9, 44), (10, 45),
 (11, 46), (12, 47), (13, 48), (14, 49), (15, 50), (16, 51), (17, 52), (18, 53), (19, 54), (20, 55);
+
+
+
+-- ============================
+-- Ajout de Volontaires
+-- ============================
+
+INSERT INTO utilisateur (nom, prenom, email, age, user_type, id_lieu) VALUES
+('Dupont','Marie','marie.dupont@example.com', 30, 'VOLONTAIRE', 1),
+('Lemoine','Julien','julien.lemoine@example.com', 35, 'VOLONTAIRE', 2),
+('Carpentier','Sophie','sophie.carpentier@example.com', 28, 'VOLONTAIRE', 3),
+('Morel','Antoine','antoine.morel@example.com', 40, 'VOLONTAIRE', 4),
+('Fournier','Emma','emma.fournier@example.com', 32, 'VOLONTAIRE', 5),
+('Rousseau','Lucas','lucas.rousseau@example.com', 27, 'VOLONTAIRE', 6),
+('Blanc','Clara','clara.blanc@example.com', 26, 'VOLONTAIRE', 7),
+('Gauthier','Thomas','thomas.gauthier@example.com', 29, 'VOLONTAIRE', 8),
+('Martinez','Laura','laura.martinez@example.com', 31, 'VOLONTAIRE', 9),
+('Petit','Maxime','maxime.petit@example.com', 33, 'VOLONTAIRE', 10);
+
+
+
+-- ============================
+-- Création de compétitions en DRAFT
+-- ============================
+
+INSERT INTO competition (
+    name_competition,
+    description,
+    statut,
+    age_min,
+    age_max,
+    date_debut,
+    date_fin,
+    genre,
+    sport,
+    id_lieu
+) VALUES
+(
+    'Tournoi de Printemps',
+    'Compétition en préparation',
+    0,
+    0,
+    99,
+    NOW(),
+    NOW(),
+    0,
+    0,
+    1
+),
+(
+    'Challenge Été 2026',
+    'Brouillon du tournoi estival',
+    0,
+    0,
+    99,
+    NOW(),
+    NOW(),
+    0,
+    0,
+    1
+);
+
+
+INSERT INTO epreuve (
+    nom_epreuve,
+    description,
+    age_min,
+    age_max,
+    date_debut,
+    date_fin,
+    discipline,
+    genre,
+    nb_elim_par_match,
+    nombre_equipe_par_match,
+    statut,
+    taille_equipe,
+    competition_id_competition
+) VALUES (
+    'Épreuve Test',                   -- nom
+    'Épreuve pour test affectations', -- description
+    0,                                -- age_min
+    99,                               -- age_max
+    CURRENT_DATE,                     -- date_debut
+    CURRENT_DATE + INTERVAL '1 day',  -- date_fin
+    0,                                -- discipline (0..8)
+    0,                                -- genre (0..2)
+    1,                                -- nb_elim_par_match
+    2,                                -- nombre_equipe_par_match
+    0,                                -- statut (0..5)
+    1,                                -- taille_equipe
+    1                                 -- competition existante
+);
+
+
+
+
+
+INSERT INTO affectation_volontaire (
+    volontaire_id_utilisateur,
+    epreuve_id_epreuve,
+    date_affectation,
+    heure_debut,
+    heure_fin,
+    lieu_rdv_id_lieu,
+    poste,
+    commentaire
+) VALUES
+(
+    25,                 -- ID utilisateur (volontaire)
+    1,                  -- ID épreuve
+    CURRENT_DATE,
+    '08:00:00',
+    '12:00:00',
+    1,                  -- lieu
+    0,                  -- poste (ordinal enum)
+    'Accueil des participants'
+),
+(
+    26,
+    1,
+    CURRENT_DATE,
+    '12:00:00',
+    '16:00:00',
+    1,
+    1,
+    'Gestion ravitaillement'
+);
+
+-- ============================
+-- Création des comptes (Authentification)
+-- ============================
+
+INSERT INTO compte (username, password, type, active, date_creation, id_utilisateur) VALUES
+('admin', 'password', 'ADMIN', true, NOW(), 21),
+('commissaire', 'password', 'COMMISSAIRE', true, NOW(), 22),
+('volontaire', 'password', 'VOLONTAIRE', true, NOW(), 25),
+('visiteur', 'password', 'VISITEUR', true, NOW(), 33);

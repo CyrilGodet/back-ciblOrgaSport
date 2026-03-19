@@ -7,8 +7,10 @@ public class UtilisateurDTO {
     private String email;
     private int age;
     private LieuDTO lieu;
+    private String type;
 
-    public UtilisateurDTO() {}
+    public UtilisateurDTO() {
+    }
 
     public UtilisateurDTO(Long idUtilisateur, String nom, String prenom, String email, int age, LieuDTO lieu) {
         this.idUtilisateur = idUtilisateur;
@@ -65,5 +67,13 @@ public class UtilisateurDTO {
 
     public void setLieu(LieuDTO lieu) {
         this.lieu = lieu;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

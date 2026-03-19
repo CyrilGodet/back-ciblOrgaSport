@@ -279,3 +279,13 @@ INSERT INTO affectation_volontaire (
     1,
     'Gestion ravitaillement'
 );
+
+-- ============================
+-- Création des comptes (Authentification)
+-- ============================
+
+INSERT INTO compte (username, password, type, active, date_creation, id_utilisateur) VALUES
+('admin', 'password', 'ADMIN', true, NOW(), 21),
+('commissaire', 'password', 'COMMISSAIRE', true, NOW(), 22),
+('volontaire', 'password', 'VOLONTAIRE', true, NOW(), 25),
+('visiteur', 'password', 'VISITEUR', true, NOW(), 33);

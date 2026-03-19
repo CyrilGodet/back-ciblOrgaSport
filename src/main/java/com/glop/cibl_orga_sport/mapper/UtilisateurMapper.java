@@ -28,4 +28,30 @@ public class UtilisateurMapper {
         entity.setAge(dto.getAge());
         // Lieu mapping usually handled in service via ID or lookup
     }
+
+    public static UtilisateurDTO toSpecificDTO(Utilisateur user) {
+        if (user == null) return null;
+        UtilisateurDTO dto;
+        if (user instanceof com.glop.cibl_orga_sport.data.Sportif) {
+            dto = SportifMapper.toDTO((com.glop.cibl_orga_sport.data.Sportif) user);
+            dto.setType("SPORTIF");
+        } else if (user instanceof com.glop.cibl_orga_sport.data.Visiteur) {
+            dto = VisiteurMapper.toDTO((com.glop.cibl_orga_sport.data.Visiteur) user);
+            dto.setType("VISITEUR");
+        } else if (user instanceof com.glop.cibl_orga_sport.data.Volontaire) {
+            dto = VolontaireMapper.toDTO((com.glop.cibl_orga_sport.data.Volontaire) user);
+            dto.setType("VOLONTAIRE");
+        } else if (user instanceof com.glop.cibl_orga_sport.data.Commissaire) {
+            dto = CommissaireMapper.toDTO((com.glop.cibl_orga_sport.data.Commissaire) user);
+            dto.setType("COMMISSAIRE");
+        } else if (user instanceof com.glop.cibl_orga_sport.data.Administrateur) {
+            dto = new com.glop.cibl_orga_sport.dto.AdministrateurDTO();
+            mapToDTO(user, dto);
+            dto.setType("ADMIN");
+        } else {
+            dto = new UtilisateurDTO();
+            mapToDTO(user, dto);
+        }
+        return dto;
+    }
 }

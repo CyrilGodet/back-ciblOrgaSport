@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface LieuRepository extends JpaRepository<Lieu, Long> {
     Optional<Lieu> findByNomLieuAndVille(String nomLieu, String ville);
-    List<com.glop.cibl_orga_sport.data.Lieu> findByNomLieuContainingIgnoreCase(String query);
+    List<Lieu> findByNomLieuContainingIgnoreCase(String query);
 }

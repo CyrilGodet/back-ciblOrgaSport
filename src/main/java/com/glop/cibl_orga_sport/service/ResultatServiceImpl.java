@@ -2,10 +2,14 @@ package com.glop.cibl_orga_sport.service;
 
 import com.glop.cibl_orga_sport.data.*;
 import com.glop.cibl_orga_sport.data.enumType.MatchStatusEnum;
+import com.glop.cibl_orga_sport.data.enumType.ParticipationStatusEnum;
+import com.glop.cibl_orga_sport.data.enumType.CompetitionPhaseType;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionStatusEnum;
+import com.glop.cibl_orga_sport.data.enumType.EtapeEpreuveEnum;
 import com.glop.cibl_orga_sport.data.enumType.ResultatDetailsStatusEnum;
 import com.glop.cibl_orga_sport.data.enumType.ResultatStatusEnum;
 import com.glop.cibl_orga_sport.dto.ResultatDTO;
+import com.glop.cibl_orga_sport.dto.ResultatDetailsDTO;
 import com.glop.cibl_orga_sport.mapper.ResultatMapper;
 import com.glop.cibl_orga_sport.repository.*;
 import jakarta.transaction.Transactional;
@@ -41,8 +45,6 @@ public class ResultatServiceImpl implements ResultatService {
     @Autowired
     private ParticipationRepository participationRepository;
 
-    @Autowired
-    private CompetitionRepository competitionRepository;
 
     @Override
     @Transactional
@@ -61,12 +63,11 @@ public class ResultatServiceImpl implements ResultatService {
         resultat.setStatus(resultatDTO.getStatus() != null ? resultatDTO.getStatus() : ResultatStatusEnum.DRAFT);
 
         if (resultatDTO.getDetails() != null) {
-            for (com.glop.cibl_orga_sport.dto.ResultatDetailsDTO detailDTO : resultatDTO.getDetails()) {
+            for (ResultatDetailsDTO detailDTO : resultatDTO.getDetails()) {
                 if (detailDTO.getParticipant() == null || detailDTO.getParticipant().getIdParticipant() == null) {
                     throw new IllegalArgumentException("Le participant est obligatoire pour chaque détail de résultat.");
                 }
                 
-                Participant participant;
                 // Since this might be a ParticipantEquipe or a ParticipantSportif, we need a ParticipantRepository
                 // We'll temporarly stick to Equipe if the ID maps, otherwise we should use a generic one.
                 // Assuming Eq has been migrated, let's cast or find. Ideally we need a ParticipantRepository.
@@ -182,7 +183,7 @@ public class ResultatServiceImpl implements ResultatService {
         int nbQualified = qualifiedTeams.size();
 
         // Validation pour la finale
-        if (etapeEpreuve.getEtapeEpreuveEnum() == com.glop.cibl_orga_sport.data.enumType.EtapeEpreuveEnum.FINALE) {
+        if (etapeEpreuve.getEtapeEpreuveEnum() == EtapeEpreuveEnum.FINALE) {
             if (nbQualified > 1) {
                 throw new IllegalStateException("Impossible de publier la finale : il ne peut y avoir qu'un seul gagnant (QUALIFIE), mais " + nbQualified + " ont été trouvés.");
             }
@@ -220,11 +221,11 @@ public class ResultatServiceImpl implements ResultatService {
             .filter(p -> p.getParticipant() != null && p.getParticipant().getIdParticipant().equals(equipe.getIdParticipant()))
             .findFirst()
             .ifPresent(p -> {
-                com.glop.cibl_orga_sport.data.enumType.ParticipationStatusEnum partStatus = switch (resultStatus) {
-                    case QUALIFIE -> com.glop.cibl_orga_sport.data.enumType.ParticipationStatusEnum.QUALIFIE;
-                    case ELIMINE -> com.glop.cibl_orga_sport.data.enumType.ParticipationStatusEnum.ELIMINE;
-                    case ABANDON -> com.glop.cibl_orga_sport.data.enumType.ParticipationStatusEnum.ABANDON;
-                    case EXCLUS -> com.glop.cibl_orga_sport.data.enumType.ParticipationStatusEnum.EXCLUS;
+                ParticipationStatusEnum partStatus = switch (resultStatus) {
+                    case QUALIFIE -> ParticipationStatusEnum.QUALIFIE;
+                    case ELIMINE -> ParticipationStatusEnum.ELIMINE;
+                    case ABANDON -> ParticipationStatusEnum.ABANDON;
+                    case EXCLUS -> ParticipationStatusEnum.EXCLUS;
                 };
                 p.setStatut(partStatus);
             });
@@ -234,15 +235,15 @@ public class ResultatServiceImpl implements ResultatService {
         List<EtapeEpreuve> allEtapes = epreuve.getEtapesEpreuves();
         
         // Déterminer le type d'étape théorique basé sur le nombre de qualifiés
-        com.glop.cibl_orga_sport.data.enumType.EtapeEpreuveEnum theoreticalEnum = null;
-        if (nbQualified <= 2) theoreticalEnum = com.glop.cibl_orga_sport.data.enumType.EtapeEpreuveEnum.FINALE;
-        else if (nbQualified <= 4) theoreticalEnum = com.glop.cibl_orga_sport.data.enumType.EtapeEpreuveEnum.DEMI_FINALE;
-        else if (nbQualified <= 8) theoreticalEnum = com.glop.cibl_orga_sport.data.enumType.EtapeEpreuveEnum.QUART_DE_FINALE;
-        else if (nbQualified <= 16) theoreticalEnum = com.glop.cibl_orga_sport.data.enumType.EtapeEpreuveEnum.HUITIEME;
+        EtapeEpreuveEnum theoreticalEnum = null;
+        if (nbQualified <= 2) theoreticalEnum = EtapeEpreuveEnum.FINALE;
+        else if (nbQualified <= 4) theoreticalEnum = EtapeEpreuveEnum.DEMI_FINALE;
+        else if (nbQualified <= 8) theoreticalEnum = EtapeEpreuveEnum.QUART_DE_FINALE;
+        else if (nbQualified <= 16) theoreticalEnum = EtapeEpreuveEnum.HUITIEME;
         
         // Si on a un enum théorique, on cherche si l'étape existe déjà
         if (theoreticalEnum != null) {
-            final com.glop.cibl_orga_sport.data.enumType.EtapeEpreuveEnum target = theoreticalEnum;
+            final EtapeEpreuveEnum target = theoreticalEnum;
             Optional<EtapeEpreuve> targetEtape = allEtapes.stream()
                 .filter(e -> e.getEtapeEpreuveEnum() == target)
                 .findFirst();
@@ -258,8 +259,8 @@ public class ResultatServiceImpl implements ResultatService {
         return null;
     }
 
-    private com.glop.cibl_orga_sport.data.enumType.CompetitionPhaseType mapEtapeToPhaseOnGoing(com.glop.cibl_orga_sport.data.enumType.EtapeEpreuveEnum etapeEnum) {
-        return com.glop.cibl_orga_sport.data.enumType.CompetitionPhaseType.valueOf(etapeEnum.name());
+    private CompetitionPhaseType mapEtapeToPhaseOnGoing(EtapeEpreuveEnum etapeEnum) {
+        return CompetitionPhaseType.valueOf(etapeEnum.name());
     }
 
     private void generateNextPhaseMatches(EtapeEpreuve nextEtape, List<Participant> equipes) {

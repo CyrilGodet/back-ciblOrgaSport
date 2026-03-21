@@ -1,9 +1,12 @@
 package com.glop.cibl_orga_sport.service;
 
 import com.glop.cibl_orga_sport.data.Compte;
+import com.glop.cibl_orga_sport.data.Lieu;
 import com.glop.cibl_orga_sport.data.Utilisateur;
+import com.glop.cibl_orga_sport.data.Visiteur;
 import com.glop.cibl_orga_sport.dto.AccountCreationDTO;
 import com.glop.cibl_orga_sport.dto.UtilisateurDTO;
+import com.glop.cibl_orga_sport.mapper.UtilisateurMapper;
 import com.glop.cibl_orga_sport.repository.CompteRepository;
 import com.glop.cibl_orga_sport.repository.LieuRepository;
 import com.glop.cibl_orga_sport.repository.UtilisateurRepository;
@@ -27,15 +30,15 @@ public class CompteServiceImpl implements CompteService {
     @Override
     public UtilisateurDTO createAccount(AccountCreationDTO dto) {
         // Pour l'instant on ne crée que des visiteurs
-        com.glop.cibl_orga_sport.data.Visiteur visiteur = new com.glop.cibl_orga_sport.data.Visiteur();
-        com.glop.cibl_orga_sport.mapper.UtilisateurMapper.mapToEntity(dto, visiteur);
+        Visiteur visiteur = new Visiteur();
+        UtilisateurMapper.mapToEntity(dto, visiteur);
 
         if (dto.getLieu() != null && dto.getLieu().getIdLieu() != null) {
-            com.glop.cibl_orga_sport.data.Lieu lieu = lieuRepository.findById(dto.getLieu().getIdLieu()).orElse(null);
+            Lieu lieu = lieuRepository.findById(dto.getLieu().getIdLieu()).orElse(null);
             visiteur.setLieu(lieu);
         }
 
-        com.glop.cibl_orga_sport.data.Utilisateur savedUser = utilisateurRepository.save(visiteur);
+       Utilisateur savedUser = utilisateurRepository.save(visiteur);
 
         Compte compte = new Compte();
         compte.setUtilisateur(savedUser);
@@ -47,13 +50,13 @@ public class CompteServiceImpl implements CompteService {
 
         repository.save(compte);
 
-        return com.glop.cibl_orga_sport.mapper.UtilisateurMapper.toSpecificDTO(savedUser);
+        return UtilisateurMapper.toSpecificDTO(savedUser);
     }
 
     @Override
     public Optional<UtilisateurDTO> login(String username, String password) {
         return repository.findByUsername(username)
                 .filter(c -> c.getPassword().equals(password))
-                .map(c -> com.glop.cibl_orga_sport.mapper.UtilisateurMapper.toSpecificDTO(c.getUtilisateur()));
+                .map(c -> UtilisateurMapper.toSpecificDTO(c.getUtilisateur()));
     }
 }

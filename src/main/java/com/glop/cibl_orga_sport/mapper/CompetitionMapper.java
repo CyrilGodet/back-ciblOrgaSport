@@ -8,7 +8,6 @@ import com.glop.cibl_orga_sport.data.enumType.CompetitionPhaseType;
 import com.glop.cibl_orga_sport.dto.CompetitionDTO;
 import com.glop.cibl_orga_sport.dto.CompetitionPhaseTypeDto;
 import java.util.stream.Collectors;
-import java.util.ArrayList;
 
 public class CompetitionMapper {
 

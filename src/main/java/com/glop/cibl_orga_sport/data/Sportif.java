@@ -2,10 +2,7 @@ package com.glop.cibl_orga_sport.data;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.*;
 import java.util.List;
 import java.util.ArrayList;

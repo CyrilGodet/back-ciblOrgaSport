@@ -1,18 +1,23 @@
 package com.glop.cibl_orga_sport.dto;
 
+import com.glop.cibl_orga_sport.data.enumType.LieuCategorieEnum;
+
 public class LieuDTO {
     private Long idLieu;
     private String nomLieu;
     private String ville;
     private String adresse;
+    private LieuCategorieEnum categorie;
 
     public LieuDTO() {}
 
-    public LieuDTO(Long idLieu, String nom, String ville, String adresse) {
+
+    public LieuDTO(Long idLieu, String nom, String ville, String adresse, LieuCategorieEnum categorie) {
         this.idLieu = idLieu;
         this.nomLieu = nom;
         this.ville = ville;
         this.adresse = adresse;
+        this.categorie = categorie;
     }
 
     public Long getIdLieu() {
@@ -45,5 +50,13 @@ public class LieuDTO {
 
     public void setAdresse(String adresse) {
         this.adresse = adresse;
+    }
+
+    public LieuCategorieEnum getCategorie() {
+        return categorie;
+    }
+
+    public void setCategorie(LieuCategorieEnum categorie) {
+        this.categorie = categorie;
     }
 }

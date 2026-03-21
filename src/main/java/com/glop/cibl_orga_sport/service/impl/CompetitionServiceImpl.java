@@ -300,7 +300,7 @@ public class CompetitionServiceImpl implements CompetitionService {
             }
 
             // 3. Création si non trouvé
-            Lieu newLieu = new Lieu(lieuDTO.getNomLieu(), lieuDTO.getVille(), lieuDTO.getAdresse());
+            Lieu newLieu = new Lieu(lieuDTO.getNomLieu(), lieuDTO.getVille(), lieuDTO.getAdresse(), lieuDTO.getCategorie());
             System.out.println("Création automatique du lieu : " + lieuDTO.getNomLieu());
             return lieuRepository.save(newLieu);
         }

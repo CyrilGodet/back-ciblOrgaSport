@@ -80,5 +80,83 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     @Override
     public List<ParticipantSportif> searchParticipantSportifs(String query) {
         return participantSportifRepository.searchParticipantSportifs(query);
+    public UserDetailsService userDetailsService() {
+        return new UserDetailsService() {
+            @Override
+            public UserDetails loadUserByUsername(String username) {
+                return repository.findByEmail(username)
+                        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+            }
+        };
+    }
+
+    @Override
+    public UtilisateurDTO findById(Integer id) {
+        return null;
+    }
+
+    @Override
+    public UserDtoJson updateNoMdp(Long id, UserDtoJson userDto) {
+        log.info("Inside update roles{}", id);
+        Optional<Utilisateur> userOptional = repository.findById(id);
+
+        if (userOptional.isPresent()) {
+            log.info("User found with id {}", id);
+            Utilisateur user = userOptional.get();
+
+            String existingPassword = user.getMdp();
+
+            user.setNom(userDto.getLastname());
+            user.setPrenom(userDto.getName());
+            user.setEmail(userDto.getLogin());
+            user.setState(userDto.getState());
+            user.setRoles(RolesDto.toEntity(userDto.getRoles()));
+
+            user.setMdp(existingPassword);
+
+            Utilisateur savedUser = repository.save(user);
+            //historyService.saveHistory("modify User", "success", savedUser);
+
+            UtilisateurDTO modifiedUserDto = UtilisateurDTO.fromEntity(savedUser);
+            UserDtoJson userDtoJson = convertToUserDtoJson(modifiedUserDto);
+            historyService.saveHistory("modify User", "success", savedUser);
+
+            return userDtoJson;
+        } else {
+            log.info("User with id {} not found", id);
+            historyService.saveHistory("modify User", "failed");
+            return null;
+        }
+    }
+
+    @Override
+    public UserDtoJson approval(Long id) {
+        log.info("Inside update roles{}", id);
+        Optional<Utilisateur> userOptional = repository.findById(id);
+
+        if (userOptional.isPresent()) {
+            log.info("User found with id {}", id);
+            Utilisateur user = userOptional.get();
+            user.setState(10);
+            Utilisateur savedUser = repository.save(user);
+            //historyService.saveHistory("modify User", "success", savedUser);
+            UtilisateurDTO modifiedUserDto = UtilisateurDTO.fromEntity(savedUser);
+            UserDtoJson userDtoJson = convertToUserDtoJson(modifiedUserDto);
+            historyService.saveHistory("Approaval User", "success", savedUser);
+
+            return userDtoJson;
+        } else {
+            log.info("User with id {} not found", id);
+            historyService.saveHistory("Approaval User", "failed");
+            return null;
+        }
+    }
+
+
+    @Override
+    public List<UserDtoJson> findAll() {
+        return repository.findAll().stream()
+                .map(user -> convertToUserDtoJson(UtilisateurDTO.fromEntity(user)))
+                .collect(Collectors.toList());
     }
 }

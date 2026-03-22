@@ -69,5 +69,15 @@ public class UtilisateurController {
         return service.searchParticipantSportifs(query).stream()
                 .map(p -> (ParticipantDTO) ParticipantMapper.toDTO(p))
                 .collect(Collectors.toList());
+    @PutMapping(value = "/approval/{id}", produces = "application/json")
+    public ResponseEntity<UserDtoJson> approavalUser(@PathVariable("id") Long id) {
+        UserDtoJson approved = service.approval(id);
+        return ResponseEntity.ok(approved);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<UserDtoJson>> findAll() {
+        List<UserDtoJson> users = service.findAll();
+        return ResponseEntity.ok(users);
     }
 }

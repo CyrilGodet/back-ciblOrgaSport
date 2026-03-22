@@ -16,4 +16,15 @@ public interface UtilisateurService {
     List<Commissaire> getAllCommissaires();
     List<Sportif> searchSportifs(String query);
     List<ParticipantSportif> searchParticipantSportifs(String query);
+    UtilisateurDTO findByEmail(String email);
+
+    UserDetailsService userDetailsService();
+
+    UtilisateurDTO findById(Integer id);
+
+    UserDtoJson updateNoMdp(Long id, UserDtoJson userDto);
+    UserDtoJson approval(Long id);
+
+
+    List<UserDtoJson> findAll();
 }

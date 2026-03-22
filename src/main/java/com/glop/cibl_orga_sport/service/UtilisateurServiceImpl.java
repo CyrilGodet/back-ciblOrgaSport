@@ -212,6 +212,28 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         }
     }
 
+    @Override
+    public UserDtoJson approval(Long id) {
+        log.info("Inside update roles{}", id);
+        Optional<Utilisateur> userOptional = repository.findById(id);
+
+        if (userOptional.isPresent()) {
+            log.info("User found with id {}", id);
+            Utilisateur user = userOptional.get();
+            user.setState(10);
+            Utilisateur savedUser = repository.save(user);
+            //historyService.saveHistory("modify User", "success", savedUser);
+            UtilisateurDTO modifiedUserDto = UtilisateurDTO.fromEntity(savedUser);
+            UserDtoJson userDtoJson = convertToUserDtoJson(modifiedUserDto);
+            historyService.saveHistory("Approaval User", "success", savedUser);
+
+            return userDtoJson;
+        } else {
+            log.info("User with id {} not found", id);
+            historyService.saveHistory("Approaval User", "failed");
+            return null;
+        }
+    }
 
 
     @Override

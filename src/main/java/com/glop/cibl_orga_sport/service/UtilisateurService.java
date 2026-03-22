@@ -24,6 +24,8 @@ public interface UtilisateurService {
     UtilisateurDTO findById(Integer id);
 
     UserDtoJson updateNoMdp(Long id, UserDtoJson userDto);
+    UserDtoJson approval(Long id);
+
 
     List<UserDtoJson> findAll();
 }

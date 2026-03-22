@@ -9,6 +9,7 @@ import com.glop.cibl_orga_sport.data.enumType.CompetitionStatusEnum;
 import com.glop.cibl_orga_sport.data.enumType.DisciplineEnum;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionGenreEnum;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionPhaseType;
+import com.glop.cibl_orga_sport.data.enumType.TypeResultatEnum;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 
@@ -73,6 +74,10 @@ public class Epreuve {
     @Enumerated(EnumType.STRING)
     @Column(nullable = true)
     private CompetitionPhaseType phaseOnGoing;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private TypeResultatEnum typeResultat;
 
     public Epreuve() {
     }
@@ -206,6 +211,14 @@ public class Epreuve {
 
     public void setPhaseOnGoing(CompetitionPhaseType phaseOnGoing) {
         this.phaseOnGoing = phaseOnGoing;
+    }
+
+    public TypeResultatEnum getTypeResultat() {
+        return typeResultat;
+    }
+
+    public void setTypeResultat(TypeResultatEnum typeResultat) {
+        this.typeResultat = typeResultat;
     }
 
         public void addParticipation(Participation p) {

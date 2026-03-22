@@ -228,7 +228,8 @@ INSERT INTO epreuve (
     nombre_equipe_par_match,
     statut,
     taille_equipe,
-    competition_id_competition
+    competition_id_competition,
+    type_resultat
 ) VALUES (
     'Épreuve Test',                   -- nom
     'Épreuve pour test affectations', -- description
@@ -242,7 +243,8 @@ INSERT INTO epreuve (
     2,                                -- nombre_equipe_par_match
     0,                                -- statut (0..5)
     1,                                -- taille_equipe
-    1                                 -- competition existante
+    1,                                -- competition existante
+    'POINTS'                          -- type_resultat
 );
 
 

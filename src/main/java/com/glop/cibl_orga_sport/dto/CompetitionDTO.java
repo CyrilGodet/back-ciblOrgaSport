@@ -3,7 +3,6 @@ package com.glop.cibl_orga_sport.dto;
 import java.sql.Date;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionStatusEnum;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionGenreEnum;
-import com.glop.cibl_orga_sport.data.enumType.CompetitionPhaseType;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionSportEnum;
 import java.util.List;
 import java.util.ArrayList;

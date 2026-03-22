@@ -3,9 +3,12 @@ package com.glop.cibl_orga_sport.data;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import com.glop.cibl_orga_sport.data.enumType.LieuCategorieEnum;
 
 @Entity
 public class Lieu {
@@ -23,12 +26,18 @@ public class Lieu {
     @Column
     private String adresse;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "categorie_lieu")
+    private LieuCategorieEnum categorie = LieuCategorieEnum.UTILISATEUR;
+
     public Lieu() {}
 
-    public Lieu(String nomLieu, String ville, String adresse) {
+
+    public Lieu(String nomLieu, String ville, String adresse, LieuCategorieEnum categorie) {
         this.nomLieu = nomLieu;
         this.ville = ville;
         this.adresse = adresse;
+        this.categorie = categorie;
     }
 
     public Long getIdLieu() {
@@ -61,5 +70,13 @@ public class Lieu {
 
     public void setAdresse(String adresse) {
         this.adresse = adresse;
+    }
+
+    public LieuCategorieEnum getCategorie() {
+        return categorie;
+    }
+
+    public void setCategorie(LieuCategorieEnum categorie) {
+        this.categorie = categorie;
     }
 }

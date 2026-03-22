@@ -11,7 +11,8 @@ public class LieuMapper {
             lieu.getIdLieu(),
             lieu.getNomLieu(),
             lieu.getVille(),
-            lieu.getAdresse()
+            lieu.getAdresse(),
+            lieu.getCategorie()
         );
     }
 
@@ -20,7 +21,8 @@ public class LieuMapper {
         Lieu lieu = new Lieu(
             dto.getNomLieu(),
             dto.getVille(),
-            dto.getAdresse()
+            dto.getAdresse(),
+            dto.getCategorie()
         );
         return lieu;
     }

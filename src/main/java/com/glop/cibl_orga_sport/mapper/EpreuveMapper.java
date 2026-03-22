@@ -2,12 +2,14 @@ package com.glop.cibl_orga_sport.mapper;
 
 import com.glop.cibl_orga_sport.data.Epreuve;
 import com.glop.cibl_orga_sport.data.Periode;
+
+import java.sql.Date;
+
 import com.glop.cibl_orga_sport.data.ConditionAge;
 import com.glop.cibl_orga_sport.dto.EpreuveDTO;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionPhaseType;
 import com.glop.cibl_orga_sport.dto.CompetitionPhaseTypeDto;
-import java.sql.Date;
-import java.util.stream.Collectors;
+
 
 public class EpreuveMapper {
 
@@ -72,8 +74,8 @@ public class EpreuveMapper {
 
         if (dto.getDateDebut() != null && dto.getDateFin() != null) {
             Periode periode = new Periode(
-                    new java.sql.Date(dto.getDateDebut().getTime()),
-                    new java.sql.Date(dto.getDateFin().getTime()));
+                    new Date(dto.getDateDebut().getTime()),
+                    new Date(dto.getDateFin().getTime()));
             epreuve.setPeriode(periode);
         }
 

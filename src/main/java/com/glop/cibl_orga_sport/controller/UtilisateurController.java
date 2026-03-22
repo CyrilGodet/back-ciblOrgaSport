@@ -2,14 +2,12 @@ package com.glop.cibl_orga_sport.controller;
 
 import com.glop.cibl_orga_sport.data.Sportif;
 import com.glop.cibl_orga_sport.data.Visiteur;
-import com.glop.cibl_orga_sport.data.Commissaire;
 import com.glop.cibl_orga_sport.dto.SportifDTO;
 import com.glop.cibl_orga_sport.dto.VisiteurDTO;
 import com.glop.cibl_orga_sport.dto.CommissaireDTO;
 import com.glop.cibl_orga_sport.mapper.SportifMapper;
 import com.glop.cibl_orga_sport.mapper.VisiteurMapper;
 import com.glop.cibl_orga_sport.mapper.CommissaireMapper;
-import com.glop.cibl_orga_sport.data.ParticipantSportif;
 import com.glop.cibl_orga_sport.dto.ParticipantDTO;
 import com.glop.cibl_orga_sport.mapper.ParticipantMapper;
 import com.glop.cibl_orga_sport.service.UtilisateurService;

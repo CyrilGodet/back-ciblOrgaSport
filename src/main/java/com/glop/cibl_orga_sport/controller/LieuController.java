@@ -1,7 +1,6 @@
 package com.glop.cibl_orga_sport.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +24,13 @@ public class LieuController {
     @GetMapping
     public List<LieuDTO> getAllLieux() {
         return lieuService.getAllLieux().stream()
+                .map(LieuMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/affectations")
+    public List<LieuDTO> getLieuxForAffectations() {
+        return lieuService.getLieuxForAffectations().stream()
                 .map(LieuMapper::toDTO)
                 .collect(Collectors.toList());
     }

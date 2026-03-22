@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.glop.cibl_orga_sport.data.Lieu;
+import com.glop.cibl_orga_sport.data.enumType.LieuCategorieEnum;
 import com.glop.cibl_orga_sport.dto.LieuDTO;
 import com.glop.cibl_orga_sport.repository.LieuRepository;
 import com.glop.cibl_orga_sport.service.LieuService;
@@ -17,12 +18,6 @@ public class LieuServiceImpl implements LieuService {
     @Autowired
     private LieuRepository repository;
 
-    @Override
-    public Lieu createLieu(String nom, String ville, String adresse) {
-        Lieu l = new Lieu(nom, ville, adresse);
-        System.out.println("Création lieu : " + nom);
-        return repository.save(l);
-    }
 
     @Override
     public Lieu updateLieu(Long id, String nom, String ville, String adresse) {
@@ -54,7 +49,7 @@ public class LieuServiceImpl implements LieuService {
     @Override
     public List<Lieu> getAllLieux() {
         return repository.findAll();
-    }
+    }    
 
     @Override
     public Optional<Lieu> getLieu(Long id) {
@@ -68,7 +63,15 @@ public class LieuServiceImpl implements LieuService {
 
     @Override
     public Lieu createLieu(LieuDTO lieuDTO) {
-        Lieu l = new Lieu(lieuDTO.getNomLieu(), lieuDTO.getVille(), lieuDTO.getAdresse());
+        LieuCategorieEnum categorie = lieuDTO.getCategorie() == null
+                ? LieuCategorieEnum.EVENEMENT
+                : lieuDTO.getCategorie();
+        Lieu l = new Lieu(lieuDTO.getNomLieu(), lieuDTO.getVille(), lieuDTO.getAdresse(), categorie);
         return repository.save(l);
+    }
+
+    @Override
+    public List<Lieu> getLieuxForAffectations() {
+        return repository.findByCategorieOrderByNomLieuAsc(LieuCategorieEnum.EVENEMENT);
     }
 }

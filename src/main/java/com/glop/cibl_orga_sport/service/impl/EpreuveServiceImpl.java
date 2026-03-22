@@ -1,6 +1,6 @@
 package com.glop.cibl_orga_sport.service.impl;
 
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,7 +33,7 @@ public class EpreuveServiceImpl implements EpreuveService {
         e.setGenre(genre);
 
         if (dateDebut != null && dateFin != null) {
-            Periode periode = new Periode(new java.sql.Date(dateDebut.getTime()), new java.sql.Date(dateFin.getTime()));
+            Periode periode = new Periode(new Date(dateDebut.getTime()), new Date(dateFin.getTime()));
             e.setPeriode(periode);
         }
 
@@ -71,10 +71,10 @@ public class EpreuveServiceImpl implements EpreuveService {
             if (dateDebut != null && dateFin != null) {
                 if (e.getPeriode() == null) {
                     e.setPeriode(
-                            new Periode(new java.sql.Date(dateDebut.getTime()), new java.sql.Date(dateFin.getTime())));
+                            new Periode(new Date(dateDebut.getTime()), new Date(dateFin.getTime())));
                 } else {
-                    e.getPeriode().setDateDebut(new java.sql.Date(dateDebut.getTime()));
-                    e.getPeriode().setDateFin(new java.sql.Date(dateFin.getTime()));
+                    e.getPeriode().setDateDebut(new Date(dateDebut.getTime()));
+                    e.getPeriode().setDateFin(new Date(dateFin.getTime()));
                 }
             }
 

@@ -1,6 +1,5 @@
 package com.glop.cibl_orga_sport.service.impl;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,25 +16,26 @@ import com.glop.cibl_orga_sport.data.ConditionAge;
 import com.glop.cibl_orga_sport.data.Epreuve;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionStatusEnum;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionGenreEnum;
-import com.glop.cibl_orga_sport.data.enumType.CompetitionSportEnum;
+import com.glop.cibl_orga_sport.data.enumType.CompetitionPhaseType;
 import com.glop.cibl_orga_sport.repository.CompetitionRepository;
 import com.glop.cibl_orga_sport.repository.ParticipantRepository;
 import com.glop.cibl_orga_sport.repository.LieuRepository;
-import com.glop.cibl_orga_sport.repository.ParticipationRepository;
 import com.glop.cibl_orga_sport.service.CompetitionService;
 import com.glop.cibl_orga_sport.repository.MatchRepository;
 import com.glop.cibl_orga_sport.data.enumType.MatchStatusEnum;
 import com.glop.cibl_orga_sport.dto.CompetitionDTO;
+import com.glop.cibl_orga_sport.dto.LieuDTO;
 import com.glop.cibl_orga_sport.dto.ParticipationDTO;
 import com.glop.cibl_orga_sport.mapper.EpreuveMapper;
 import com.glop.cibl_orga_sport.data.Participant;
+import com.glop.cibl_orga_sport.data.ParticipantEquipe;
+import com.glop.cibl_orga_sport.data.ParticipantSportif;
 import com.glop.cibl_orga_sport.data.EtapeEpreuve;
 import com.glop.cibl_orga_sport.data.Match;
 import com.glop.cibl_orga_sport.data.Participation;
 import com.glop.cibl_orga_sport.data.enumType.ParticipationStatusEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.util.stream.Collectors;
 import com.glop.cibl_orga_sport.data.enumType.EtapeEpreuveEnum;
 
 @Service
@@ -51,9 +51,6 @@ public class CompetitionServiceImpl implements CompetitionService {
 
     @Autowired
     private ParticipantRepository participantRepository;
-
-    @Autowired
-    private ParticipationRepository participationRepository;
 
     @Autowired
     private MatchRepository matchRepository;
@@ -183,14 +180,14 @@ public class CompetitionServiceImpl implements CompetitionService {
         for (Epreuve e : c.getEpreuves()) {
             int targetSize = e.getTailleEquipe();
             if (targetSize == 1) {
-                if (!(p instanceof com.glop.cibl_orga_sport.data.ParticipantSportif)) {
+                if (!(p instanceof ParticipantSportif)) {
                     throw new IllegalArgumentException("L'épreuve '" + e.getNomEpreuve() + "' est solo (taille 1). Participant doit être un sportif.");
                 }
             } else {
-                if (!(p instanceof com.glop.cibl_orga_sport.data.ParticipantEquipe)) {
+                if (!(p instanceof ParticipantEquipe)) {
                    throw new IllegalArgumentException("L'épreuve '" + e.getNomEpreuve() + "' est en équipe (taille " + targetSize + ").");
                 }
-                com.glop.cibl_orga_sport.data.ParticipantEquipe pe = (com.glop.cibl_orga_sport.data.ParticipantEquipe) p;
+                ParticipantEquipe pe = (ParticipantEquipe) p;
                 if (pe.getSportifs().size() != targetSize) {
                     throw new IllegalArgumentException("L'équipe '" + pe.getNomEquipe() + "' doit avoir exactement " + targetSize + " membres (actuellement " + pe.getSportifs().size() + ").");
                 }
@@ -282,7 +279,7 @@ public class CompetitionServiceImpl implements CompetitionService {
         return repository.save(c);
     }
 
-    private Lieu getOrCreateLieu(com.glop.cibl_orga_sport.dto.LieuDTO lieuDTO) {
+    private Lieu getOrCreateLieu(LieuDTO lieuDTO) {
         if (lieuDTO == null) {
             return null;
         }
@@ -303,7 +300,7 @@ public class CompetitionServiceImpl implements CompetitionService {
             }
 
             // 3. Création si non trouvé
-            Lieu newLieu = new Lieu(lieuDTO.getNomLieu(), lieuDTO.getVille(), lieuDTO.getAdresse());
+            Lieu newLieu = new Lieu(lieuDTO.getNomLieu(), lieuDTO.getVille(), lieuDTO.getAdresse(), lieuDTO.getCategorie());
             System.out.println("Création automatique du lieu : " + lieuDTO.getNomLieu());
             return lieuRepository.save(newLieu);
         }
@@ -362,7 +359,7 @@ public class CompetitionServiceImpl implements CompetitionService {
 
         for (Epreuve epreuve : competition.getEpreuves()) {
             if (epreuve.getPhaseOnGoing() != null) {
-                com.glop.cibl_orga_sport.data.enumType.EtapeEpreuveEnum etapeEnum = mapPhaseToEtape(epreuve.getPhaseOnGoing());
+                EtapeEpreuveEnum etapeEnum = mapPhaseToEtape(epreuve.getPhaseOnGoing());
                 List<Match> epreuveMatches = matchRepository.findByEtapeEpreuveEpreuveIdEpreuveAndEtapeEpreuveEtapeEpreuveEnum(epreuve.getIdEpreuve(), etapeEnum);
                 allOngoingMatches.addAll(epreuveMatches);
             }
@@ -370,9 +367,9 @@ public class CompetitionServiceImpl implements CompetitionService {
         return allOngoingMatches;
     }
 
-    private com.glop.cibl_orga_sport.data.enumType.EtapeEpreuveEnum mapPhaseToEtape(
-            com.glop.cibl_orga_sport.data.enumType.CompetitionPhaseType phase) {
-        return com.glop.cibl_orga_sport.data.enumType.EtapeEpreuveEnum.valueOf(phase.name());
+    private EtapeEpreuveEnum mapPhaseToEtape(
+            CompetitionPhaseType phase) {
+        return EtapeEpreuveEnum.valueOf(phase.name());
     }
 
     @Override
@@ -426,7 +423,7 @@ public class CompetitionServiceImpl implements CompetitionService {
             throw new IllegalStateException("La compétition doit avoir au moins une épreuve.");
         }
 
-        for (com.glop.cibl_orga_sport.data.Epreuve epreuve : competition.getEpreuves()) {
+        for (Epreuve epreuve : competition.getEpreuves()) {
             // Validation des dates de l'épreuve
             if (epreuve.getPeriode() != null) {
                 if (epreuve.getPeriode().getDateDebut() != null
@@ -442,7 +439,7 @@ public class CompetitionServiceImpl implements CompetitionService {
             }
 
             // Validation du genre
-            if (competition.getGenre() != com.glop.cibl_orga_sport.data.enumType.CompetitionGenreEnum.MIXTE) {
+            if (competition.getGenre() != CompetitionGenreEnum.MIXTE) {
                 if (epreuve.getGenre() != competition.getGenre()) {
                     throw new IllegalStateException("Le genre de l'épreuve '" + epreuve.getNomEpreuve() + "' ("
                             + epreuve.getGenre() + ") est incohérent avec celui de la compétition ("
@@ -498,7 +495,7 @@ public class CompetitionServiceImpl implements CompetitionService {
     }
 
     private void initializeCompetitionPhases(Competition competition) {
-        for (com.glop.cibl_orga_sport.data.Epreuve epreuve : competition.getEpreuves()) {
+        for (Epreuve epreuve : competition.getEpreuves()) {
             epreuve.getEtapesEpreuves().clear();
 
             // Assuming for simplicity that all participants of the competition take part in every epreuve initially
@@ -508,7 +505,7 @@ public class CompetitionServiceImpl implements CompetitionService {
             int nbAdvance = nbPerMatch - nbElim;
 
             // Calculer les phases automatiquement
-            List<com.glop.cibl_orga_sport.data.enumType.EtapeEpreuveEnum> phases = computePhases(
+            List<EtapeEpreuveEnum> phases = computePhases(
                     nbEquipes, nbPerMatch, nbAdvance);
 
             logger.info("Épreuve '{}': {} équipes, {} par match, {} éliminées → {} phases: {}",
@@ -517,14 +514,14 @@ public class CompetitionServiceImpl implements CompetitionService {
 
             // Stocker les phases sur la compétition
             competition.getPhases().clear();
-            for (com.glop.cibl_orga_sport.data.enumType.EtapeEpreuveEnum etapeEnum : phases) {
+            for (EtapeEpreuveEnum etapeEnum : phases) {
                 competition.getPhases().add(mapEtapeToPhase(etapeEnum));
             }
 
             EtapeEpreuve firstEtape = null;
 
             for (int i = 0; i < phases.size(); i++) {
-                com.glop.cibl_orga_sport.data.enumType.EtapeEpreuveEnum etapeEnum = phases.get(i);
+                EtapeEpreuveEnum etapeEnum = phases.get(i);
 
                 EtapeEpreuve etape = new EtapeEpreuve();
                 etape.setEpreuve(epreuve);
@@ -554,7 +551,7 @@ public class CompetitionServiceImpl implements CompetitionService {
      * puis attribue les noms de phases en partant de la fin:
      * FINALE → DEMI_FINALE → QUART_DE_FINALE → HUITIEME → SELECTION → PRE_SELECTION
      */
-    private List<com.glop.cibl_orga_sport.data.enumType.EtapeEpreuveEnum> computePhases(
+    private List<EtapeEpreuveEnum> computePhases(
             int nbEquipes, int nbPerMatch, int nbAdvance) {
 
         // Calculer le nombre de tours nécessaires
@@ -575,16 +572,16 @@ public class CompetitionServiceImpl implements CompetitionService {
 
         // Attribution des noms de phases en partant de la fin
         // Tableau des phases nommées (du dernier tour au premier)
-        com.glop.cibl_orga_sport.data.enumType.EtapeEpreuveEnum[] namedPhases = {
-                com.glop.cibl_orga_sport.data.enumType.EtapeEpreuveEnum.FINALE,
-                com.glop.cibl_orga_sport.data.enumType.EtapeEpreuveEnum.DEMI_FINALE,
-                com.glop.cibl_orga_sport.data.enumType.EtapeEpreuveEnum.QUART_DE_FINALE,
-                com.glop.cibl_orga_sport.data.enumType.EtapeEpreuveEnum.HUITIEME,
-                com.glop.cibl_orga_sport.data.enumType.EtapeEpreuveEnum.SELECTION,
-                com.glop.cibl_orga_sport.data.enumType.EtapeEpreuveEnum.PRE_SELECTION
+        EtapeEpreuveEnum[] namedPhases = {
+                EtapeEpreuveEnum.FINALE,
+                EtapeEpreuveEnum.DEMI_FINALE,
+                EtapeEpreuveEnum.QUART_DE_FINALE,
+                EtapeEpreuveEnum.HUITIEME,
+                EtapeEpreuveEnum.SELECTION,
+                EtapeEpreuveEnum.PRE_SELECTION
         };
 
-        List<com.glop.cibl_orga_sport.data.enumType.EtapeEpreuveEnum> result = new ArrayList<>();
+        List<EtapeEpreuveEnum> result = new ArrayList<>();
 
         for (int i = 0; i < nbTours; i++) {
             // Index dans namedPhases: le dernier tour = 0 (FINALE), avant-dernier = 1, etc.
@@ -593,30 +590,30 @@ public class CompetitionServiceImpl implements CompetitionService {
                 result.add(namedPhases[reverseIndex]);
             } else {
                 // Plus de noms disponibles, utiliser PRE_SELECTION
-                result.add(com.glop.cibl_orga_sport.data.enumType.EtapeEpreuveEnum.PRE_SELECTION);
+                result.add(EtapeEpreuveEnum.PRE_SELECTION);
             }
         }
 
         return result;
     }
 
-    private com.glop.cibl_orga_sport.data.enumType.CompetitionPhaseType mapEtapeToPhase(
-            com.glop.cibl_orga_sport.data.enumType.EtapeEpreuveEnum etape) {
+    private CompetitionPhaseType mapEtapeToPhase(
+            EtapeEpreuveEnum etape) {
         return switch (etape) {
-            case PRE_SELECTION -> com.glop.cibl_orga_sport.data.enumType.CompetitionPhaseType.PRE_SELECTION;
-            case SELECTION -> com.glop.cibl_orga_sport.data.enumType.CompetitionPhaseType.SELECTION;
-            case HUITIEME -> com.glop.cibl_orga_sport.data.enumType.CompetitionPhaseType.HUITIEME;
-            case QUART_DE_FINALE -> com.glop.cibl_orga_sport.data.enumType.CompetitionPhaseType.QUART_DE_FINALE;
-            case DEMI_FINALE -> com.glop.cibl_orga_sport.data.enumType.CompetitionPhaseType.DEMI_FINALE;
-            case FINALE -> com.glop.cibl_orga_sport.data.enumType.CompetitionPhaseType.FINALE;
+            case PRE_SELECTION -> CompetitionPhaseType.PRE_SELECTION;
+            case SELECTION -> CompetitionPhaseType.SELECTION;
+            case HUITIEME -> CompetitionPhaseType.HUITIEME;
+            case QUART_DE_FINALE -> CompetitionPhaseType.QUART_DE_FINALE;
+            case DEMI_FINALE -> CompetitionPhaseType.DEMI_FINALE;
+            case FINALE -> CompetitionPhaseType.FINALE;
         };
     }
 
     private void generateInitialMatches(EtapeEpreuve etape) {
-        com.glop.cibl_orga_sport.data.Epreuve epreuve = etape.getEpreuve();
+        Epreuve epreuve = etape.getEpreuve();
         // Fallback to competition participations since they moved from epreuve
         List<Participant> equipes = epreuve.getCompetition().getParticipations().stream()
-                .map(com.glop.cibl_orga_sport.data.Participation::getParticipant)
+                .map(Participation::getParticipant)
                 .collect(java.util.stream.Collectors.toList());
 
         logger.info("Génération des matchs pour l'épreuve: {} - Étape: {}. Nombre total de participants: {}",
@@ -633,7 +630,7 @@ public class CompetitionServiceImpl implements CompetitionService {
             Match match = new Match();
             match.setEtapeEpreuve(etape);
             match.setPeriode(etape.getPeriode());
-            match.setStatus(com.glop.cibl_orga_sport.data.enumType.MatchStatusEnum.IN_PROGRESS);
+            match.setStatus(MatchStatusEnum.IN_PROGRESS);
 
             List<Participant> matchEquipes = new ArrayList<>();
             for (int j = 0; j < nbPerMatch && (i + j) < equipes.size(); j++) {

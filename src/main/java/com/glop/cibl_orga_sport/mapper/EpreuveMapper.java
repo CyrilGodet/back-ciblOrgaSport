@@ -8,6 +8,7 @@ import java.sql.Date;
 import com.glop.cibl_orga_sport.data.ConditionAge;
 import com.glop.cibl_orga_sport.dto.EpreuveDTO;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionPhaseType;
+import com.glop.cibl_orga_sport.data.enumType.TypeResultatEnum;
 import com.glop.cibl_orga_sport.dto.CompetitionPhaseTypeDto;
 
 public class EpreuveMapper {
@@ -26,6 +27,7 @@ public class EpreuveMapper {
         dto.setNbPerMatch(epreuve.getNombreEquipeParMatch());
         dto.setNbElimMatch(epreuve.getNbElimParMatch());
         dto.setTailleEquipe(epreuve.getTailleEquipe());
+        dto.setTypeResultat(epreuve.getTypeResultat());
 
         if (epreuve.getCompetition() != null) {
             dto.setCompetitionId(epreuve.getCompetition().getIdCompetition());
@@ -83,6 +85,7 @@ public class EpreuveMapper {
         epreuve.setNombreEquipeParMatch(dto.getNbPerMatch());
         epreuve.setNbElimParMatch(dto.getNbElimMatch());
         epreuve.setTailleEquipe(dto.getTailleEquipe());
+        epreuve.setTypeResultat(dto.getTypeResultat());
 
         if (dto.getPhaseOnGoing() != null) {
             epreuve.setPhaseOnGoing(CompetitionPhaseType.valueOf(dto.getPhaseOnGoing().getValue()));

@@ -12,7 +12,7 @@ docker compose down
 
 ### Accès à la base de données
 
-docker exec -it back-ciblorgasport-postgres-1 psql -U admin -d glop
+`docker exec -it back-ciblorgasport-postgres-1 psql -U admin -d glop`
 
 
 ### Accès à Grafana

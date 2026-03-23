@@ -9,12 +9,12 @@ import org.springframework.stereotype.Service;
 
 import com.glop.cibl_orga_sport.data.Billet;
 import com.glop.cibl_orga_sport.data.Epreuve;
-import com.glop.cibl_orga_sport.data.Spectateur;
+import com.glop.cibl_orga_sport.data.Visiteur;
 import com.glop.cibl_orga_sport.dto.BilletDTO;
 import com.glop.cibl_orga_sport.mapper.BilletMapper;
 import com.glop.cibl_orga_sport.repository.BilletRepository;
 import com.glop.cibl_orga_sport.repository.EpreuveRepository;
-import com.glop.cibl_orga_sport.repository.SpectateurRepository;
+import com.glop.cibl_orga_sport.repository.VisiteurRepository;
 
 @Service
 public class BilletServiceImpl implements BilletService {
@@ -23,14 +23,14 @@ public class BilletServiceImpl implements BilletService {
     private BilletRepository billetRepository;
 
     @Autowired
-    private SpectateurRepository spectateurRepository;
+    private VisiteurRepository visiteurRepository;
 
     @Autowired
     private EpreuveRepository epreuveRepository;
 
     @Override
     public Billet createBillet(BilletDTO dto) {
-        if (dto == null || dto.getSpectateurId() == null || dto.getEpreuveId() == null || dto.getNumeroBillet() == null
+        if (dto == null || dto.getVisiteurId() == null || dto.getEpreuveId() == null || dto.getNumeroBillet() == null
                 || dto.getCategorie() == null) {
             return null;
         }
@@ -39,15 +39,15 @@ public class BilletServiceImpl implements BilletService {
             return null;
         }
 
-        Optional<Spectateur> spectateur = spectateurRepository.findById(dto.getSpectateurId());
+        Optional<Visiteur> visiteur = visiteurRepository.findById(dto.getVisiteurId());
         Optional<Epreuve> epreuve = epreuveRepository.findById(dto.getEpreuveId());
 
-        if (spectateur.isEmpty() || epreuve.isEmpty()) {
+        if (visiteur.isEmpty() || epreuve.isEmpty()) {
             return null;
         }
 
         Billet billet = BilletMapper.toEntity(dto);
-        billet.setSpectateur(spectateur.get());
+        billet.setVisiteur(visiteur.get());
         billet.setEpreuve(epreuve.get());
         if (billet.getDateAchat() == null) {
             billet.setDateAchat(LocalDateTime.now());
@@ -80,12 +80,12 @@ public class BilletServiceImpl implements BilletService {
             billet.setDateAchat(dto.getDateAchat());
         }
 
-        if (dto.getSpectateurId() != null) {
-            Optional<Spectateur> spectateur = spectateurRepository.findById(dto.getSpectateurId());
-            if (spectateur.isEmpty()) {
+        if (dto.getVisiteurId() != null) {
+            Optional<Visiteur> visiteur = visiteurRepository.findById(dto.getVisiteurId());
+            if (visiteur.isEmpty()) {
                 return null;
             }
-            billet.setSpectateur(spectateur.get());
+            billet.setVisiteur(visiteur.get());
         }
 
         if (dto.getEpreuveId() != null) {
@@ -120,7 +120,7 @@ public class BilletServiceImpl implements BilletService {
     }
 
     @Override
-    public List<Billet> getBilletsBySpectateur(Long spectateurId) {
-        return billetRepository.findBySpectateurIdUtilisateur(spectateurId);
+    public List<Billet> getBilletsByVisiteur(Long visiteurId) {
+        return billetRepository.findByVisiteurIdUtilisateur(visiteurId);
     }
 }

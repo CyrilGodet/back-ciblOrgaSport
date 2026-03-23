@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 public class BilletDTO {
     private Long idBillet;
-    private Long spectateurId;
+    private Long visiteurId;
     private Long epreuveId;
     private String numeroBillet;
     private String categorie;
@@ -13,10 +13,10 @@ public class BilletDTO {
     public BilletDTO() {
     }
 
-    public BilletDTO(Long idBillet, Long spectateurId, Long epreuveId, String numeroBillet, String categorie,
+    public BilletDTO(Long idBillet, Long visiteurId, Long epreuveId, String numeroBillet, String categorie,
             LocalDateTime dateAchat) {
         this.idBillet = idBillet;
-        this.spectateurId = spectateurId;
+        this.visiteurId = visiteurId;
         this.epreuveId = epreuveId;
         this.numeroBillet = numeroBillet;
         this.categorie = categorie;
@@ -31,12 +31,12 @@ public class BilletDTO {
         this.idBillet = idBillet;
     }
 
-    public Long getSpectateurId() {
-        return spectateurId;
+    public Long getVisiteurId() {
+        return visiteurId;
     }
 
-    public void setSpectateurId(Long spectateurId) {
-        this.spectateurId = spectateurId;
+    public void setVisiteurId(Long visiteurId) {
+        this.visiteurId = visiteurId;
     }
 
     public Long getEpreuveId() {

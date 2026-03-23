@@ -45,9 +45,9 @@ public class BilletController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/spectateur/{spectateurId}")
-    public List<BilletDTO> getBilletsBySpectateur(@PathVariable Long spectateurId) {
-        return billetService.getBilletsBySpectateur(spectateurId).stream()
+    @GetMapping("/visiteur/{visiteurId}")
+    public List<BilletDTO> getBilletsByVisiteur(@PathVariable Long visiteurId) {
+        return billetService.getBilletsByVisiteur(visiteurId).stream()
                 .map(BilletMapper::toDTO)
                 .collect(Collectors.toList());
     }

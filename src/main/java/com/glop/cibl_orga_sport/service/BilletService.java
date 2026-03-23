@@ -17,5 +17,5 @@ public interface BilletService {
 
     public List<Billet> getAllBillets();
 
-    public List<Billet> getBilletsBySpectateur(Long spectateurId);
+    public List<Billet> getBilletsByVisiteur(Long visiteurId);
 }

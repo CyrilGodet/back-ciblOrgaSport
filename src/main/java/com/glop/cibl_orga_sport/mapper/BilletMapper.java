@@ -10,12 +10,12 @@ public class BilletMapper {
             return null;
         }
 
-        Long spectateurId = billet.getSpectateur() != null ? billet.getSpectateur().getIdSpectateur() : null;
+        Long visiteurId = billet.getVisiteur() != null ? billet.getVisiteur().getIdVisiteur() : null;
         Long epreuveId = billet.getEpreuve() != null ? billet.getEpreuve().getIdEpreuve() : null;
 
         return new BilletDTO(
                 billet.getIdBillet(),
-                spectateurId,
+                visiteurId,
                 epreuveId,
                 billet.getNumeroBillet(),
                 billet.getCategorie(),

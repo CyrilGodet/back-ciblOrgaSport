@@ -16,7 +16,7 @@ public class Billet {
     private Long idBillet;
 
     @ManyToOne
-    private Spectateur spectateur;
+    private Visiteur visiteur;
 
     @ManyToOne
     private Epreuve epreuve;
@@ -33,8 +33,8 @@ public class Billet {
     public Billet() {
     }
 
-    public Billet(Spectateur spectateur, Epreuve epreuve, String numeroBillet, String categorie, LocalDateTime dateAchat) {
-        this.spectateur = spectateur;
+    public Billet(Visiteur visiteur, Epreuve epreuve, String numeroBillet, String categorie, LocalDateTime dateAchat) {
+        this.visiteur = visiteur;
         this.epreuve = epreuve;
         this.numeroBillet = numeroBillet;
         this.categorie = categorie;
@@ -49,12 +49,12 @@ public class Billet {
         this.idBillet = idBillet;
     }
 
-    public Spectateur getSpectateur() {
-        return spectateur;
+    public Visiteur getVisiteur() {
+        return visiteur;
     }
 
-    public void setSpectateur(Spectateur spectateur) {
-        this.spectateur = spectateur;
+    public void setVisiteur(Visiteur visiteur) {
+        this.visiteur = visiteur;
     }
 
     public Epreuve getEpreuve() {

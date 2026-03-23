@@ -4,7 +4,7 @@ import com.glop.cibl_orga_sport.data.enumType.ResultatDetailsStatusEnum;
 
 public class ResultatDetailsDTO {
     private Long idResultatDetails;
-    private ParticipantDTO participant;
+    private EquipeDTO equipe;
     private int rang;
     private ResultatDetailsStatusEnum status;
 
@@ -19,12 +19,12 @@ public class ResultatDetailsDTO {
         this.idResultatDetails = idResultatDetails;
     }
 
-    public ParticipantDTO getParticipant() {
-        return participant;
+    public EquipeDTO getEquipe() {
+        return equipe;
     }
 
-    public void setParticipant(ParticipantDTO participant) {
-        this.participant = participant;
+    public void setEquipe(EquipeDTO equipe) {
+        this.equipe = equipe;
     }
 
     public int getRang() {

@@ -8,7 +8,7 @@ import java.util.List;
 
 @Repository
 public interface ParticipationRepository extends JpaRepository<Participation, Long> {
-    List<Participation> findByCompetition_IdCompetition(Long idCompetition);
+    List<Participation> findByEpreuve_IdEpreuve(Long idEpreuve);
 
-    List<Participation> findByParticipant_IdParticipant(Long idParticipant);
+    List<Participation> findByEquipe_IdEquipe(Long idEquipe);
 }

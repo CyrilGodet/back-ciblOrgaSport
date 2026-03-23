@@ -11,11 +11,11 @@ import java.util.Optional;
 
 public interface EpreuveService {
 
-    Epreuve createEpreuve(String nomEpreuve, String description, DisciplineEnum discipline, CompetitionGenreEnum genre, 
-                         Date dateDebut, Date dateFin, int ageMin, int ageMax, Competition competition);
+    Epreuve createEpreuve(String nomEpreuve, String description, DisciplineEnum discipline, CompetitionGenreEnum genre,
+                          Date dateDebut, Date dateFin, int ageMin, int ageMax, Competition competition);
 
-    Epreuve updateEpreuve(Long id, String nomEpreuve, String description, DisciplineEnum discipline, CompetitionGenreEnum genre, 
-                         Date dateDebut, Date dateFin, int ageMin, int ageMax, CompetitionStatusEnum statut, Competition competition);
+    Epreuve updateEpreuve(Long id, String nomEpreuve, String description, DisciplineEnum discipline, CompetitionGenreEnum genre,
+                          Date dateDebut, Date dateFin, int ageMin, int ageMax, CompetitionStatusEnum statut, Competition competition);
 
     boolean deleteEpreuve(Long id);
 
@@ -24,7 +24,7 @@ public interface EpreuveService {
     Optional<Epreuve> getEpreuve(Long id);
 
     List<Epreuve> getEpreuvesByCompetitionId(Long competitionId);
-    
+
     Epreuve publishEpreuve(Long id);
     Epreuve startEpreuve(Long id);
     Epreuve finishEpreuve(Long id);

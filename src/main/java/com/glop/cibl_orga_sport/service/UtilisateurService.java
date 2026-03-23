@@ -1,6 +1,5 @@
 package com.glop.cibl_orga_sport.service;
 
-import com.glop.cibl_orga_sport.data.ParticipantSportif;
 import com.glop.cibl_orga_sport.data.Sportif;
 import com.glop.cibl_orga_sport.data.UserDtoJson;
 import com.glop.cibl_orga_sport.data.Visiteur;
@@ -29,7 +28,4 @@ public interface UtilisateurService {
 
 
     List<UserDtoJson> findAll();
-
-    List<Sportif> searchSportifs(String query);
-    List<ParticipantSportif> searchParticipantSportifs(String query);
 }

@@ -1,0 +1,73 @@
+package com.glop.cibl_orga_sport.service;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.glop.cibl_orga_sport.data.Lieu;
+import com.glop.cibl_orga_sport.dto.LieuDTO;
+import com.glop.cibl_orga_sport.repository.LieuRepository;
+
+@Service
+public class LieuServiceImpl implements LieuService {
+
+    @Autowired
+    private LieuRepository repository;
+
+    @Override
+    public Lieu createLieu(String nom, String ville, String adresse) {
+        Lieu l = new Lieu(nom, ville, adresse);
+        System.out.println("Création lieu : " + nom);
+        return repository.save(l);
+    }
+
+    @Override
+    public Lieu updateLieu(Long id, String nom, String ville, String adresse) {
+        Optional<Lieu> existingLieu = repository.findById(id);
+        if (existingLieu.isPresent()) {
+            Lieu l = existingLieu.get();
+            l.setNomLieu(nom);
+            l.setVille(ville);
+            l.setAdresse(adresse);
+            System.out.println("Modification lieu : " + id);
+            return repository.save(l);
+        }
+        System.out.println("Lieu non trouvé : " + id);
+        return null;
+    }
+
+    @Override
+    public boolean deleteLieu(Long id) {
+        Optional<Lieu> l = repository.findById(id);
+        if (l.isPresent()) {
+            repository.deleteById(id);
+            System.out.println("Lieu supprimé : " + id);
+            return true;
+        }
+        System.out.println("Lieu non trouvé : " + id);
+        return false;
+    }
+
+    @Override
+    public List<Lieu> getAllLieux() {
+        return repository.findAll();
+    }
+
+    @Override
+    public Optional<Lieu> getLieu(Long id) {
+        return repository.findById(id);
+    }
+
+    @Override
+    public List<Lieu> searchLieux(String query) {
+        return repository.findByNomLieuContainingIgnoreCase(query);
+    }
+
+    @Override
+    public Lieu createLieu(LieuDTO lieuDTO) {
+        Lieu l = new Lieu(lieuDTO.getNomLieu(), lieuDTO.getVille(), lieuDTO.getAdresse());
+        return repository.save(l);
+    }
+}

@@ -10,7 +10,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
@@ -21,15 +20,12 @@ public class Participation {
     private Long idParticipation;
 
     @ManyToOne
-    @JsonBackReference("competition-participations")
-    private Competition competition;
-
-    @ManyToOne
-    private Participant participant;
-
-    @ManyToOne
-    @JoinColumn(name = "epreuve_id")
+    @JsonBackReference("epreuve-participations")
     private Epreuve epreuve;
+
+    @ManyToOne
+    @JsonBackReference("equipe-participations")
+    private Equipe equipe;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -38,9 +34,9 @@ public class Participation {
     public Participation() {
     }
 
-    public Participation(Competition competition, Participant participant, ParticipationStatusEnum statut) {
-        this.competition = competition;
-        this.participant = participant;
+    public Participation(Epreuve epreuve, Equipe equipe, ParticipationStatusEnum statut) {
+        this.epreuve = epreuve;
+        this.equipe = equipe;
         this.statut = statut;
     }
 
@@ -52,20 +48,20 @@ public class Participation {
         this.idParticipation = idParticipation;
     }
 
-    public Competition getCompetition() {
-        return competition;
+    public Epreuve getEpreuve() {
+        return epreuve;
     }
 
-    public void setCompetition(Competition competition) {
-        this.competition = competition;
+    public void setEpreuve(Epreuve epreuve) {
+        this.epreuve = epreuve;
     }
 
-    public Participant getParticipant() {
-        return participant;
+    public Equipe getEquipe() {
+        return equipe;
     }
 
-    public void setParticipant(Participant participant) {
-        this.participant = participant;
+    public void setEquipe(Equipe equipe) {
+        this.equipe = equipe;
     }
 
     public ParticipationStatusEnum getStatut() {
@@ -75,12 +71,4 @@ public class Participation {
     public void setStatut(ParticipationStatusEnum statut) {
         this.statut = statut;
     }
-
-    public Epreuve getEpreuve() {
-    return epreuve;
-}
-
-public void setEpreuve(Epreuve epreuve) {
-    this.epreuve = epreuve;
-}
 }

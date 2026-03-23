@@ -34,8 +34,8 @@ public class Match {
     private Resultat resultat;
 
     @ManyToMany
-    @JoinTable(name = "match_participant", joinColumns = @JoinColumn(name = "match_id"), inverseJoinColumns = @JoinColumn(name = "participant_id"))
-    private List<Participant> participants = new ArrayList<>();
+    @JoinTable(name = "match_equipe", joinColumns = @JoinColumn(name = "match_id"), inverseJoinColumns = @JoinColumn(name = "equipe_id"))
+    private List<Equipe> equipes = new ArrayList<>();
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -82,12 +82,12 @@ public class Match {
         this.resultat = resultat;
     }
 
-    public List<Participant> getParticipants() {
-        return participants;
+    public List<Equipe> getEquipes() {
+        return equipes;
     }
 
-    public void setParticipants(List<Participant> participants) {
-        this.participants = participants;
+    public void setEquipes(List<Equipe> equipes) {
+        this.equipes = equipes;
     }
 
     public MatchStatusEnum getStatus() {

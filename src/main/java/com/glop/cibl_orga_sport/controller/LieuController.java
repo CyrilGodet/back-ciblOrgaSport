@@ -28,13 +28,6 @@ public class LieuController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping("/affectations")
-    public List<LieuDTO> getLieuxForAffectations() {
-        return lieuService.getLieuxForAffectations().stream()
-                .map(LieuMapper::toDTO)
-                .collect(Collectors.toList());
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<LieuDTO> getLieu(@PathVariable Long id) {
         Optional<Lieu> lieu = lieuService.getLieu(id);

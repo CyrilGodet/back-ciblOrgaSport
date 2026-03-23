@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface SportifRepository extends JpaRepository<Sportif, Long> {
-    List<Sportif> findByNomContainingIgnoreCaseOrPrenomContainingIgnoreCaseOrEmailContainingIgnoreCase(String nom, String prenom, String email);
+    // List<Sportif> findByEquipe_IdEquipe(Long idEquipe);
 }

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class MatchDTO {
     private Long idMatch;
     private Long etapeEpreuveId;
-    private List<ParticipantDTO> participants = new ArrayList<>();
+    private List<EquipeDTO> equipes = new ArrayList<>();
     private PeriodeDTO periode;
     private ResultatDTO resultat;
     private MatchStatusEnum status;
@@ -31,12 +31,12 @@ public class MatchDTO {
         this.etapeEpreuveId = etapeEpreuveId;
     }
 
-    public List<ParticipantDTO> getParticipants() {
-        return participants;
+    public List<EquipeDTO> getEquipes() {
+        return equipes;
     }
 
-    public void setParticipants(List<ParticipantDTO> participants) {
-        this.participants = participants;
+    public void setEquipes(List<EquipeDTO> equipes) {
+        this.equipes = equipes;
     }
 
     public PeriodeDTO getPeriode() {

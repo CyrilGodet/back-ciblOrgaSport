@@ -4,8 +4,6 @@ import com.glop.cibl_orga_sport.data.EtapeEpreuve;
 import com.glop.cibl_orga_sport.data.Periode;
 import com.glop.cibl_orga_sport.dto.EtapeEpreuveDTO;
 import com.glop.cibl_orga_sport.dto.PeriodeDTO;
-
-import java.sql.Date;
 import java.util.stream.Collectors;
 
 public class EtapeEpreuveMapper {
@@ -33,9 +31,9 @@ public class EtapeEpreuveMapper {
                     .collect(Collectors.toList()));
         }
 
-        if (etape.getParticipants() != null) {
-            dto.setParticipants(etape.getParticipants().stream()
-                    .map(ParticipantMapper::toDTO)
+        if (etape.getEquipes() != null) {
+            dto.setEquipes(etape.getEquipes().stream()
+                    .map(EquipeMapper::toDTO)
                     .collect(Collectors.toList()));
         }
 
@@ -52,8 +50,8 @@ public class EtapeEpreuveMapper {
 
         if (dto.getPeriode() != null) {
             Periode periode = new Periode(
-                    new Date(dto.getPeriode().getDateDebut().getTime()),
-                    new Date(dto.getPeriode().getDateFin().getTime()));
+                    new java.sql.Date(dto.getPeriode().getDateDebut().getTime()),
+                    new java.sql.Date(dto.getPeriode().getDateFin().getTime()));
             etape.setPeriode(periode);
         }
 

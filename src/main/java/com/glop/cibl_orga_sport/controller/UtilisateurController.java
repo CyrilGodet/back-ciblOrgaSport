@@ -11,8 +11,6 @@ import com.glop.cibl_orga_sport.dto.CommissaireDTO;
 import com.glop.cibl_orga_sport.mapper.SportifMapper;
 import com.glop.cibl_orga_sport.mapper.VisiteurMapper;
 import com.glop.cibl_orga_sport.mapper.CommissaireMapper;
-import com.glop.cibl_orga_sport.dto.ParticipantDTO;
-import com.glop.cibl_orga_sport.mapper.ParticipantMapper;
 import com.glop.cibl_orga_sport.service.UtilisateurService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -43,35 +41,21 @@ public class UtilisateurController {
     @GetMapping("/visiteurs")
     public List<VisiteurDTO> getAllVisiteurs() {
         return service.getAllVisiteurs().stream()
-                .map(v -> (VisiteurDTO) VisiteurMapper.toDTO(v))
+                .map(VisiteurMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/commissaires")
     public List<CommissaireDTO> getAllCommissaires() {
         return service.getAllCommissaires().stream()
-                .map(c -> (CommissaireDTO) CommissaireMapper.toDTO(c))
+                .map(CommissaireMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/sportifs")
     public List<SportifDTO> getAllSportifs() {
         return service.getAllSportifs().stream()
-                .map(s -> (SportifDTO) SportifMapper.toDTO(s))
-                .collect(Collectors.toList());
-    }
-
-    @GetMapping("/search")
-    public List<SportifDTO> searchSportifs(@RequestParam("q") String query) {
-        return service.searchSportifs(query).stream()
-                .map(s -> (SportifDTO) SportifMapper.toDTO(s))
-                .collect(Collectors.toList());
-    }
-
-    @GetMapping("/search/participant")
-    public List<ParticipantDTO> searchParticipantSportifs(@RequestParam("q") String query) {
-        return service.searchParticipantSportifs(query).stream()
-                .map(p -> (ParticipantDTO) ParticipantMapper.toDTO(p))
+                .map(SportifMapper::toDTO)
                 .collect(Collectors.toList());
     }
 

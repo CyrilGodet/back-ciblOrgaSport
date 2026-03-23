@@ -10,7 +10,7 @@ public class EtapeEpreuveDTO {
     private PeriodeDTO periode;
     private ResultatDTO resultat;
     private List<MatchDTO> matches = new ArrayList<>();
-    private List<ParticipantDTO> participants = new ArrayList<>();
+    private List<EquipeDTO> equipes = new ArrayList<>();
     private EtapeEpreuveEnum etapeEpreuveEnum;
 
     public EtapeEpreuveDTO() {
@@ -56,12 +56,12 @@ public class EtapeEpreuveDTO {
         this.matches = matches;
     }
 
-    public List<ParticipantDTO> getParticipants() {
-        return participants;
+    public List<EquipeDTO> getEquipes() {
+        return equipes;
     }
 
-    public void setParticipants(List<ParticipantDTO> participants) {
-        this.participants = participants;
+    public void setEquipes(List<EquipeDTO> equipes) {
+        this.equipes = equipes;
     }
 
     public EtapeEpreuveEnum getEtapeEpreuveEnum() {

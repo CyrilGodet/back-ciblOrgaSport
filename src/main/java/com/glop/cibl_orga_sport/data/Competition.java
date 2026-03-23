@@ -18,7 +18,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.CascadeType;
@@ -40,10 +39,6 @@ public class Competition {
     @JsonManagedReference("competition-epreuves")
     private List<Epreuve> epreuves;
 
-    @OneToMany(mappedBy = "competition", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference("competition-participations")
-    private List<Participation> participations = new ArrayList<>();
-
     @ElementCollection
     @Enumerated(EnumType.STRING)
     private List<CompetitionPhaseType> phases = new ArrayList<>();
@@ -53,7 +48,6 @@ public class Competition {
     private Periode periode;
 
     @ManyToOne
-    @JoinColumn(name = "id_lieu")
     private Lieu lieu;
 
     @Embedded
@@ -107,14 +101,6 @@ public class Competition {
 
     public void setEpreuves(List<Epreuve> epreuves) {
         this.epreuves = epreuves;
-    }
-
-    public List<Participation> getParticipations() {
-        return participations;
-    }
-
-    public void setParticipations(List<Participation> participations) {
-        this.participations = participations;
     }
 
     public void addEpreuve(Epreuve epreuve) {

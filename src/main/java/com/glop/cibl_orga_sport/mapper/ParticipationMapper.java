@@ -11,10 +11,10 @@ public class ParticipationMapper {
 
         ParticipationDTO dto = new ParticipationDTO();
         dto.setIdParticipation(participation.getIdParticipation());
-        if (participation.getCompetition() != null) {
-            dto.setCompetitionId(participation.getCompetition().getIdCompetition());
+        if (participation.getEpreuve() != null) {
+            dto.setEpreuveId(participation.getEpreuve().getIdEpreuve());
         }
-        dto.setParticipant(ParticipantMapper.toDTO(participation.getParticipant()));
+        dto.setEquipe(EquipeMapper.toDTO(participation.getEquipe()));
         dto.setStatut(participation.getStatut());
         return dto;
     }
@@ -25,10 +25,10 @@ public class ParticipationMapper {
 
         Participation participation = new Participation();
         participation.setIdParticipation(dto.getIdParticipation());
-        // Competition association is handled by the service during create/update
-        // but for general mapping, we use ParticipantMapper
-        if (dto.getParticipant() != null) {
-            participation.setParticipant(ParticipantMapper.toEntity(dto.getParticipant()));
+        // Equipe association is handled by the service during create/update
+        // but for general mapping, we use EquipeMapper
+        if (dto.getEquipe() != null) {
+            participation.setEquipe(EquipeMapper.toEntity(dto.getEquipe()));
         }
         participation.setStatut(dto.getStatut());
         return participation;

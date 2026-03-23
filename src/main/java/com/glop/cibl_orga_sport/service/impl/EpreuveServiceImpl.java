@@ -25,8 +25,8 @@ public class EpreuveServiceImpl implements EpreuveService {
 
     @Override
     public Epreuve createEpreuve(String nomEpreuve, String description, DisciplineEnum discipline,
-            CompetitionGenreEnum genre,
-            Date dateDebut, Date dateFin, int ageMin, int ageMax, Competition competition) {
+                                 CompetitionGenreEnum genre,
+                                 Date dateDebut, Date dateFin, int ageMin, int ageMax, Competition competition) {
         Epreuve e = new Epreuve(nomEpreuve);
         e.setDescription(description);
         e.setDiscipline(discipline);
@@ -51,9 +51,9 @@ public class EpreuveServiceImpl implements EpreuveService {
 
     @Override
     public Epreuve updateEpreuve(Long id, String nomEpreuve, String description, DisciplineEnum discipline,
-            CompetitionGenreEnum genre,
-            Date dateDebut, Date dateFin, int ageMin, int ageMax, CompetitionStatusEnum statut,
-            Competition competition) {
+                                 CompetitionGenreEnum genre,
+                                 Date dateDebut, Date dateFin, int ageMin, int ageMax, CompetitionStatusEnum statut,
+                                 Competition competition) {
         Optional<Epreuve> existingEpreuve = repository.findById(id);
         if (existingEpreuve.isPresent()) {
             Epreuve e = existingEpreuve.get();

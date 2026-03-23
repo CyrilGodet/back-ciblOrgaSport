@@ -53,9 +53,6 @@ public class Epreuve {
     private List<Participation> participations = new ArrayList<>();
 
     @Column(nullable = false)
-    private int tailleEquipe;
-
-    @Column(nullable = false)
     private DisciplineEnum discipline;
 
     @Column(nullable = false)
@@ -176,12 +173,12 @@ public class Epreuve {
         this.conditionAge = conditionAge;
     }
 
-    public int getTailleEquipe() {
-        return tailleEquipe;
+    public List<Participation> getParticipations() {
+        return participations;
     }
 
-    public void setTailleEquipe(int tailleEquipe) {
-        this.tailleEquipe = tailleEquipe;
+    public void setParticipations(List<Participation> participations) {
+        this.participations = participations;
     }
 
     public int getNombreEquipeParMatch() {
@@ -207,24 +204,5 @@ public class Epreuve {
     public void setPhaseOnGoing(CompetitionPhaseType phaseOnGoing) {
         this.phaseOnGoing = phaseOnGoing;
     }
-
-        public void addParticipation(Participation p) {
-            participations.add(p);
-            p.setEpreuve(this);
-        }
-
-        public void removeParticipation(Participation p) {
-            participations.remove(p);
-            p.setEpreuve(null);
-        }
-
-
-        public List<Participation> getParticipations() {
-    return participations;
-}
-
-public void setParticipations(List<Participation> participations) {
-    this.participations = participations;
-}
 
 }

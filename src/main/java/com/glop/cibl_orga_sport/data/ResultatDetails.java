@@ -20,7 +20,7 @@ public class ResultatDetails {
     private Long idResultatDetails;
 
     @ManyToOne
-    private Equipe equipe;
+    private Participant participant;
 
     @ManyToOne
     @JsonBackReference("resultat-details")
@@ -36,8 +36,8 @@ public class ResultatDetails {
     public ResultatDetails() {
     }
 
-    public ResultatDetails(Equipe equipe, Resultat resultat, int rang, ResultatDetailsStatusEnum status) {
-        this.equipe = equipe;
+    public ResultatDetails(Participant participant, Resultat resultat, int rang, ResultatDetailsStatusEnum status) {
+        this.participant = participant;
         this.resultat = resultat;
         this.rang = rang;
         this.status = status;
@@ -51,12 +51,12 @@ public class ResultatDetails {
         this.idResultatDetails = idResultatDetails;
     }
 
-    public Equipe getEquipe() {
-        return equipe;
+    public Participant getParticipant() {
+        return participant;
     }
 
-    public void setEquipe(Equipe equipe) {
-        this.equipe = equipe;
+    public void setParticipant(Participant participant) {
+        this.participant = participant;
     }
 
     public Resultat getResultat() {

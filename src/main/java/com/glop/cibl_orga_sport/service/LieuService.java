@@ -7,10 +7,10 @@ import java.util.Optional;
 
 public interface LieuService {
 
-    Lieu createLieu(String nom, String ville, String adresse);
     Lieu updateLieu(Long id, String nom, String ville, String adresse);
     boolean deleteLieu(Long id);
     List<Lieu> getAllLieux();
+    List<Lieu> getLieuxForAffectations();
     Optional<Lieu> getLieu(Long id);
     List<Lieu> searchLieux(String query);
     Lieu createLieu(LieuDTO lieuDTO);

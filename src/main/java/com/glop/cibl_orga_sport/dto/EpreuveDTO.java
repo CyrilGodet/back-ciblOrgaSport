@@ -1,6 +1,6 @@
 package com.glop.cibl_orga_sport.dto;
 
-import java.util.Date;
+import java.sql.Date;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionStatusEnum;
 import com.glop.cibl_orga_sport.data.enumType.DisciplineEnum;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionGenreEnum;
@@ -23,6 +23,7 @@ public class EpreuveDTO {
     private int nbPerMatch;
     private int nbElimMatch;
     private CompetitionPhaseTypeDto phaseOnGoing;
+    private int tailleEquipe;
 
     public EpreuveDTO() {
     }
@@ -173,6 +174,14 @@ public class EpreuveDTO {
 
     public void setPhaseOnGoing(CompetitionPhaseTypeDto phaseOnGoing) {
         this.phaseOnGoing = phaseOnGoing;
+    }
+
+    public int getTailleEquipe() {
+        return tailleEquipe;
+    }
+
+    public void setTailleEquipe(int tailleEquipe) {
+        this.tailleEquipe = tailleEquipe;
     }
 
 }

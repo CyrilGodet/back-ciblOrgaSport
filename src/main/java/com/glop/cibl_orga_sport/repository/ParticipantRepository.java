@@ -1,0 +1,9 @@
+package com.glop.cibl_orga_sport.repository;
+
+import com.glop.cibl_orga_sport.data.Participant;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface ParticipantRepository extends JpaRepository<Participant, Long> {
+}

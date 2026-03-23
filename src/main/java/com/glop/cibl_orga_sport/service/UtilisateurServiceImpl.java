@@ -1,6 +1,11 @@
 package com.glop.cibl_orga_sport.service;
 
 import com.glop.cibl_orga_sport.data.*;
+import com.glop.cibl_orga_sport.data.Sportif;
+import com.glop.cibl_orga_sport.data.Visiteur;
+import com.glop.cibl_orga_sport.data.Commissaire;
+import com.glop.cibl_orga_sport.data.Lieu;
+import com.glop.cibl_orga_sport.data.ParticipantSportif;
 import com.glop.cibl_orga_sport.dto.RolesDto;
 import com.glop.cibl_orga_sport.dto.SportifDTO;
 import com.glop.cibl_orga_sport.dto.UtilisateurDTO;
@@ -13,6 +18,8 @@ import com.glop.cibl_orga_sport.repository.HistoryDao;
 import com.glop.cibl_orga_sport.repository.RolesDao;
 import com.glop.cibl_orga_sport.repository.UtilisateurRepository;
 import com.glop.cibl_orga_sport.repository.LieuRepository;
+import com.glop.cibl_orga_sport.repository.SportifRepository;
+import com.glop.cibl_orga_sport.repository.ParticipantSportifRepository;
 import com.glop.cibl_orga_sport.mapper.SportifMapper;
 import com.glop.cibl_orga_sport.mapper.VisiteurMapper;
 import jakarta.transaction.Transactional;
@@ -41,6 +48,13 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     private UtilisateurRepository repository;
 
     @Autowired
+    private SportifRepository sportifRepository;
+
+    @Autowired
+    private ParticipantSportifRepository participantSportifRepository;
+
+
+    @Autowired
     private LieuRepository lieuRepository;
 
     @Autowired
@@ -65,6 +79,19 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         return userDtoJson;
     }
 
+    @Override
+    public Sportif createSportif(SportifDTO dto) {
+        Sportif sportif = SportifMapper.toEntity(dto);
+        if (dto.getLieu() != null && dto.getLieu().getIdLieu() != null) {
+            Optional<Lieu> lieu = lieuRepository.findById(dto.getLieu().getIdLieu());
+            lieu.ifPresent(sportif::setLieu);
+        }
+        Sportif savedSportif = repository.save(sportif);
+        ParticipantSportif participantSportif = new ParticipantSportif(savedSportif);
+        participantSportifRepository.save(participantSportif);
+        return savedSportif;
+    }
+
 
     private void createHistoryEntry(Utilisateur user, String action, String status) {
         History history = new History();
@@ -82,54 +109,26 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     @Override
     @Transactional
     public Sportif createSportif(SportifDTO dto) {
-        if (repository.existsByEmail(dto.getEmail())) {
-            throw new EntityAlreadyExistException("Email déjà utilisé");
-        }
-
-        Lieu lieu = null;
+        Sportif sportif = SportifMapper.toEntity(dto);
         if (dto.getLieu() != null && dto.getLieu().getIdLieu() != null) {
-            lieu = lieuRepository.findById(dto.getLieu().getIdLieu())
-                    .orElseThrow(() -> new EntityNotFoundException("Lieu introuvable"));
+            Optional<Lieu> lieu = lieuRepository.findById(dto.getLieu().getIdLieu());
+            lieu.ifPresent(sportif::setLieu);
         }
-
-        Roles role = rolesRepository.findById(dto.getRoles().getId())  // ou dto.getIdRoles()
-                .orElseThrow(() -> new EntityNotFoundException("Role introuvable"));
-
-        Sportif sportif = new Sportif();
-        sportif.setNom(dto.getNom());
-        sportif.setPrenom(dto.getPrenom());
-        sportif.setEmail(dto.getEmail());
-        sportif.setAge(dto.getAge());
-        sportif.setMdp(dto.getMdp());
-        sportif.setLieu(lieu);
-        sportif.setRoles(role);
-        return repository.save(sportif);
+        Sportif savedSportif = repository.save(sportif);
+        ParticipantSportif participantSportif = new ParticipantSportif(savedSportif);
+        participantSportifRepository.save(participantSportif);
+        return savedSportif;
     }
 
 
     @Override
     @Transactional
     public Visiteur createVisiteur(VisiteurDTO dto) {
-        if (repository.existsByEmail(dto.getEmail())) {
-            throw new EntityAlreadyExistException("Email déjà utilisé");
-        }
-
-        Lieu lieu = null;
+        Visiteur visiteur = VisiteurMapper.toEntity(dto);
         if (dto.getLieu() != null && dto.getLieu().getIdLieu() != null) {
-            lieu = lieuRepository.findById(dto.getLieu().getIdLieu())
-                    .orElseThrow(() -> new EntityNotFoundException("Lieu introuvable"));
+            Optional<Lieu> lieu = lieuRepository.findById(dto.getLieu().getIdLieu());
+            lieu.ifPresent(visiteur::setLieu);
         }
-
-        Roles role = rolesRepository.findById(dto.getRoles().getId())
-                .orElseThrow(() -> new EntityNotFoundException("Role introuvable"));
-
-        Visiteur visiteur = new Visiteur();
-        visiteur.setNom(dto.getNom());
-        visiteur.setPrenom(dto.getPrenom());
-        visiteur.setEmail(dto.getEmail());
-        visiteur.setRoles(role);
-        visiteur.setLieu(lieu);
-
         return repository.save(visiteur);
     }
 
@@ -147,6 +146,12 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     @Override
     public List<Commissaire> getAllCommissaires() {
         return repository.findAllCommissaires();
+    }
+
+    @Override
+    public List<Sportif> searchSportifs(String query) {
+        return sportifRepository.findByNomContainingIgnoreCaseOrPrenomContainingIgnoreCaseOrEmailContainingIgnoreCase(
+                query, query, query);
     }
 
     @Override
@@ -241,5 +246,10 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         return repository.findAll().stream()
                 .map(user -> convertToUserDtoJson(UtilisateurDTO.fromEntity(user)))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ParticipantSportif> searchParticipantSportifs(String query) {
+        return participantSportifRepository.searchParticipantSportifs(query);
     }
 }

@@ -1,46 +1,62 @@
 package com.glop.cibl_orga_sport.dto;
 
-import com.glop.cibl_orga_sport.data.Lieu;
-import lombok.Builder;
-import lombok.Data;
+import com.glop.cibl_orga_sport.data.enumType.LieuCategorieEnum;
 
-@Builder
-@Data
 public class LieuDTO {
     private Long idLieu;
     private String nomLieu;
     private String ville;
     private String adresse;
+    private LieuCategorieEnum categorie;
 
-    public static LieuDTO fromEntity(Lieu lieu) {
-        if (lieu == null) {
-            return null;
-        }
-        return LieuDTO.builder()
-                .idLieu(lieu.getIdLieu())
-                .nomLieu(lieu.getNomLieu())
-                .ville(lieu.getVille())
-                .adresse(lieu.getAdresse())
-                .build();
-    }
+    public LieuDTO() {}
 
-    public static Lieu toEntity(LieuDTO lieuDTO) {
-        if (lieuDTO == null) {
-            return null;
-        }
-        Lieu lieu = new Lieu();
-        lieu.setIdLieu(lieuDTO.getIdLieu());
-        lieu.setNomLieu(lieuDTO.getNomLieu());
-        lieu.setVille(lieuDTO.getVille());
-        lieu.setAdresse(lieuDTO.getAdresse());
-        return lieu;
-    }
 
-    public LieuDTO(Long idLieu, String nom, String ville, String adresse) {
+    public LieuDTO(Long idLieu, String nom, String ville, String adresse, LieuCategorieEnum categorie) {
         this.idLieu = idLieu;
         this.nomLieu = nom;
         this.ville = ville;
         this.adresse = adresse;
+        this.categorie = categorie;
     }
 
+    public Long getIdLieu() {
+        return idLieu;
+    }
+
+    public void setIdLieu(Long idLieu) {
+        this.idLieu = idLieu;
+    }
+
+    public String getNomLieu() {
+        return nomLieu;
+    }
+
+    public void setNomLieu(String nom) {
+        this.nomLieu = nom;
+    }
+
+    public String getVille() {
+        return ville;
+    }
+
+    public void setVille(String ville) {
+        this.ville = ville;
+    }
+
+    public String getAdresse() {
+        return adresse;
+    }
+
+    public void setAdresse(String adresse) {
+        this.adresse = adresse;
+    }
+
+    public LieuCategorieEnum getCategorie() {
+        return categorie;
+    }
+
+    public void setCategorie(LieuCategorieEnum categorie) {
+        this.categorie = categorie;
+    }
 }

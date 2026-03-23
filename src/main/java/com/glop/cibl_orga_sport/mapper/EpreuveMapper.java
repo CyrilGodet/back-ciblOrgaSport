@@ -2,12 +2,14 @@ package com.glop.cibl_orga_sport.mapper;
 
 import com.glop.cibl_orga_sport.data.Epreuve;
 import com.glop.cibl_orga_sport.data.Periode;
+
+import java.sql.Date;
+
 import com.glop.cibl_orga_sport.data.ConditionAge;
 import com.glop.cibl_orga_sport.dto.EpreuveDTO;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionPhaseType;
 import com.glop.cibl_orga_sport.dto.CompetitionPhaseTypeDto;
-import java.sql.Date;
-import java.util.stream.Collectors;
+
 
 public class EpreuveMapper {
 
@@ -24,6 +26,7 @@ public class EpreuveMapper {
         dto.setStatut(epreuve.getStatut());
         dto.setNbPerMatch(epreuve.getNombreEquipeParMatch());
         dto.setNbElimMatch(epreuve.getNbElimParMatch());
+        dto.setTailleEquipe(epreuve.getTailleEquipe());
 
         if (epreuve.getCompetition() != null) {
             dto.setCompetitionId(epreuve.getCompetition().getIdCompetition());
@@ -39,8 +42,8 @@ public class EpreuveMapper {
             dto.setAgeMax(epreuve.getConditionAge().getAgeMax());
         }
 
-        if (epreuve.getParticipations() != null) {
-            dto.setParticipations(epreuve.getParticipations().stream()
+        if (epreuve.getCompetition() != null && epreuve.getCompetition().getParticipations() != null) {
+            dto.setParticipations(epreuve.getCompetition().getParticipations().stream()
                     .map(ParticipationMapper::toDTO)
                     .collect(java.util.stream.Collectors.toList()));
         }
@@ -52,7 +55,8 @@ public class EpreuveMapper {
         }
 
         if (epreuve.getPhaseOnGoing() != null) {
-            dto.setPhaseOnGoing(new CompetitionPhaseTypeDto(epreuve.getPhaseOnGoing().name(), epreuve.getPhaseOnGoing().getLabel()));
+            dto.setPhaseOnGoing(new CompetitionPhaseTypeDto(epreuve.getPhaseOnGoing().name(),
+                    epreuve.getPhaseOnGoing().getLabel()));
         }
 
         return dto;
@@ -70,8 +74,8 @@ public class EpreuveMapper {
 
         if (dto.getDateDebut() != null && dto.getDateFin() != null) {
             Periode periode = new Periode(
-                    new java.sql.Date(dto.getDateDebut().getTime()),
-                    new java.sql.Date(dto.getDateFin().getTime()));
+                    new Date(dto.getDateDebut().getTime()),
+                    new Date(dto.getDateFin().getTime()));
             epreuve.setPeriode(periode);
         }
 
@@ -79,6 +83,7 @@ public class EpreuveMapper {
         epreuve.setConditionAge(conditionAge);
         epreuve.setNombreEquipeParMatch(dto.getNbPerMatch());
         epreuve.setNbElimParMatch(dto.getNbElimMatch());
+        epreuve.setTailleEquipe(dto.getTailleEquipe());
 
         if (dto.getPhaseOnGoing() != null) {
             epreuve.setPhaseOnGoing(CompetitionPhaseType.valueOf(dto.getPhaseOnGoing().getValue()));

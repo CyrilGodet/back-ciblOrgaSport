@@ -20,6 +20,7 @@ public class CompetitionDTO {
     private CompetitionStatusEnum statut;
     private LieuDTO lieu;
     private List<EpreuveDTO> epreuves = new ArrayList<>();
+    private List<ParticipationDTO> participations = new ArrayList<>();
     private List<CompetitionPhaseTypeDto> phases = new ArrayList<>();
 
     public CompetitionDTO() {
@@ -156,6 +157,15 @@ public class CompetitionDTO {
 
     public void setEpreuves(List<EpreuveDTO> epreuves) {
         this.epreuves = epreuves;
+    }
+
+
+    public List<ParticipationDTO> getParticipations() {
+        return participations;
+    }
+
+    public void setParticipations(List<ParticipationDTO> participations) {
+        this.participations = participations;
     }
 
     public List<CompetitionPhaseTypeDto> getPhases() {

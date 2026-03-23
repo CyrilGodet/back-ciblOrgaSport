@@ -8,7 +8,6 @@ import com.glop.cibl_orga_sport.data.enumType.CompetitionPhaseType;
 import com.glop.cibl_orga_sport.dto.CompetitionDTO;
 import com.glop.cibl_orga_sport.dto.CompetitionPhaseTypeDto;
 import java.util.stream.Collectors;
-import java.util.ArrayList;
 
 public class CompetitionMapper {
 
@@ -50,6 +49,17 @@ public class CompetitionMapper {
                     .collect(Collectors.toList()));
         }
 
+        if (competition.getParticipations() != null) {
+            dto.setParticipations(competition.getParticipations().stream()
+                    .map(ParticipationMapper::toDTO)
+                    .collect(Collectors.toList()));
+        }
+
+        if (competition.getPhases() != null) {
+            dto.setPhases(competition.getPhases().stream()
+                    .map(phase -> new CompetitionPhaseTypeDto(phase.name(), phase.getLabel()))
+                    .collect(Collectors.toList()));
+        }
 
         return dto;
     }
@@ -85,6 +95,12 @@ public class CompetitionMapper {
                     .map(EpreuveMapper::toEntity)
                     .collect(Collectors.toList()));
             competition.getEpreuves().forEach(e -> e.setCompetition(competition));
+        }
+
+        if (dto.getPhases() != null) {
+            competition.setPhases(dto.getPhases().stream()
+                    .map(phaseDto -> CompetitionPhaseType.valueOf(phaseDto.getValue()))
+                    .collect(Collectors.toList()));
         }
 
         if (dto.getPhases() != null) {

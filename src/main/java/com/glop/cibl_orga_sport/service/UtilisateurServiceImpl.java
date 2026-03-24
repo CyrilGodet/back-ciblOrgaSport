@@ -13,8 +13,19 @@ import com.glop.cibl_orga_sport.repository.SportifRepository;
 import com.glop.cibl_orga_sport.repository.ParticipantSportifRepository;
 import com.glop.cibl_orga_sport.mapper.SportifMapper;
 import com.glop.cibl_orga_sport.mapper.VisiteurMapper;
+import com.glop.cibl_orga_sport.exception.EntityAlreadyExistException;
+import com.glop.cibl_orga_sport.exception.EntityNotFoundException;
+import com.glop.cibl_orga_sport.exception.ErrorCodes;
+import com.glop.cibl_orga_sport.repository.HistoryDao;
+import com.glop.cibl_orga_sport.repository.RolesDao;
+import com.glop.cibl_orga_sport.repository.UtilisateurRepository;
+import com.glop.cibl_orga_sport.repository.LieuRepository;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 

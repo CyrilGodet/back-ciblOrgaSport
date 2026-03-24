@@ -10,7 +10,6 @@ import com.glop.cibl_orga_sport.dto.EpreuveDTO;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionPhaseType;
 import com.glop.cibl_orga_sport.dto.CompetitionPhaseTypeDto;
 
-
 public class EpreuveMapper {
 
     public static EpreuveDTO toDTO(Epreuve epreuve) {

@@ -6,6 +6,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+
+import com.glop.cibl_orga_sport.data.enumType.IncidentStatutEnum;
 import com.glop.cibl_orga_sport.data.enumType.NiveauImpactEnum;
 
 import java.time.LocalDateTime;
@@ -37,10 +39,18 @@ public class Incident {
     
     @Column(nullable = false)
     private boolean estResolu;
+
+    @Column(nullable = false)
+    private IncidentStatutEnum statut;
+
+    @Column
+    private Utilisateur createur;
+
     
     public Incident() {
         this.dateIncident = LocalDateTime.now();
         this.estResolu = false;
+        this.statut = IncidentStatutEnum.OUVERT;
     }
     
     public Incident(String titre, String description, NiveauImpactEnum niveauImpact) {
@@ -49,6 +59,7 @@ public class Incident {
         this.niveauImpact = niveauImpact;
         this.dateIncident = LocalDateTime.now();
         this.estResolu = false;
+        this.statut = IncidentStatutEnum.OUVERT;
     }
         
     public Long getIdIncident() {

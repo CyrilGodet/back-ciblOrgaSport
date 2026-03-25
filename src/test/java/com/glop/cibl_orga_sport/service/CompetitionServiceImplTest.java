@@ -38,7 +38,7 @@ class CompetitionServiceImplTest {
     @Test
     void testCreateCompetition() {
         Periode periode = new Periode(Date.valueOf("2026-01-01"), Date.valueOf("2026-01-10"));
-        Lieu lieu = new Lieu(null, "Ville", "test");
+        Lieu lieu = new Lieu(null, "Ville", "test", null);
         ConditionAge conditionAge = new ConditionAge(18, 99);
 
         Competition competition = new Competition(
@@ -111,7 +111,7 @@ class CompetitionServiceImplTest {
     @Test
     void testUpdateCompetition() {
         Periode periode = new Periode(Date.valueOf("2026-01-01"), Date.valueOf("2026-01-10"));
-        Lieu lieu = new Lieu(null, "Ville", "1 rue test");
+        Lieu lieu = new Lieu(null, "Ville", "1 rue test", null);
         ConditionAge conditionAge = new ConditionAge(18, 99);
         Competition existingCompetition = new Competition("Championnats du monde de natation", null, periode, lieu,
                 conditionAge, null, CompetitionStatusEnum.DRAFT, null);

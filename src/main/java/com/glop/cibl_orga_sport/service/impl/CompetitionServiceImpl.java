@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.glop.cibl_orga_sport.data.enumType.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,15 +15,11 @@ import com.glop.cibl_orga_sport.data.Periode;
 import com.glop.cibl_orga_sport.data.Lieu;
 import com.glop.cibl_orga_sport.data.ConditionAge;
 import com.glop.cibl_orga_sport.data.Epreuve;
-import com.glop.cibl_orga_sport.data.enumType.CompetitionStatusEnum;
-import com.glop.cibl_orga_sport.data.enumType.CompetitionGenreEnum;
-import com.glop.cibl_orga_sport.data.enumType.CompetitionPhaseType;
 import com.glop.cibl_orga_sport.repository.CompetitionRepository;
 import com.glop.cibl_orga_sport.repository.ParticipantRepository;
 import com.glop.cibl_orga_sport.repository.LieuRepository;
 import com.glop.cibl_orga_sport.service.CompetitionService;
 import com.glop.cibl_orga_sport.repository.MatchRepository;
-import com.glop.cibl_orga_sport.data.enumType.MatchStatusEnum;
 import com.glop.cibl_orga_sport.dto.CompetitionDTO;
 import com.glop.cibl_orga_sport.dto.LieuDTO;
 import com.glop.cibl_orga_sport.dto.ParticipationDTO;
@@ -33,10 +30,8 @@ import com.glop.cibl_orga_sport.data.ParticipantSportif;
 import com.glop.cibl_orga_sport.data.EtapeEpreuve;
 import com.glop.cibl_orga_sport.data.Match;
 import com.glop.cibl_orga_sport.data.Participation;
-import com.glop.cibl_orga_sport.data.enumType.ParticipationStatusEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.glop.cibl_orga_sport.data.enumType.EtapeEpreuveEnum;
 
 @Service
 public class CompetitionServiceImpl implements CompetitionService {

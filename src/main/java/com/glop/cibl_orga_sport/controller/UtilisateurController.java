@@ -1,6 +1,7 @@
 package com.glop.cibl_orga_sport.controller;
 
 import com.glop.cibl_orga_sport.data.Sportif;
+import com.glop.cibl_orga_sport.data.UserDtoJson;
 import com.glop.cibl_orga_sport.data.Visiteur;
 import com.glop.cibl_orga_sport.dto.SportifDTO;
 import com.glop.cibl_orga_sport.dto.VisiteurDTO;
@@ -12,6 +13,7 @@ import com.glop.cibl_orga_sport.dto.ParticipantDTO;
 import com.glop.cibl_orga_sport.mapper.ParticipantMapper;
 import com.glop.cibl_orga_sport.service.UtilisateurService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -69,5 +71,17 @@ public class UtilisateurController {
         return service.searchParticipantSportifs(query).stream()
                 .map(p -> (ParticipantDTO) ParticipantMapper.toDTO(p))
                 .collect(Collectors.toList());
+    }  // ← accolade manquante ici
+
+    @PutMapping(value = "/approval/{id}", produces = "application/json")
+    public ResponseEntity<UserDtoJson> approavalUser(@PathVariable("id") Long id) {
+        UserDtoJson approved = service.approval(id);
+        return ResponseEntity.ok(approved);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<UserDtoJson>> findAll() {
+        List<UserDtoJson> users = service.findAll();
+        return ResponseEntity.ok(users);
     }
 }

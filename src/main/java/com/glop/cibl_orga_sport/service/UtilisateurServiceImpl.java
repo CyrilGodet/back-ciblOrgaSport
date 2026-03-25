@@ -1,12 +1,16 @@
 package com.glop.cibl_orga_sport.service;
 
 import com.glop.cibl_orga_sport.data.Sportif;
+import com.glop.cibl_orga_sport.data.Utilisateur;
 import com.glop.cibl_orga_sport.data.Visiteur;
 import com.glop.cibl_orga_sport.data.Commissaire;
 import com.glop.cibl_orga_sport.data.Lieu;
 import com.glop.cibl_orga_sport.data.ParticipantSportif;
+import com.glop.cibl_orga_sport.data.UserDtoJson;
 import com.glop.cibl_orga_sport.dto.SportifDTO;
 import com.glop.cibl_orga_sport.dto.VisiteurDTO;
+import com.glop.cibl_orga_sport.dto.UtilisateurDTO;
+import com.glop.cibl_orga_sport.dto.RolesDto;
 import com.glop.cibl_orga_sport.repository.UtilisateurRepository;
 import com.glop.cibl_orga_sport.repository.LieuRepository;
 import com.glop.cibl_orga_sport.repository.SportifRepository;
@@ -18,17 +22,19 @@ import com.glop.cibl_orga_sport.exception.EntityNotFoundException;
 import com.glop.cibl_orga_sport.exception.ErrorCodes;
 import com.glop.cibl_orga_sport.repository.HistoryDao;
 import com.glop.cibl_orga_sport.repository.RolesDao;
-import com.glop.cibl_orga_sport.repository.UtilisateurRepository;
-import com.glop.cibl_orga_sport.repository.LieuRepository;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class UtilisateurServiceImpl implements UtilisateurService {
 
@@ -43,6 +49,9 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
     @Autowired
     private LieuRepository lieuRepository;
+
+    @Autowired
+    private HistoryService historyService;
 
     @Override
     public Sportif createSportif(SportifDTO dto) {
@@ -91,6 +100,22 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     @Override
     public List<ParticipantSportif> searchParticipantSportifs(String query) {
         return participantSportifRepository.searchParticipantSportifs(query);
+    }  // ← accolade manquante ici
+
+
+    @Override
+    public UtilisateurDTO findByEmail(String email) {
+        if (email == null) {
+            log.error("Dear customer, login is null");
+            return null;
+        }
+        return repository.findByEmail(email)
+                .map(utilisateur -> UtilisateurDTO.fromEntity(utilisateur))  // ✅ Lambda
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Aucun utilisateur avec l'email = " + email + " n'a été trouvé dans la BDD",
+                        ErrorCodes.USER_NOT_FOUND));
+    }
+
     public UserDetailsService userDetailsService() {
         return new UserDetailsService() {
             @Override
@@ -122,12 +147,9 @@ public class UtilisateurServiceImpl implements UtilisateurService {
             user.setEmail(userDto.getLogin());
             user.setState(userDto.getState());
             user.setRoles(RolesDto.toEntity(userDto.getRoles()));
-
             user.setMdp(existingPassword);
 
             Utilisateur savedUser = repository.save(user);
-            //historyService.saveHistory("modify User", "success", savedUser);
-
             UtilisateurDTO modifiedUserDto = UtilisateurDTO.fromEntity(savedUser);
             UserDtoJson userDtoJson = convertToUserDtoJson(modifiedUserDto);
             historyService.saveHistory("modify User", "success", savedUser);
@@ -150,7 +172,6 @@ public class UtilisateurServiceImpl implements UtilisateurService {
             Utilisateur user = userOptional.get();
             user.setState(10);
             Utilisateur savedUser = repository.save(user);
-            //historyService.saveHistory("modify User", "success", savedUser);
             UtilisateurDTO modifiedUserDto = UtilisateurDTO.fromEntity(savedUser);
             UserDtoJson userDtoJson = convertToUserDtoJson(modifiedUserDto);
             historyService.saveHistory("Approaval User", "success", savedUser);
@@ -163,11 +184,20 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         }
     }
 
-
     @Override
     public List<UserDtoJson> findAll() {
         return repository.findAll().stream()
                 .map(user -> convertToUserDtoJson(UtilisateurDTO.fromEntity(user)))
                 .collect(Collectors.toList());
+    }
+
+    private UserDtoJson convertToUserDtoJson(UtilisateurDTO dto) {
+        UserDtoJson json = new UserDtoJson();
+        json.setLastname(dto.getNom());
+        json.setName(dto.getPrenom());
+        json.setLogin(dto.getEmail());
+        json.setState(dto.getState());
+        json.setRoles(dto.getRoles());
+        return json;
     }
 }

@@ -1,3 +1,4 @@
+/*
 package com.glop.cibl_orga_sport.service.impl;
 
 import java.util.ArrayList;
@@ -6,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import com.glop.cibl_orga_sport.data.enumType.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +15,15 @@ import com.glop.cibl_orga_sport.data.Periode;
 import com.glop.cibl_orga_sport.data.Lieu;
 import com.glop.cibl_orga_sport.data.ConditionAge;
 import com.glop.cibl_orga_sport.data.Epreuve;
+import com.glop.cibl_orga_sport.data.enumType.CompetitionStatusEnum;
+import com.glop.cibl_orga_sport.data.enumType.CompetitionGenreEnum;
+import com.glop.cibl_orga_sport.data.enumType.CompetitionPhaseType;
 import com.glop.cibl_orga_sport.repository.CompetitionRepository;
 import com.glop.cibl_orga_sport.repository.ParticipantRepository;
 import com.glop.cibl_orga_sport.repository.LieuRepository;
 import com.glop.cibl_orga_sport.service.CompetitionService;
 import com.glop.cibl_orga_sport.repository.MatchRepository;
+import com.glop.cibl_orga_sport.data.enumType.MatchStatusEnum;
 import com.glop.cibl_orga_sport.dto.CompetitionDTO;
 import com.glop.cibl_orga_sport.dto.LieuDTO;
 import com.glop.cibl_orga_sport.dto.ParticipationDTO;
@@ -30,8 +34,10 @@ import com.glop.cibl_orga_sport.data.ParticipantSportif;
 import com.glop.cibl_orga_sport.data.EtapeEpreuve;
 import com.glop.cibl_orga_sport.data.Match;
 import com.glop.cibl_orga_sport.data.Participation;
+import com.glop.cibl_orga_sport.data.enumType.ParticipationStatusEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.glop.cibl_orga_sport.data.enumType.EtapeEpreuveEnum;
 
 @Service
 public class CompetitionServiceImpl implements CompetitionService {
@@ -66,33 +72,33 @@ public class CompetitionServiceImpl implements CompetitionService {
         if (dto.getEpreuves() != null) {
             dto.getEpreuves().forEach(eDto -> {
 
-    Epreuve e = EpreuveMapper.toEntity(eDto);
+                Epreuve e = EpreuveMapper.toEntity(eDto);
 
-    // Ajouter les participations
-    if (eDto.getParticipations() != null) {
+                // Ajouter les participations
+                if (eDto.getParticipations() != null) {
 
-        for (ParticipationDTO pDto : eDto.getParticipations()) {
+                    for (ParticipationDTO pDto : eDto.getParticipations()) {
 
-            Long pId = pDto.getParticipant().getIdParticipant();
+                        Long pId = pDto.getParticipant().getIdParticipant();
 
-            Participant participant = participantRepository.findById(pId)
-                    .orElseThrow(() -> new IllegalArgumentException("Participant non trouvé : " + pId));
+                        Participant participant = participantRepository.findById(pId)
+                                .orElseThrow(() -> new IllegalArgumentException("Participant non trouvé : " + pId));
 
-            Participation participation = new Participation();
-            participation.setParticipant(participant);
-            participation.setCompetition(c);
-            participation.setEpreuve(e);
-            participation.setStatut(
-                    pDto.getStatut() != null
-                            ? pDto.getStatut()
-                            : ParticipationStatusEnum.INSCRIT);
+                        Participation participation = new Participation();
+                        participation.setParticipant(participant);
+                        participation.setCompetition(c);
+                        participation.setEpreuve(e);
+                        participation.setStatut(
+                                pDto.getStatut() != null
+                                        ? pDto.getStatut()
+                                        : ParticipationStatusEnum.INSCRIT);
 
-            e.addParticipation(participation);
-        }
-    }
+                        e.addParticipation(participation);
+                    }
+                }
 
-    c.addEpreuve(e);
-});
+                c.addEpreuve(e);
+            });
         }
 
         // Process participations at competition level
@@ -164,12 +170,12 @@ public class CompetitionServiceImpl implements CompetitionService {
         //c.getParticipations().clear();
         //c.getParticipations().addAll(participationMap.values());
 
-       // System.out.println("Total participations in competition: " + c.getParticipations().size());
+        // System.out.println("Total participations in competition: " + c.getParticipations().size());
     }
 
     private void validateParticipantSize(Competition c, Participant p) {
         if (c.getEpreuves().isEmpty()) return;
-        
+
         // Use first epreuve for common rules if any, or iterate all
         // The user mentioned tailleEquipe in EpreuveDTO/Entity
         for (Epreuve e : c.getEpreuves()) {
@@ -180,7 +186,7 @@ public class CompetitionServiceImpl implements CompetitionService {
                 }
             } else {
                 if (!(p instanceof ParticipantEquipe)) {
-                   throw new IllegalArgumentException("L'épreuve '" + e.getNomEpreuve() + "' est en équipe (taille " + targetSize + ").");
+                    throw new IllegalArgumentException("L'épreuve '" + e.getNomEpreuve() + "' est en équipe (taille " + targetSize + ").");
                 }
                 ParticipantEquipe pe = (ParticipantEquipe) p;
                 if (pe.getSportifs().size() != targetSize) {
@@ -233,33 +239,33 @@ public class CompetitionServiceImpl implements CompetitionService {
             c.getEpreuves().clear();
             dto.getEpreuves().forEach(eDto -> {
 
-    Epreuve e = EpreuveMapper.toEntity(eDto);
+                Epreuve e = EpreuveMapper.toEntity(eDto);
 
-    // Ajouter les participations
-    if (eDto.getParticipations() != null) {
+                // Ajouter les participations
+                if (eDto.getParticipations() != null) {
 
-        for (ParticipationDTO pDto : eDto.getParticipations()) {
+                    for (ParticipationDTO pDto : eDto.getParticipations()) {
 
-            Long pId = pDto.getParticipant().getIdParticipant();
+                        Long pId = pDto.getParticipant().getIdParticipant();
 
-            Participant participant = participantRepository.findById(pId)
-                    .orElseThrow(() -> new IllegalArgumentException("Participant non trouvé : " + pId));
+                        Participant participant = participantRepository.findById(pId)
+                                .orElseThrow(() -> new IllegalArgumentException("Participant non trouvé : " + pId));
 
-            Participation participation = new Participation();
-            participation.setParticipant(participant);
-            participation.setCompetition(c);
-            participation.setEpreuve(e);
-            participation.setStatut(
-                    pDto.getStatut() != null
-                            ? pDto.getStatut()
-                            : ParticipationStatusEnum.INSCRIT);
+                        Participation participation = new Participation();
+                        participation.setParticipant(participant);
+                        participation.setCompetition(c);
+                        participation.setEpreuve(e);
+                        participation.setStatut(
+                                pDto.getStatut() != null
+                                        ? pDto.getStatut()
+                                        : ParticipationStatusEnum.INSCRIT);
 
-            e.addParticipation(participation);
-        }
-    }
+                        e.addParticipation(participation);
+                    }
+                }
 
-    c.addEpreuve(e);
-});
+                c.addEpreuve(e);
+            });
         }
 
         // Cleanup and process participations
@@ -443,7 +449,7 @@ public class CompetitionServiceImpl implements CompetitionService {
             }
 
             // On a moved the participations to Competition, so no need to check on Epreuve
-            // We'll leave it out, though you might want to check the overall Competition participants size 
+            // We'll leave it out, though you might want to check the overall Competition participants size
             // vs epreuve.getNombreEquipeParMatch().
             if (competition.getParticipations() == null || competition.getParticipations().isEmpty()) {
                 throw new IllegalStateException("La compétition doit avoir au moins un participant inscrit.");
@@ -538,14 +544,16 @@ public class CompetitionServiceImpl implements CompetitionService {
         }
     }
 
-    /**
+    */
+/**
      * Calcule la liste des phases (étapes) en fonction du nombre d'équipes,
      * du nombre d'équipes par match, et du nombre d'équipes qui avancent par match.
-     * 
+     *
      * L'algorithme simule les tours successifs jusqu'à la finale,
      * puis attribue les noms de phases en partant de la fin:
      * FINALE → DEMI_FINALE → QUART_DE_FINALE → HUITIEME → SELECTION → PRE_SELECTION
-     */
+     *//*
+
     private List<EtapeEpreuveEnum> computePhases(
             int nbEquipes, int nbPerMatch, int nbAdvance) {
 
@@ -674,4 +682,4 @@ public class CompetitionServiceImpl implements CompetitionService {
         System.out.println("Compétition non trouvée : " + id);
         return null;
     }
-}
+}*/

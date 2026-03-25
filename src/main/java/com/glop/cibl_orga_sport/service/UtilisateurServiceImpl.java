@@ -17,12 +17,8 @@ import com.glop.cibl_orga_sport.repository.SportifRepository;
 import com.glop.cibl_orga_sport.repository.ParticipantSportifRepository;
 import com.glop.cibl_orga_sport.mapper.SportifMapper;
 import com.glop.cibl_orga_sport.mapper.VisiteurMapper;
-import com.glop.cibl_orga_sport.exception.EntityAlreadyExistException;
 import com.glop.cibl_orga_sport.exception.EntityNotFoundException;
 import com.glop.cibl_orga_sport.exception.ErrorCodes;
-import com.glop.cibl_orga_sport.repository.HistoryDao;
-import com.glop.cibl_orga_sport.repository.RolesDao;
-import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -100,7 +96,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     @Override
     public List<ParticipantSportif> searchParticipantSportifs(String query) {
         return participantSportifRepository.searchParticipantSportifs(query);
-    }  // ← accolade manquante ici
+    } 
 
 
     @Override

@@ -3,6 +3,7 @@ package com.glop.cibl_orga_sport.service.impl;
 import com.glop.cibl_orga_sport.data.Incident;
 import com.glop.cibl_orga_sport.data.Competition;
 import com.glop.cibl_orga_sport.data.Lieu;
+import com.glop.cibl_orga_sport.data.enumType.IncidentStatutEnum;
 import com.glop.cibl_orga_sport.data.enumType.NiveauImpactEnum;
 import com.glop.cibl_orga_sport.dto.IncidentDTO;
 import com.glop.cibl_orga_sport.mapper.IncidentMapper;
@@ -36,6 +37,22 @@ public class IncidentServiceImpl implements IncidentService {
                 .map(IncidentMapper::toDTO)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<IncidentDTO> getIncidentsOuverts() {
+        return incidentRepository.findByStatutIn(List.of(IncidentStatutEnum.OUVERT, IncidentStatutEnum.EN_COURS))
+                .stream()
+                .map(IncidentMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<IncidentDTO> getIncidentsHistorique() {
+        return incidentRepository.findByStatutIn(List.of(IncidentStatutEnum.FERME, IncidentStatutEnum.ANNULE))
+                .stream()
+                .map(IncidentMapper::toDTO)
+                .collect(Collectors.toList());
+    }
     
     @Override
     public List<IncidentDTO> getIncidentsByCompetition(Long competitionId) {
@@ -64,6 +81,11 @@ public class IncidentServiceImpl implements IncidentService {
     @Override
     public IncidentDTO createIncident(IncidentDTO incidentDTO) {
         Incident incident = IncidentMapper.toEntity(incidentDTO);
+
+        if (incidentDTO.getStatut() != null) {
+            incident.setStatut(incidentDTO.getStatut());
+        }
+        incident.setEstResolu(incident.getStatut() == IncidentStatutEnum.FERME);
         
         if (incidentDTO.getIdCompetition() != null) {
             Optional<Competition> competition = competitionRepository.findById(incidentDTO.getIdCompetition());
@@ -87,7 +109,17 @@ public class IncidentServiceImpl implements IncidentService {
             incident.setTitre(incidentDTO.getTitre());
             incident.setDescription(incidentDTO.getDescription());
             incident.setNiveauImpact(incidentDTO.getNiveauImpact());
-            incident.setEstResolu(incidentDTO.isResolu());
+
+            IncidentStatutEnum statut = incidentDTO.getStatut();
+            if (statut != null) {
+                incident.setStatut(statut);
+                incident.setEstResolu(statut == IncidentStatutEnum.FERME || incidentDTO.isResolu());
+            } else {
+                incident.setEstResolu(incidentDTO.isResolu());
+                if (incidentDTO.isResolu()) {
+                    incident.setStatut(IncidentStatutEnum.FERME);
+                }
+            }
             
             if (incidentDTO.getIdLieu() != null) {
                 Optional<Lieu> lieu = lieuRepository.findById(incidentDTO.getIdLieu());
@@ -106,6 +138,7 @@ public class IncidentServiceImpl implements IncidentService {
         if (existingIncident.isPresent()) {
             Incident incident = existingIncident.get();
             incident.setEstResolu(true);
+            incident.setStatut(IncidentStatutEnum.FERME);
             Incident updatedIncident = incidentRepository.save(incident);
             return IncidentMapper.toDTO(updatedIncident);
         }

@@ -7,6 +7,8 @@ import java.util.Optional;
 
 public interface IncidentService {
     List<IncidentDTO> getAllIncidents();
+    List<IncidentDTO> getIncidentsOuverts();
+    List<IncidentDTO> getIncidentsHistorique();
     List<IncidentDTO> getIncidentsByCompetition(Long competitionId);
     List<IncidentDTO> getIncidentsNonResolus();
     Optional<IncidentDTO> getIncidentById(Long id);

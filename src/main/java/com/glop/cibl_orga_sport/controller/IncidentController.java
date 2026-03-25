@@ -22,6 +22,16 @@ public class IncidentController {
     public List<IncidentDTO> getAllIncidents() {
         return incidentService.getAllIncidents();
     }
+
+    @GetMapping("/ouverts")
+    public List<IncidentDTO> getIncidentsOuverts() {
+        return incidentService.getIncidentsOuverts();
+    }
+
+    @GetMapping("/historique")
+    public List<IncidentDTO> getIncidentsHistorique() {
+        return incidentService.getIncidentsHistorique();
+    }
     
     @GetMapping("/{id}")
     public ResponseEntity<IncidentDTO> getIncidentById(@PathVariable Long id) {

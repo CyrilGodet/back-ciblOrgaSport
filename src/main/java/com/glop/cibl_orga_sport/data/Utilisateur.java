@@ -47,6 +47,9 @@ public class Utilisateur implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
     private List<History> historyList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "createur", cascade = CascadeType.PERSIST)
+    private List<Incident> incidentsCrees = new ArrayList<>();
+
     public Utilisateur(String nom, String prenom, String email, int age, Lieu lieu) {
         this.nom = nom;
         this.prenom = prenom;

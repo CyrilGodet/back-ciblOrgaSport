@@ -43,7 +43,7 @@ public class Incident {
     @Column(nullable = false)
     private IncidentStatutEnum statut;
 
-    @Column
+    @ManyToOne
     private Utilisateur createur;
 
     
@@ -124,5 +124,21 @@ public class Incident {
     
     public void setEstResolu(boolean resolu) {
         this.estResolu = resolu;
+    }
+
+    public IncidentStatutEnum getStatut() {
+        return statut;
+    }
+
+    public void setStatut(IncidentStatutEnum statut) {
+        this.statut = statut;
+    }
+
+    public Utilisateur getCreateur() {
+        return createur;
+    }
+
+    public void setCreateur(Utilisateur createur) {
+        this.createur = createur;
     }
 }

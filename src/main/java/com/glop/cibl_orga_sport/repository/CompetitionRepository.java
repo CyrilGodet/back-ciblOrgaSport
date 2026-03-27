@@ -7,4 +7,7 @@ import java.util.List;
 
 public interface CompetitionRepository extends JpaRepository<Competition, Long> {
     List<Competition> findByStatut(CompetitionStatusEnum statut);
+
+    @org.springframework.data.jpa.repository.Query("SELECT DISTINCT c FROM Competition c JOIN c.epreuves e WHERE e.commissaireId = :commissaireId")
+    List<Competition> findByCommissaireId(@org.springframework.data.repository.query.Param("commissaireId") Long commissaireId);
 }

@@ -79,6 +79,9 @@ public class Epreuve {
     @Column(nullable = false)
     private TypeResultatEnum typeResultat;
 
+    @Column(nullable = true)
+    private Long commissaireId;
+
     public Epreuve() {
     }
 
@@ -219,6 +222,14 @@ public class Epreuve {
 
     public void setTypeResultat(TypeResultatEnum typeResultat) {
         this.typeResultat = typeResultat;
+    }
+
+    public Long getCommissaireId() {
+        return commissaireId;
+    }
+
+    public void setCommissaireId(Long commissaireId) {
+        this.commissaireId = commissaireId;
     }
 
         public void addParticipation(Participation p) {

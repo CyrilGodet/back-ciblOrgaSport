@@ -91,30 +91,31 @@ INSERT INTO participant_equipe (nom_equipe, id_participant) VALUES
 -- Création des utilisateurs
 -- ============================
 
-INSERT INTO utilisateur (nom, prenom, email, age, user_type, id_lieu) VALUES
-('Martin','Lucas', 'lucas.martin@example.com', 25, 'SPORTIF', 11),
-('Bernard','Hugo', 'hugo.bernard@example.com', 28, 'SPORTIF', 12),
-('Dubois','Nathan', 'nathan.dubois@example.com', 22, 'SPORTIF', 13),
-('Thomas','Louis', 'louis.thomas@example.com', 30, 'SPORTIF', 14),
-('Robert','Jules', 'jules.robert@example.com', 24, 'SPORTIF', 15),
-('Richard','Adam', 'adam.richard@example.com', 26, 'SPORTIF', 16),
-('Petit','Léo', 'leo.petit@example.com', 27, 'SPORTIF', 17),
-('Durand','Noah', 'noah.durand@example.com', 23, 'SPORTIF', 18),
-('Leroy','Ethan', 'ethan.leroy@example.com', 29, 'SPORTIF', 19),
-('Moreau','Gabriel', 'gabriel.moreau@example.com', 25, 'SPORTIF', 20),
-('Simon','Arthur', 'arthur.simon@example.com', 21, 'SPORTIF', 21),
-('Laurent','Paul', 'paul.laurent@example.com', 32, 'SPORTIF', 22),
-('Lefebvre','Tom', 'tom.lefebvre@example.com', 26, 'SPORTIF', 23),
-('Michel','Enzo', 'enzo.michel@example.com', 24, 'SPORTIF', 24),
-('Garcia','Raphaël', 'raphael.garcia@example.com', 28, 'SPORTIF', 25),
-('David','Maxime', 'maxime.david@example.com', 27, 'SPORTIF', 26),
-('Bertrand','Antoine', 'antoine.bertrand@example.com', 25, 'SPORTIF', 27),
-('Roux','Mathis', 'mathis.roux@example.com', 23, 'SPORTIF', 28),
-('Vincent','Alexis', 'alexis.vincent@example.com', 29, 'SPORTIF', 29),
-('Fournier','Clément', 'clement.fournier@example.com', 31, 'SPORTIF', 30),
-('Admin', 'Jean', 'admin@glop.com', 40, 'ADMIN', 31),
-('Alice', 'Commissaire', 'commissaire@glop.com', 35, 'COMMISSAIRE', 32),
-('Bob', 'Visiteur', 'visiteur@glop.com', 20, 'VISITEUR', 33);
+INSERT INTO utilisateur (nom, prenom, email, age, state, id_lieu, dtype) VALUES
+('Martin','Lucas', 'lucas.martin@example.com', 25, 1, 11, 'SPORTIF'),
+('Bernard','Hugo', 'hugo.bernard@example.com', 28, 1, 12, 'SPORTIF'),
+('Dubois','Nathan', 'nathan.dubois@example.com', 22, 1, 13, 'SPORTIF'),
+('Thomas','Louis', 'louis.thomas@example.com', 30, 1, 14, 'SPORTIF'),
+('Robert','Jules', 'jules.robert@example.com', 24, 1, 15, 'SPORTIF'),
+('Richard','Adam', 'adam.richard@example.com', 26, 1, 16, 'SPORTIF'),
+('Petit','Léo', 'leo.petit@example.com', 27, 1, 17, 'SPORTIF'),
+('Durand','Noah', 'noah.durand@example.com', 23, 1, 18, 'SPORTIF'),
+('Leroy','Ethan', 'ethan.leroy@example.com', 29, 1, 19, 'SPORTIF'),
+
+('Moreau','Gabriel', 'gabriel.moreau@example.com', 25, 1, 20, 'SPORTIF'),
+('Simon','Arthur', 'arthur.simon@example.com', 21, 1, 21, 'SPORTIF'),
+('Laurent','Paul', 'paul.laurent@example.com', 32, 1, 22, 'SPORTIF'),
+('Lefebvre','Tom', 'tom.lefebvre@example.com', 26, 1, 23, 'SPORTIF'),
+('Michel','Enzo', 'enzo.michel@example.com', 24, 1, 24, 'SPORTIF'),
+('Garcia','Raphaël', 'raphael.garcia@example.com', 28, 1, 25, 'SPORTIF'),
+('David','Maxime', 'maxime.david@example.com', 27, 1, 26, 'SPORTIF'),
+('Bertrand','Antoine', 'antoine.bertrand@example.com', 25, 1, 27, 'SPORTIF'),
+('Roux','Mathis', 'mathis.roux@example.com', 23, 1, 28, 'SPORTIF'),
+('Vincent','Alexis', 'alexis.vincent@example.com', 29, 1, 29, 'SPORTIF'),
+('Fournier','Clément', 'clement.fournier@example.com', 31, 1, 30, 'SPORTIF'),
+('Admin', 'Jean', 'admin@glop.com', 40, 1, 31, 'ADMIN'),
+('Alice', 'Commissaire', 'commissaire@glop.com', 35, 1, 32, 'COMMISSAIRE'),
+('Bob', 'Visiteur', 'visiteur@glop.com', 20, 1, 33, 'VISITEUR');
 
 -- ============================
 -- Liaisons équipes ↔ sportifs (Via participant_equipe_sportif)
@@ -159,17 +160,17 @@ INSERT INTO participant_sportif (sportif_id, id_participant) VALUES
 -- Ajout de Volontaires
 -- ============================
 
-INSERT INTO utilisateur (nom, prenom, email, age, user_type, id_lieu) VALUES
-('Dupont','Marie','marie.dupont@example.com', 30, 'VOLONTAIRE', 1),
-('Lemoine','Julien','julien.lemoine@example.com', 35, 'VOLONTAIRE', 2),
-('Carpentier','Sophie','sophie.carpentier@example.com', 28, 'VOLONTAIRE', 3),
-('Morel','Antoine','antoine.morel@example.com', 40, 'VOLONTAIRE', 4),
-('Fournier','Emma','emma.fournier@example.com', 32, 'VOLONTAIRE', 5),
-('Rousseau','Lucas','lucas.rousseau@example.com', 27, 'VOLONTAIRE', 6),
-('Blanc','Clara','clara.blanc@example.com', 26, 'VOLONTAIRE', 7),
-('Gauthier','Thomas','thomas.gauthier@example.com', 29, 'VOLONTAIRE', 8),
-('Martinez','Laura','laura.martinez@example.com', 31, 'VOLONTAIRE', 9),
-('Petit','Maxime','maxime.petit@example.com', 33, 'VOLONTAIRE', 10);
+INSERT INTO utilisateur (nom, prenom, email, age, state, id_lieu, dtype) VALUES
+('Dupont','Marie','marie.dupont@example.com', 30, 1, 1, 'VOLONTAIRE'),
+('Lemoine','Julien','julien.lemoine@example.com', 35, 1, 2, 'VOLONTAIRE'),
+('Carpentier','Sophie','sophie.carpentier@example.com', 28, 1, 3, 'VOLONTAIRE'),
+('Morel','Antoine','antoine.morel@example.com', 40, 1, 4, 'VOLONTAIRE'),
+('Fournier','Emma','emma.fournier@example.com', 32, 1, 5, 'VOLONTAIRE'),
+('Rousseau','Lucas','lucas.rousseau@example.com', 27, 1, 6, 'VOLONTAIRE'),
+('Blanc','Clara','clara.blanc@example.com', 26, 1, 7, 'VOLONTAIRE'),
+('Gauthier','Thomas','thomas.gauthier@example.com', 29, 1, 8, 'VOLONTAIRE'),
+('Martinez','Laura','laura.martinez@example.com', 31, 1, 9, 'VOLONTAIRE'),
+('Petit','Maxime','maxime.petit@example.com', 33, 1, 10, 'VOLONTAIRE');
 
 
 
@@ -321,6 +322,6 @@ INSERT INTO affectation_volontaire (
 INSERT INTO compte (username, password, type, active, date_creation, id_utilisateur) VALUES
 ('admin', 'password', 'ADMIN', true, NOW(), 21),
 ('commissaire', 'password', 'COMMISSAIRE', true, NOW(), 22),
-('sportif', 'password', 'SPORTIF', true, NOW(), 23),
-('volontaire', 'password', 'VOLONTAIRE', true, NOW(), 25),
-('visiteur', 'password', 'VISITEUR', true, NOW(), 33);
+('visiteur', 'password', 'VISITEUR', true, NOW(), 23),
+('sportif', 'password', 'SPORTIF', true, NOW(), 1),
+('volontaire', 'password', 'VOLONTAIRE', true, NOW(), 24);

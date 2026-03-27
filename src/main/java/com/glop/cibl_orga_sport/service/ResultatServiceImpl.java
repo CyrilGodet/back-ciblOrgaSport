@@ -79,6 +79,7 @@ public class ResultatServiceImpl implements ResultatService {
                 detail.setParticipant(equipe);
                 detail.setRang(detailDTO.getRang());
                 detail.setStatus(detailDTO.getStatus());
+                detail.setValeur(detailDTO.getValeur());
 
                 resultat.addDetail(detail);
                 logger.info("Ajout du détail pour le participant ID: {}, rang: {}, status: {}",
@@ -159,7 +160,7 @@ public class ResultatServiceImpl implements ResultatService {
             for (ResultatDetails matchDetail : matchResultat.getDetails()) {
                 // Ajouter le détail au résultat de l'étape
                 ResultatDetails etapeDetail = new ResultatDetails(
-                        matchDetail.getParticipant(), etapeResultat, matchDetail.getRang(), matchDetail.getStatus());
+                        matchDetail.getParticipant(), etapeResultat, matchDetail.getRang(), matchDetail.getStatus(), matchDetail.getValeur());
                 etapeResultat.addDetail(etapeDetail);
 
                 // Mettre à jour la participation

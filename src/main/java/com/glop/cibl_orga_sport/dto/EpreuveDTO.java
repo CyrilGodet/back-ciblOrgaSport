@@ -26,6 +26,7 @@ public class EpreuveDTO {
     private CompetitionPhaseTypeDto phaseOnGoing;
     private int tailleEquipe;
     private TypeResultatEnum typeResultat;
+    private Long commissaireId;
 
     public EpreuveDTO() {
     }
@@ -192,6 +193,14 @@ public class EpreuveDTO {
 
     public void setTypeResultat(TypeResultatEnum typeResultat) {
         this.typeResultat = typeResultat;
+    }
+
+    public Long getCommissaireId() {
+        return commissaireId;
+    }
+
+    public void setCommissaireId(Long commissaireId) {
+        this.commissaireId = commissaireId;
     }
 
 }

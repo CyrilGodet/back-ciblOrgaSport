@@ -15,7 +15,8 @@ public class ResultatController {
     private ResultatService resultatService;
 
     @PutMapping("/match/{matchId}")
-    public ResponseEntity<ResultatDTO> saveDraftResultat(@PathVariable Long matchId, @RequestBody ResultatDTO resultatDTO) {
+    public ResponseEntity<ResultatDTO> saveDraftResultat(@PathVariable Long matchId,
+            @RequestBody ResultatDTO resultatDTO) {
         ResultatDTO savedResult = resultatService.saveDraftResultat(matchId, resultatDTO);
         return ResponseEntity.ok(savedResult);
     }

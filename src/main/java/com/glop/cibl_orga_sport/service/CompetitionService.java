@@ -33,4 +33,6 @@ public interface CompetitionService {
     Competition startCompetition(Long id);
 
     Competition finishCompetition(Long id);
+
+    List<Competition> getCompetitionsByCommissaireId(Long commissaireId);
 }

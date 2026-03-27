@@ -143,4 +143,11 @@ public class CompetitionController {
         }
         return ResponseEntity.badRequest().build();
     }
+
+    @GetMapping("/commissaire/{commissaireId}")
+    public List<CompetitionDTO> getCompetitionsByCommissaire(@PathVariable Long commissaireId) {
+        return service.getCompetitionsByCommissaireId(commissaireId).stream()
+                .map(CompetitionMapper::toDTO)
+                .collect(Collectors.toList());
+    }
 }

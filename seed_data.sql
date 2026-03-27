@@ -214,6 +214,38 @@ INSERT INTO competition (
     1
 );
 
+INSERT INTO epreuve (
+    nom_epreuve,
+    description,
+    age_min,
+    age_max,
+    date_debut,
+    date_fin,
+    discipline,
+    genre,
+    nb_elim_par_match,
+    nombre_equipe_par_match,
+    statut,
+    taille_equipe,
+    competition_id_competition,
+    type_resultat
+) VALUES (
+    'Épreuve dsfhdshfklfdhskjh',                   -- nom
+    'Épreuve test', -- description
+    1,                                -- age_min
+    99,                               -- age_max
+    CURRENT_DATE,                     -- date_debut
+    CURRENT_DATE + INTERVAL '1 day',  -- date_fin
+    0,                                -- discipline (0..8)
+    0,                                -- genre (0..2)
+    1,                                -- nb_elim_par_match
+    2,                                -- nombre_equipe_par_match
+    0,                                -- statut (0..5)
+    2,                                -- taille_equipe
+    2,                                -- competition existante
+    'POINTS'                          -- type_resultat
+);
+
 
 INSERT INTO epreuve (
     nom_epreuve,
@@ -242,7 +274,7 @@ INSERT INTO epreuve (
     1,                                -- nb_elim_par_match
     2,                                -- nombre_equipe_par_match
     0,                                -- statut (0..5)
-    1,                                -- taille_equipe
+    2,                                -- taille_equipe
     1,                                -- competition existante
     'POINTS'                          -- type_resultat
 );
@@ -289,5 +321,6 @@ INSERT INTO affectation_volontaire (
 INSERT INTO compte (username, password, type, active, date_creation, id_utilisateur) VALUES
 ('admin', 'password', 'ADMIN', true, NOW(), 21),
 ('commissaire', 'password', 'COMMISSAIRE', true, NOW(), 22),
+('sportif', 'password', 'SPORTIF', true, NOW(), 23),
 ('volontaire', 'password', 'VOLONTAIRE', true, NOW(), 25),
 ('visiteur', 'password', 'VISITEUR', true, NOW(), 33);

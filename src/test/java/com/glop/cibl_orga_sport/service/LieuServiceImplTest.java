@@ -1,6 +1,8 @@
 package com.glop.cibl_orga_sport.service;
 
 import com.glop.cibl_orga_sport.data.Lieu;
+import com.glop.cibl_orga_sport.data.enumType.LieuCategorieEnum;
+import com.glop.cibl_orga_sport.dto.LieuDTO;
 import com.glop.cibl_orga_sport.repository.LieuRepository;
 import com.glop.cibl_orga_sport.service.impl.LieuServiceImpl;
 
@@ -33,14 +35,18 @@ class LieuServiceImplTest {
         lieu.setIdLieu(1L);
 
         when(lieuRepository.save(any(Lieu.class))).thenReturn(lieu);
-        /*
-        Lieu result = lieuService.createLieu("Centre Aquatique Olympique Métropole du Grand Saint-Denis", "Saint-Denis", "361-363, Av. du Président Wilson");
+
+        LieuDTO dto = new LieuDTO();
+        dto.setNomLieu("Centre Aquatique Olympique Métropole du Grand Saint-Denis");
+        dto.setVille("Saint-Denis");
+        dto.setAdresse("361-363, Av. du Président Wilson");
+
+        Lieu result = lieuService.createLieu(dto);
 
         assertNotNull(result);
         assertEquals("Centre Aquatique Olympique Métropole du Grand Saint-Denis", result.getNomLieu());
         assertEquals("Saint-Denis", result.getVille());
         assertEquals("361-363, Av. du Président Wilson", result.getAdresse());
-         */
     }
 
     @Test
@@ -117,5 +123,25 @@ class LieuServiceImplTest {
         boolean result = lieuService.deleteLieu(999L);
 
         assertFalse(result);
+    }
+
+    @Test
+    void testSearchLieux() {
+        when(lieuRepository.findByNomLieuContainingIgnoreCase("aquatique"))
+                .thenReturn(List.of(new Lieu("Centre", "Paris", "Adr", LieuCategorieEnum.EVENEMENT)));
+
+        List<Lieu> result = lieuService.searchLieux("aquatique");
+
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    void testGetLieuxForAffectations() {
+        when(lieuRepository.findByCategorieOrderByNomLieuAsc(LieuCategorieEnum.EVENEMENT))
+                .thenReturn(List.of(new Lieu("Site", "Paris", "Adr", LieuCategorieEnum.EVENEMENT)));
+
+        List<Lieu> result = lieuService.getLieuxForAffectations();
+
+        assertEquals(1, result.size());
     }
 }

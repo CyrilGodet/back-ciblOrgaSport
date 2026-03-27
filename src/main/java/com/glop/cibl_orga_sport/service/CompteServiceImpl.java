@@ -56,6 +56,7 @@ public class CompteServiceImpl implements CompteService {
     @Override
     public Optional<UtilisateurDTO> login(String username, String password) {
         return repository.findByUsername(username)
+                .or(() -> repository.findByUtilisateurEmail(username))
                 .filter(c -> c.getPassword().equals(password))
                 .map(c -> UtilisateurMapper.toSpecificDTO(c.getUtilisateur()));
     }

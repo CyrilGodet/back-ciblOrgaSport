@@ -9,7 +9,7 @@ import jakarta.persistence.DiscriminatorValue;
 public class Commissaire extends Utilisateur {
 
     @Column
-    public boolean estAcrediteCEN;
+    public Boolean estAcrediteCEN;
 
     public Commissaire() {
         super();
@@ -17,5 +17,14 @@ public class Commissaire extends Utilisateur {
 
     public Commissaire(String nom, String prenom, String email, int age, Lieu lieu) {
         super(nom, prenom, email, age, lieu);
+        this.estAcrediteCEN = false;
+    }
+
+    public Boolean isEstAcrediteCEN() {
+        return estAcrediteCEN;
+    }
+
+    public void setEstAcrediteCEN(Boolean estAcrediteCEN) {
+        this.estAcrediteCEN = estAcrediteCEN;
     }
 }

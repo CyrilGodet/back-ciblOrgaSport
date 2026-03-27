@@ -3,18 +3,18 @@
 -- ============================
 
 -- Suppression des enfants d'abord
--- TRUNCATE TABLE
--- participation,
--- etape_epreuve,
--- etape_equipe,
--- competition_phases,
--- epreuve,
--- equipe_sportif,
--- utilisateur,
--- equipe,
--- competition,
--- lieu
--- RESTART IDENTITY CASCADE;
+TRUNCATE TABLE
+ participation,
+ etape_epreuve,
+etape_equipe,
+ competition_phases,
+ epreuve,
+ equipe_sportif,
+utilisateur,
+ equipe,
+ competition,
+ lieu
+ RESTART IDENTITY CASCADE;
 
 -- Réinitialisation des séquences
 -- ALTER SEQUENCE equipe_id_equipe_seq RESTART WITH 1;
@@ -91,30 +91,52 @@ INSERT INTO participant_equipe (nom_equipe, id_participant) VALUES
 -- Création des utilisateurs
 -- ============================
 
-INSERT INTO utilisateur (nom, prenom, email, age, user_type, id_lieu) VALUES
-('Martin','Lucas', 'lucas.martin@example.com', 25, 'SPORTIF', 11),
-('Bernard','Hugo', 'hugo.bernard@example.com', 28, 'SPORTIF', 12),
-('Dubois','Nathan', 'nathan.dubois@example.com', 22, 'SPORTIF', 13),
-('Thomas','Louis', 'louis.thomas@example.com', 30, 'SPORTIF', 14),
-('Robert','Jules', 'jules.robert@example.com', 24, 'SPORTIF', 15),
-('Richard','Adam', 'adam.richard@example.com', 26, 'SPORTIF', 16),
-('Petit','Léo', 'leo.petit@example.com', 27, 'SPORTIF', 17),
-('Durand','Noah', 'noah.durand@example.com', 23, 'SPORTIF', 18),
-('Leroy','Ethan', 'ethan.leroy@example.com', 29, 'SPORTIF', 19),
-('Moreau','Gabriel', 'gabriel.moreau@example.com', 25, 'SPORTIF', 20),
-('Simon','Arthur', 'arthur.simon@example.com', 21, 'SPORTIF', 21),
-('Laurent','Paul', 'paul.laurent@example.com', 32, 'SPORTIF', 22),
-('Lefebvre','Tom', 'tom.lefebvre@example.com', 26, 'SPORTIF', 23),
-('Michel','Enzo', 'enzo.michel@example.com', 24, 'SPORTIF', 24),
-('Garcia','Raphaël', 'raphael.garcia@example.com', 28, 'SPORTIF', 25),
-('David','Maxime', 'maxime.david@example.com', 27, 'SPORTIF', 26),
-('Bertrand','Antoine', 'antoine.bertrand@example.com', 25, 'SPORTIF', 27),
-('Roux','Mathis', 'mathis.roux@example.com', 23, 'SPORTIF', 28),
-('Vincent','Alexis', 'alexis.vincent@example.com', 29, 'SPORTIF', 29),
-('Fournier','Clément', 'clement.fournier@example.com', 31, 'SPORTIF', 30),
-('Admin', 'Jean', 'admin@glop.com', 40, 'ADMIN', 31),
-('Alice', 'Commissaire', 'commissaire@glop.com', 35, 'COMMISSAIRE', 32),
-('Bob', 'Visiteur', 'visiteur@glop.com', 20, 'VISITEUR', 33);
+INSERT INTO roles (designation)
+SELECT 'admin'
+WHERE NOT EXISTS (SELECT 1 FROM roles WHERE designation = 'admin');
+
+INSERT INTO roles (designation)
+SELECT 'commissaire'
+WHERE NOT EXISTS (SELECT 1 FROM roles WHERE designation = 'commissaire');
+
+INSERT INTO roles (designation)
+SELECT 'sportif'
+WHERE NOT EXISTS (SELECT 1 FROM roles WHERE designation = 'sportif');
+
+
+INSERT INTO roles (designation)
+SELECT 'volontaire'
+WHERE NOT EXISTS (SELECT 1 FROM roles WHERE designation = 'volontaire');    
+
+
+INSERT INTO roles (designation)
+SELECT 'visiteur'
+WHERE NOT EXISTS (SELECT 1 FROM roles WHERE designation = 'visiteur');
+
+INSERT INTO utilisateur (nom, prenom, email, age, dtype, id_lieu, state, id_roles) VALUES
+('Martin','Lucas', 'lucas.martin@example.com', 25, 'SPORTIF', 11, 10, NULL),
+('Bernard','Hugo', 'hugo.bernard@example.com', 28, 'SPORTIF', 12, 10, NULL),
+('Dubois','Nathan', 'nathan.dubois@example.com', 22, 'SPORTIF', 13, 10, NULL),
+('Thomas','Louis', 'louis.thomas@example.com', 30, 'SPORTIF', 14, 10, NULL),
+('Robert','Jules', 'jules.robert@example.com', 24, 'SPORTIF', 15, 10, NULL),
+('Richard','Adam', 'adam.richard@example.com', 26, 'SPORTIF', 16, 10, NULL),
+('Petit','Léo', 'leo.petit@example.com', 27, 'SPORTIF', 17, 10, NULL),
+('Durand','Noah', 'noah.durand@example.com', 23, 'SPORTIF', 18, 10, NULL),
+('Leroy','Ethan', 'ethan.leroy@example.com', 29, 'SPORTIF', 19, 10, NULL),
+('Moreau','Gabriel', 'gabriel.moreau@example.com', 25, 'SPORTIF', 20, 10, NULL),
+('Simon','Arthur', 'arthur.simon@example.com', 21, 'SPORTIF', 21, 10, NULL),
+('Laurent','Paul', 'paul.laurent@example.com', 32, 'SPORTIF', 22, 10, NULL),
+('Lefebvre','Tom', 'tom.lefebvre@example.com', 26, 'SPORTIF', 23, 10, NULL),
+('Michel','Enzo', 'enzo.michel@example.com', 24, 'SPORTIF', 24, 10, NULL),
+('Garcia','Raphaël', 'raphael.garcia@example.com', 28, 'SPORTIF', 25, 10, NULL),
+('David','Maxime', 'maxime.david@example.com', 27, 'SPORTIF', 26, 10, NULL),
+('Bertrand','Antoine', 'antoine.bertrand@example.com', 25, 'SPORTIF', 27, 10, NULL),
+('Roux','Mathis', 'mathis.roux@example.com', 23, 'SPORTIF', 28, 10, NULL),
+('Vincent','Alexis', 'alexis.vincent@example.com', 29, 'SPORTIF', 29, 10, NULL),
+('Fournier','Clément', 'clement.fournier@example.com', 31, 'SPORTIF', 30, 10, NULL),
+('Admin', 'Jean', 'admin@glop.com', 40, 'ADMIN', 31, 10, (SELECT id_roles FROM roles WHERE designation = 'admin' LIMIT 1)),
+('Alice', 'Commissaire', 'commissaire@glop.com', 35, 'COMMISSAIRE', 32, 10, (SELECT id_roles FROM roles WHERE designation = 'commissaire' LIMIT 1)),
+('Bob', 'Visiteur', 'visiteur@glop.com', 20, 'VISITEUR', 33, 10, NULL);
 
 -- ============================
 -- Liaisons équipes ↔ sportifs (Via participant_equipe_sportif)
@@ -159,17 +181,17 @@ INSERT INTO participant_sportif (sportif_id, id_participant) VALUES
 -- Ajout de Volontaires
 -- ============================
 
-INSERT INTO utilisateur (nom, prenom, email, age, user_type, id_lieu) VALUES
-('Dupont','Marie','marie.dupont@example.com', 30, 'VOLONTAIRE', 1),
-('Lemoine','Julien','julien.lemoine@example.com', 35, 'VOLONTAIRE', 2),
-('Carpentier','Sophie','sophie.carpentier@example.com', 28, 'VOLONTAIRE', 3),
-('Morel','Antoine','antoine.morel@example.com', 40, 'VOLONTAIRE', 4),
-('Fournier','Emma','emma.fournier@example.com', 32, 'VOLONTAIRE', 5),
-('Rousseau','Lucas','lucas.rousseau@example.com', 27, 'VOLONTAIRE', 6),
-('Blanc','Clara','clara.blanc@example.com', 26, 'VOLONTAIRE', 7),
-('Gauthier','Thomas','thomas.gauthier@example.com', 29, 'VOLONTAIRE', 8),
-('Martinez','Laura','laura.martinez@example.com', 31, 'VOLONTAIRE', 9),
-('Petit','Maxime','maxime.petit@example.com', 33, 'VOLONTAIRE', 10);
+INSERT INTO utilisateur (nom, prenom, email, age, dtype, id_lieu, state, id_roles) VALUES
+('Dupont','Marie','marie.dupont@example.com', 30, 'VOLONTAIRE', 1, 10, NULL),
+('Lemoine','Julien','julien.lemoine@example.com', 35, 'VOLONTAIRE', 2, 10, NULL),
+('Carpentier','Sophie','sophie.carpentier@example.com', 28, 'VOLONTAIRE', 3, 10, NULL),
+('Morel','Antoine','antoine.morel@example.com', 40, 'VOLONTAIRE', 4, 10, NULL),
+('Fournier','Emma','emma.fournier@example.com', 32, 'VOLONTAIRE', 5, 10, NULL),
+('Rousseau','Lucas','lucas.rousseau@example.com', 27, 'VOLONTAIRE', 6, 10, NULL),
+('Blanc','Clara','clara.blanc@example.com', 26, 'VOLONTAIRE', 7, 10, NULL),
+('Gauthier','Thomas','thomas.gauthier@example.com', 29, 'VOLONTAIRE', 8, 10, NULL),
+('Martinez','Laura','laura.martinez@example.com', 31, 'VOLONTAIRE', 9, 10, NULL),
+('Petit','Maxime','maxime.petit@example.com', 33, 'VOLONTAIRE', 10, 10, NULL);
 
 
 

@@ -5,6 +5,7 @@ import com.glop.cibl_orga_sport.service.AffectationVolontaireService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -15,6 +16,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/affectations")
 @CrossOrigin(origins = "http://localhost:4200")
+@PreAuthorize("hasAnyAuthority('admin', 'commissaire')")
 public class AffectationVolontaireController {
     
     @Autowired

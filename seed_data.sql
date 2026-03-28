@@ -172,6 +172,13 @@ INSERT INTO utilisateur (nom, prenom, email, age, state, id_lieu, dtype, est_con
 ('Martinez','Laura','laura.martinez@example.com', 31, 1, 9, 'VOLONTAIRE', NULL, NULL, NULL, NULL),
 ('Petit','Maxime','maxime.petit@example.com', 33, 1, 10, 'VOLONTAIRE', NULL, NULL, NULL, NULL);
 
+-- Super Admin account (Based on AuthenticationServiceImpl.signup logic)
+-- State 10 ensures the account is active and can login
+-- id_roles 1 corresponds to 'admin' role
+INSERT INTO utilisateur (nom, prenom, email, age, state, id_lieu, dtype, mdp, id_roles) VALUES
+('Admin', 'Super', 'superadmin@glop.com', 30, 10, 31, 'ADMIN', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.TVuHOn2', 1);
+
+
 
 
 -- ============================
@@ -324,4 +331,5 @@ INSERT INTO compte (username, password, type, active, date_creation, id_utilisat
 ('commissaire', 'password', 'COMMISSAIRE', true, NOW(), 22),
 ('visiteur', 'password', 'VISITEUR', true, NOW(), 23),
 ('sportif', 'password', 'SPORTIF', true, NOW(), 1),
-('volontaire', 'password', 'VOLONTAIRE', true, NOW(), 24);
+('volontaire', 'password', 'VOLONTAIRE', true, NOW(), 24),
+('superadmin', 'password', 'ADMIN', true, NOW(), 34);

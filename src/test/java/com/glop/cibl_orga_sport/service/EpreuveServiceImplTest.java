@@ -251,4 +251,14 @@ class EpreuveServiceImplTest {
 
         assertNull(result);
     }
+
+    @Test
+    void testGetEpreuvesByCompetitionId() {
+        when(epreuveRepository.findByCompetitionIdCompetition(77L))
+                .thenReturn(List.of(new Epreuve("100m"), new Epreuve("200m")));
+
+        List<Epreuve> result = epreuveService.getEpreuvesByCompetitionId(77L);
+
+        assertEquals(2, result.size());
+    }
 }

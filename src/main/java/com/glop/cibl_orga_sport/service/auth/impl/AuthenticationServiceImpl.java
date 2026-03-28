@@ -117,6 +117,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return JwtAuthenticationResponse.builder()
                 .login(user.getEmail())
                 .token(jwt)
+                .role(user.getRoles().getDesignation())
                 .build();
     }
 }

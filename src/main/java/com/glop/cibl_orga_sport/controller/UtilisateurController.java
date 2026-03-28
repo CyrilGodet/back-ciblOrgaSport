@@ -79,6 +79,20 @@ public class UtilisateurController {
         return ResponseEntity.ok(approved);
     }
 
+    @PutMapping(value = "/updateNoMdp/{id}", produces = "application/json")
+    public ResponseEntity<UserDtoJson> updateNoMdp(
+            @PathVariable("id") Long id,
+            @RequestBody UserDtoJson userDto
+    ) {
+        UserDtoJson updated = service.updateNoMdp(id, userDto);
+        if (updated != null) {
+            return ResponseEntity.ok(updated);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
     @GetMapping
     public ResponseEntity<List<UserDtoJson>> findAll() {
         List<UserDtoJson> users = service.findAll();

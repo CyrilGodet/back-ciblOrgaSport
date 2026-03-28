@@ -295,7 +295,14 @@ public class CompetitionServiceImpl implements CompetitionService {
             }
 
             // 3. Création si non trouvé
-            Lieu newLieu = new Lieu(lieuDTO.getNomLieu(), lieuDTO.getVille(), lieuDTO.getAdresse(), lieuDTO.getCategorie());
+            com.glop.cibl_orga_sport.data.CoordonneesGPS gps = null;
+            if (lieuDTO.getGpsCoordinates() != null) {
+                gps = new com.glop.cibl_orga_sport.data.CoordonneesGPS(
+                    lieuDTO.getGpsCoordinates().getLatitude(),
+                    lieuDTO.getGpsCoordinates().getLongitude()
+                );
+            }
+            Lieu newLieu = new Lieu(lieuDTO.getNomLieu(), lieuDTO.getVille(), lieuDTO.getAdresse(), lieuDTO.getCategorie(), gps);
             System.out.println("Création automatique du lieu : " + lieuDTO.getNomLieu());
             return lieuRepository.save(newLieu);
         }

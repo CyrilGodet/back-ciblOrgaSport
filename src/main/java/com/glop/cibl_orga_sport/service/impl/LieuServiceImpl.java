@@ -20,13 +20,19 @@ public class LieuServiceImpl implements LieuService {
 
 
     @Override
-    public Lieu updateLieu(Long id, String nom, String ville, String adresse) {
+    public Lieu updateLieu(Long id, String nom, String ville, String adresse, com.glop.cibl_orga_sport.dto.CoordonneesGPSDTO gpsDto) {
         Optional<Lieu> existingLieu = repository.findById(id);
         if (existingLieu.isPresent()) {
             Lieu l = existingLieu.get();
             l.setNomLieu(nom);
             l.setVille(ville);
             l.setAdresse(adresse);
+            if (gpsDto != null) {
+                l.setGpsCoordinates(new com.glop.cibl_orga_sport.data.CoordonneesGPS(
+                    gpsDto.getLatitude(),
+                    gpsDto.getLongitude()
+                ));
+            }
             System.out.println("Modification lieu : " + id);
             return repository.save(l);
         }
@@ -66,7 +72,8 @@ public class LieuServiceImpl implements LieuService {
         LieuCategorieEnum categorie = lieuDTO.getCategorie() == null
                 ? LieuCategorieEnum.EVENEMENT
                 : lieuDTO.getCategorie();
-        Lieu l = new Lieu(lieuDTO.getNomLieu(), lieuDTO.getVille(), lieuDTO.getAdresse(), categorie);
+        lieuDTO.setCategorie(categorie);
+        Lieu l = com.glop.cibl_orga_sport.mapper.LieuMapper.toEntity(lieuDTO);
         return repository.save(l);
     }
 

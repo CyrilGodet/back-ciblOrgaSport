@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface LieuService {
 
-    Lieu updateLieu(Long id, String nom, String ville, String adresse);
+    Lieu updateLieu(Long id, String nom, String ville, String adresse, com.glop.cibl_orga_sport.dto.CoordonneesGPSDTO gpsCoordinates);
     boolean deleteLieu(Long id);
     List<Lieu> getAllLieux();
     List<Lieu> getLieuxForAffectations();

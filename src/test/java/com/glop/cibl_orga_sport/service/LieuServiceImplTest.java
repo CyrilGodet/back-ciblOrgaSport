@@ -87,7 +87,7 @@ class LieuServiceImplTest {
         when(lieuRepository.findById(1L)).thenReturn(Optional.of(existingLieu));
         when(lieuRepository.save(any(Lieu.class))).thenReturn(existingLieu);
 
-        Lieu result = lieuService.updateLieu(1L, "Piscine Modifiée", "Marseille", "789 Boulevard Natation");
+        Lieu result = lieuService.updateLieu(1L, "Piscine Modifiée", "Marseille", "789 Boulevard Natation", null);
 
         assertNotNull(result);
         assertEquals("Piscine Modifiée", result.getNomLieu());
@@ -99,7 +99,7 @@ class LieuServiceImplTest {
     void testUpdateLieu_NotFound() {
         when(lieuRepository.findById(999L)).thenReturn(Optional.empty());
 
-        Lieu result = lieuService.updateLieu(999L, "Piscine", "Saint-Denis", "123 Rue");
+        Lieu result = lieuService.updateLieu(999L, "Piscine", "Saint-Denis", "123 Rue", null);
 
         assertNull(result);
     }

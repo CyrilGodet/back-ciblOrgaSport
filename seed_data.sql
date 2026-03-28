@@ -331,5 +331,7 @@ INSERT INTO compte (username, password, type, active, date_creation, id_utilisat
 ('commissaire', 'password', 'COMMISSAIRE', true, NOW(), 22),
 ('visiteur', 'password', 'VISITEUR', true, NOW(), 23),
 ('sportif', 'password', 'SPORTIF', true, NOW(), 1),
+('sportif2', 'password', 'SPORTIF', true, NOW(), 2),
+('sportif3', 'password', 'SPORTIF', true, NOW(), 3),
 ('volontaire', 'password', 'VOLONTAIRE', true, NOW(), 24),
 ('superadmin', 'password', 'ADMIN', true, NOW(), 34);

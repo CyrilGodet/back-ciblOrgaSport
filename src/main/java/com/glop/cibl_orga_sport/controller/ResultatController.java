@@ -32,4 +32,10 @@ public class ResultatController {
         resultatService.publishResultatsForEtape(idEtapeEpreuve);
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/match/{matchId}/participant/{participantId}/abandon")
+    public ResponseEntity<Void> declareAbandonForMatch(@PathVariable Long matchId, @PathVariable Long participantId) {
+        resultatService.declareAbandonForMatch(matchId, participantId);
+        return ResponseEntity.ok().build();
+    }
 }

@@ -82,6 +82,18 @@ public class UtilisateurController {
         return service.findById(id);
     }
 
+    @GetMapping("/sportif/{id}/participations")
+    public ResponseEntity<com.glop.cibl_orga_sport.dto.SportifParticipationsDTO> getSportifParticipations(
+            @PathVariable Long id) {
+        return ResponseEntity.ok(service.getSportifParticipations(id));
+    }
+
+    @GetMapping("/sportif/{id}/competitions")
+    public ResponseEntity<List<com.glop.cibl_orga_sport.dto.CompetitionDTO>> getSportifCompetitions(
+            @PathVariable Long id) {
+        return ResponseEntity.ok(service.getCompetitionsBySportif(id));
+    }
+
     @PutMapping(value = "/approval/{id}", produces = "application/json")
     public ResponseEntity<UserDtoJson> approavalUser(@PathVariable("id") Long id) {
         UserDtoJson approved = service.approval(id);

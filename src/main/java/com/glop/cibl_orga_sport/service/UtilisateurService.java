@@ -7,6 +7,8 @@ import com.glop.cibl_orga_sport.dto.VisiteurDTO;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import com.glop.cibl_orga_sport.data.enumType.DocumentStatusEnum;
+import com.glop.cibl_orga_sport.dto.SportifParticipationsDTO;
+import com.glop.cibl_orga_sport.dto.CompetitionDTO;
 import java.util.List;
 
 public interface UtilisateurService {
@@ -22,6 +24,9 @@ public interface UtilisateurService {
     UserDetailsService userDetailsService();
 
     UtilisateurDTO findById(Long id);
+
+    SportifParticipationsDTO getSportifParticipations(Long sportifId);
+    List<CompetitionDTO> getCompetitionsBySportif(Long sportifId);
 
     UserDtoJson updateNoMdp(Long id, UserDtoJson userDto);
     UserDtoJson approval(Long id);

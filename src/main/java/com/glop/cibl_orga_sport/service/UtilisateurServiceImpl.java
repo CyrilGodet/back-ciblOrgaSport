@@ -21,6 +21,9 @@ import com.glop.cibl_orga_sport.mapper.VisiteurMapper;
 import com.glop.cibl_orga_sport.exception.EntityNotFoundException;
 import com.glop.cibl_orga_sport.exception.ErrorCodes;
 import com.glop.cibl_orga_sport.mapper.UtilisateurMapper;
+import com.glop.cibl_orga_sport.mapper.ParticipantMapper;
+import com.glop.cibl_orga_sport.mapper.CompetitionMapper;
+import com.glop.cibl_orga_sport.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -45,6 +48,12 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
     @Autowired
     private ParticipantSportifRepository participantSportifRepository;
+
+    @Autowired
+    private ParticipantEquipeRepository participantEquipeRepository;
+
+    @Autowired
+    private ParticipationRepository participationRepository;
 
     @Autowired
     private LieuRepository lieuRepository;
@@ -132,6 +141,43 @@ public class UtilisateurServiceImpl implements UtilisateurService {
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Aucun utilisateur avec l'id = " + id + " n'a été trouvé dans la BDD",
                         ErrorCodes.USER_NOT_FOUND));
+    }
+
+    @Override
+    public com.glop.cibl_orga_sport.dto.SportifParticipationsDTO getSportifParticipations(Long sportifId) {
+        com.glop.cibl_orga_sport.dto.SportifParticipationsDTO dto = new com.glop.cibl_orga_sport.dto.SportifParticipationsDTO();
+        
+        participantSportifRepository.findBySportifId(sportifId)
+                .map(ps -> (com.glop.cibl_orga_sport.dto.ParticipantSportifDTO) ParticipantMapper.toDTO(ps))
+                .ifPresent(dto::setParticipantSportif);
+
+        List<com.glop.cibl_orga_sport.dto.ParticipantEquipeDTO> equipes = participantEquipeRepository.findEquipesBySportifId(sportifId).stream()
+                .map(pe -> (com.glop.cibl_orga_sport.dto.ParticipantEquipeDTO) ParticipantMapper.toDTO(pe))
+                .collect(Collectors.toList());
+        dto.setParticipantEquipes(equipes);
+        
+        return dto;
+    }
+
+    @Override
+    public List<com.glop.cibl_orga_sport.dto.CompetitionDTO> getCompetitionsBySportif(Long sportifId) {
+        java.util.List<Long> participantIds = new java.util.ArrayList<>();
+        
+        participantSportifRepository.findBySportifId(sportifId)
+                .ifPresent(ps -> participantIds.add(ps.getIdParticipant()));
+                
+        participantEquipeRepository.findEquipesBySportifId(sportifId)
+                .forEach(pe -> participantIds.add(pe.getIdParticipant()));
+
+        if (participantIds.isEmpty()) {
+            return java.util.Collections.emptyList();
+        }
+
+        return participationRepository.findByParticipant_IdParticipantIn(participantIds).stream()
+                .map(com.glop.cibl_orga_sport.data.Participation::getCompetition)
+                .distinct()
+                .map(CompetitionMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
     @Override

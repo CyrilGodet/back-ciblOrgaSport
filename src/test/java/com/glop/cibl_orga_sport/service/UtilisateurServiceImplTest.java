@@ -60,7 +60,8 @@ class UtilisateurServiceImplTest {
         Sportif savedSportif = new Sportif();
         savedSportif.setIdUtilisateur(11L);
         when(repository.save(any(Sportif.class))).thenReturn(savedSportif);
-        when(participantSportifRepository.save(any(ParticipantSportif.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(participantSportifRepository.save(any(ParticipantSportif.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
 
         Sportif result = service.createSportif(dto);
 
@@ -189,6 +190,6 @@ class UtilisateurServiceImplTest {
 
     @Test
     void findByIdShouldReturnNullByCurrentImplementation() {
-        assertNull(service.findById(1));
+        assertNull(service.findById(1L));
     }
 }

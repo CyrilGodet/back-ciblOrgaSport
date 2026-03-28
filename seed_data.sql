@@ -27,7 +27,6 @@
 -- ============================
 -- Création des lieux
 -- ============================
-
 INSERT INTO lieu (nom_lieu, ville, adresse, categorie_lieu) VALUES
 -- Lieux génériques (ID 1-10)
 ('Stade Pierre-Mauroy', 'Lille', '261 Boulevard de Tournai', 'EVENEMENT'),
@@ -40,7 +39,7 @@ INSERT INTO lieu (nom_lieu, ville, adresse, categorie_lieu) VALUES
 ('Stade de la Mosson', 'Montpellier', '345 Avenue de Heidelberg', 'EVENEMENT'),
 ('Complexe Sportif Nantes Métropole', 'Nantes', '2 Boulevard de Berlin', 'EVENEMENT'),
 ('Piscine Olympique', 'Paris', '1 Avenue des Sports', 'EVENEMENT'),
--- Lieux personnels (ID 11-33)
+-- Lieux personnels (ID 11-25 for reduced set)
 ('lucas.martin@example.com', 'Paris', 'Domicile', 'UTILISATEUR'),
 ('hugo.bernard@example.com', 'Marseille', 'Domicile', 'UTILISATEUR'),
 ('nathan.dubois@example.com', 'Lyon', 'Domicile', 'UTILISATEUR'),
@@ -51,16 +50,6 @@ INSERT INTO lieu (nom_lieu, ville, adresse, categorie_lieu) VALUES
 ('noah.durand@example.com', 'Montpellier', 'Domicile', 'UTILISATEUR'),
 ('ethan.leroy@example.com', 'Bordeaux', 'Domicile', 'UTILISATEUR'),
 ('gabriel.moreau@example.com', 'Lille', 'Domicile', 'UTILISATEUR'),
-('arthur.simon@example.com', 'Rennes', 'Domicile', 'UTILISATEUR'),
-('paul.laurent@example.com', 'Reims', 'Domicile', 'UTILISATEUR'),
-('tom.lefebvre@example.com', 'Le Havre', 'Domicile', 'UTILISATEUR'),
-('enzo.michel@example.com', 'Saint-Étienne', 'Domicile', 'UTILISATEUR'),
-('raphael.garcia@example.com', 'Toulon', 'Domicile', 'UTILISATEUR'),
-('maxime.david@example.com', 'Grenoble', 'Domicile', 'UTILISATEUR'),
-('antoine.bertrand@example.com', 'Dijon', 'Domicile', 'UTILISATEUR'),
-('mathis.roux@example.com', 'Angers', 'Domicile', 'UTILISATEUR'),
-('alexis.vincent@example.com', 'Villeurbanne', 'Domicile', 'UTILISATEUR'),
-('clement.fournier@example.com', 'Le Mans', 'Domicile', 'UTILISATEUR'),
 ('admin@glop.com', 'Paris', 'Bureau Admin', 'UTILISATEUR'),
 ('commissaire@glop.com', 'Lyon', 'Bureau Commissaire', 'UTILISATEUR'),
 ('visiteur@glop.com', 'Marseille', 'Accueil', 'UTILISATEUR');
@@ -69,92 +58,56 @@ INSERT INTO lieu (nom_lieu, ville, adresse, categorie_lieu) VALUES
 -- Création des équipes (Maintenant via Polymorphisme Participant)
 -- ============================
 
--- First we create the Participants, then the ParticipantEquipe
--- Let's create Participants for all 35 teams. 
--- We assume IDs will be 1 to 35 for these teams in the participant table.
-
-INSERT INTO participant (id_participant) VALUES (1), (2), (3), (4), (5), (6), (7), (8), (9), (10),
-(11), (12), (13), (14), (15), (16), (17), (18), (19), (20),
-(21), (22), (23), (24), (25), (26), (27), (28), (29), (30),
-(31), (32), (33), (34), (35);
+INSERT INTO participant (id_participant) VALUES 
+(1), (2), (3), (4), (5), (6), (7), (8), (9), (10),
+(11), (12), (13), (14), (15);
 
 INSERT INTO participant_equipe (nom_equipe, id_participant) VALUES
 ('Les Foulées Rapides', 1), ('Sprint Nord', 2), ('Les Solitaires du Stade', 3), ('Run Power', 4), ('Les Gazelles', 5),
 ('Les Flèches Rouges', 6), ('Ultra Solo', 7), ('Les Coureurs Libres', 8), ('Solo Performance', 9), ('Nord Running', 10),
-('Speed Force', 11), ('Les Endurants', 12), ('Solo Elite', 13), ('Run Storm', 14), ('Les Turbos', 15),
-('Les Rapides', 16), ('Solo Horizon', 17), ('Les Sprinteurs', 18), ('Endurance Max', 19), ('Solo Victory', 20),
-('Duo Dynamique', 21), ('Les Binômes Rapides', 22), ('Double Impact', 23), ('Les Frères de Piste', 24), ('Duo Nordique', 25),
-('Les Inséparables', 26), ('Double Endurance', 27), ('Les Fusées', 28), ('Duo Sprint', 29), ('Les Compagnons de Course', 30),
-('Twin Speed', 31), ('Les Coureurs Unis', 32), ('Double Energie', 33), ('Duo Horizon', 34), ('Les Alliés du Run', 35);
+('Duo Dynamique', 11), ('Les Binômes Rapides', 12), ('Double Impact', 13), ('Les Frères de Piste', 14), ('Duo Nordique', 15);
 
 -- ============================
 -- Création des utilisateurs
 -- ============================
 
 INSERT INTO utilisateur (nom, prenom, email, age, state, id_lieu, dtype, est_conforme_charte_europeenne, a_founi_passeport, a_founicertificat_medical, est_acreditecen) VALUES
-('Martin','Lucas', 'lucas.martin@example.com', 25, 1, 11, 'SPORTIF', true, true, true, NULL),
-('Bernard','Hugo', 'hugo.bernard@example.com', 28, 1, 12, 'SPORTIF', true, true, true, NULL),
-('Dubois','Nathan', 'nathan.dubois@example.com', 22, 1, 13, 'SPORTIF', true, true, true, NULL),
-('Thomas','Louis', 'louis.thomas@example.com', 30, 1, 14, 'SPORTIF', true, true, true, NULL),
-('Robert','Jules', 'jules.robert@example.com', 24, 1, 15, 'SPORTIF', true, true, true, NULL),
-('Richard','Adam', 'adam.richard@example.com', 26, 1, 16, 'SPORTIF', true, true, true, NULL),
-('Petit','Léo', 'leo.petit@example.com', 27, 1, 17, 'SPORTIF', true, true, true, NULL),
-('Durand','Noah', 'noah.durand@example.com', 23, 1, 18, 'SPORTIF', true, true, true, NULL),
-('Leroy','Ethan', 'ethan.leroy@example.com', 29, 1, 19, 'SPORTIF', true, true, true, NULL),
-
-('Moreau','Gabriel', 'gabriel.moreau@example.com', 25, 1, 20, 'SPORTIF', true, true, true, NULL),
-('Simon','Arthur', 'arthur.simon@example.com', 21, 1, 21, 'SPORTIF', true, true, true, NULL),
-('Laurent','Paul', 'paul.laurent@example.com', 32, 1, 22, 'SPORTIF', true, true, true, NULL),
-('Lefebvre','Tom', 'tom.lefebvre@example.com', 26, 1, 23, 'SPORTIF', true, true, true, NULL),
-('Michel','Enzo', 'enzo.michel@example.com', 24, 1, 24, 'SPORTIF', true, true, true, NULL),
-('Garcia','Raphaël', 'raphael.garcia@example.com', 28, 1, 25, 'SPORTIF', true, true, true, NULL),
-('David','Maxime', 'maxime.david@example.com', 27, 1, 26, 'SPORTIF', true, true, true, NULL),
-('Bertrand','Antoine', 'antoine.bertrand@example.com', 25, 1, 27, 'SPORTIF', true, true, true, NULL),
-('Roux','Mathis', 'mathis.roux@example.com', 23, 1, 28, 'SPORTIF', true, true, true, NULL),
-('Vincent','Alexis', 'alexis.vincent@example.com', 29, 1, 29, 'SPORTIF', true, true, true, NULL),
-('Fournier','Clément', 'clement.fournier@example.com', 31, 1, 30, 'SPORTIF', true, true, true, NULL),
-('Admin', 'Jean', 'admin@glop.com', 40, 1, 31, 'ADMIN', NULL, NULL, NULL, NULL),
-('Alice', 'Commissaire', 'commissaire@glop.com', 35, 1, 32, 'COMMISSAIRE', NULL, NULL, NULL, true),
-('Bob', 'Visiteur', 'visiteur@glop.com', 20, 1, 33, 'VISITEUR', NULL, NULL, NULL, NULL);
+('Martin','Lucas', 'lucas.martin@example.com', 25, 1, 11, 'SPORTIF', false, true, true, NULL),
+('Bernard','Hugo', 'hugo.bernard@example.com', 28, 1, 12, 'SPORTIF', false, true, true, NULL),
+('Dubois','Nathan', 'nathan.dubois@example.com', 22, 1, 13, 'SPORTIF', false, true, true, NULL),
+('Thomas','Louis', 'louis.thomas@example.com', 30, 1, 14, 'SPORTIF', false, true, true, NULL),
+('Robert','Jules', 'jules.robert@example.com', 24, 1, 15, 'SPORTIF', false, true, true, NULL),
+('Richard','Adam', 'adam.richard@example.com', 26, 1, 16, 'SPORTIF', false, true, true, NULL),
+('Petit','Léo', 'leo.petit@example.com', 27, 1, 17, 'SPORTIF', false, true, true, NULL),
+('Durand','Noah', 'noah.durand@example.com', 23, 1, 18, 'SPORTIF', false, true, true, NULL),
+('Leroy','Ethan', 'ethan.leroy@example.com', 29, 1, 19, 'SPORTIF', false, true, true, NULL),
+('Moreau','Gabriel', 'gabriel.moreau@example.com', 25, 1, 20, 'SPORTIF', false, true, true, NULL),
+('Admin', 'Jean', 'admin@glop.com', 40, 1, 21, 'ADMIN', NULL, NULL, NULL, NULL),
+('Alice', 'Commissaire', 'commissaire@glop.com', 35, 1, 22, 'COMMISSAIRE', NULL, NULL, NULL, true),
+('Bob', 'Visiteur', 'visiteur@glop.com', 20, 1, 23, 'VISITEUR', NULL, NULL, NULL, NULL);
 
 -- ============================
--- Liaisons équipes ↔ sportifs (Via participant_equipe_sportif)
+-- Liaisons équipes ↔ sportifs
 -- ============================
 
--- Solo (1-20)
--- Table should be renamed to participant_equipe_sportif or similar based on mapping, in Java it is `equipe_sportif` on ParticipantEquipe
---INSERT INTO equipe_sportif (equipe_id, sportif_id) VALUES (1,1),(2,2),(3,3),(4,4),(5,5),(6,6),(7,7),(8,8),(9,9),(10,10),
---(11,11),(12,12),(13,13),(14,14),(15,15),(16,16),(17,17),(18,18),(19,19),(20,20);
-
--- Duo (21-35)
-INSERT INTO equipe_sportif (equipe_id, sportif_id) VALUES (21,1),(21,2),(22,3),(22,4),(23,5),(23,6),(24,7),(24,8),(25,9),(25,10),
-(26,11),(26,12),(27,13),(27,14),(28,15),(28,16),(29,17),(29,18),(30,19),(30,20),(31,1),(31,3),
-(32,5),(32,7),(33,9),(33,11),(34,13),(34,15),(35,17),(35,19);
-
-
--- Équipes de 3 joueurs
+-- Trios (1-5 in participant table -> IDs 1-5 in participant_equipe)
 INSERT INTO equipe_sportif (equipe_id, sportif_id) VALUES
-(11,1),(11,2),(11,3),
-(12,4),(12,5),(12,6),
-(13,7),(13,8),(13,9),
-(14,10),(14,11),(14,12),
-(15,13),(15,14),(15,15),
-(16,16),(16,17),(16,18),
-(17,19),(17,20),(17,1),
-(18,2),(18,3),(18,4),
-(19,5),(19,6),(19,7),
-(20,8),(20,9),(20,10);
+(1,1),(1,2),(1,3),
+(2,4),(2,5),(2,6),
+(3,7),(3,8),(3,9),
+(4,10),(4,1),(4,2),
+(5,3),(5,4),(5,5);
 
--- Also create ParticipantSportif entries for all sportifs (1-20)
--- Need to map IDs correctly. Let's assume Participant IDs 36 to 55 for sportifs.
-INSERT INTO participant (id_participant) VALUES (36), (37), (38), (39), (40), (41), (42), (43), (44), (45),
-(46), (47), (48), (49), (50), (51), (52), (53), (54), (55);
+-- Duos (6-15)
+INSERT INTO equipe_sportif (equipe_id, sportif_id) VALUES 
+(6,1),(6,2),(7,3),(7,4),(8,5),(8,6),(9,7),(9,8),(10,9),(10,10),
+(11,1),(11,3),(12,5),(12,7),(13,9),(13,2),(14,4),(14,6),(15,8),(15,10);
+
+-- Participant IDs 16-25 for sportifs 1-10
+INSERT INTO participant (id_participant) VALUES (16), (17), (18), (19), (20), (21), (22), (23), (24), (25);
 
 INSERT INTO participant_sportif (sportif_id, id_participant) VALUES 
-(1, 36), (2, 37), (3, 38), (4, 39), (5, 40), (6, 41), (7, 42), (8, 43), (9, 44), (10, 45),
-(11, 46), (12, 47), (13, 48), (14, 49), (15, 50), (16, 51), (17, 52), (18, 53), (19, 54), (20, 55);
-
-
+(1, 16), (2, 17), (3, 18), (4, 19), (5, 20), (6, 21), (7, 22), (8, 23), (9, 24), (10, 25);
 
 -- ============================
 -- Ajout de Volontaires
@@ -165,163 +118,51 @@ INSERT INTO utilisateur (nom, prenom, email, age, state, id_lieu, dtype, est_con
 ('Lemoine','Julien','julien.lemoine@example.com', 35, 1, 2, 'VOLONTAIRE', NULL, NULL, NULL, NULL),
 ('Carpentier','Sophie','sophie.carpentier@example.com', 28, 1, 3, 'VOLONTAIRE', NULL, NULL, NULL, NULL),
 ('Morel','Antoine','antoine.morel@example.com', 40, 1, 4, 'VOLONTAIRE', NULL, NULL, NULL, NULL),
-('Fournier','Emma','emma.fournier@example.com', 32, 1, 5, 'VOLONTAIRE', NULL, NULL, NULL, NULL),
-('Rousseau','Lucas','lucas.rousseau@example.com', 27, 1, 6, 'VOLONTAIRE', NULL, NULL, NULL, NULL),
-('Blanc','Clara','clara.blanc@example.com', 26, 1, 7, 'VOLONTAIRE', NULL, NULL, NULL, NULL),
-('Gauthier','Thomas','thomas.gauthier@example.com', 29, 1, 8, 'VOLONTAIRE', NULL, NULL, NULL, NULL),
-('Martinez','Laura','laura.martinez@example.com', 31, 1, 9, 'VOLONTAIRE', NULL, NULL, NULL, NULL),
-('Petit','Maxime','maxime.petit@example.com', 33, 1, 10, 'VOLONTAIRE', NULL, NULL, NULL, NULL);
+('Fournier','Emma','emma.fournier@example.com', 32, 1, 5, 'VOLONTAIRE', NULL, NULL, NULL, NULL);
 
-
+-- Super Admin account
+INSERT INTO utilisateur (nom, prenom, email, age, state, id_lieu, dtype, mdp, id_roles) VALUES
+('Admin', 'Super', 'superadmin@glop.com', 30, 10, 21, 'ADMIN', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.TVuHOn2', 1);
 
 -- ============================
 -- Création de compétitions en DRAFT
 -- ============================
 
-INSERT INTO competition (
-    name_competition,
-    description,
-    statut,
-    age_min,
-    age_max,
-    date_debut,
-    date_fin,
-    genre,
-    sport,
-    id_lieu
-) VALUES
-(
-    'Tournoi de Printemps',
-    'Compétition en préparation',
-    0,
-    0,
-    99,
-    NOW(),
-    NOW(),
-    0,
-    0,
-    1
-),
-(
-    'Challenge Été 2026',
-    'Brouillon du tournoi estival',
-    0,
-    0,
-    99,
-    NOW(),
-    NOW(),
-    0,
-    0,
-    1
-);
+INSERT INTO competition (name_competition, description, statut, age_min, age_max, date_debut, date_fin, genre, sport, id_lieu) VALUES
+('Tournoi de Printemps', 'Compétition printanière d''athlétisme', 0, 0, 99, '2026-04-01 08:00:00', '2026-04-15 20:00:00', 0, 0, 1),
+('Challenge Été 2026', 'Le grand rendez-vous estival', 0, 0, 99, '2026-07-01 08:00:00', '2026-07-31 22:00:00', 0, 0, 1);
 
-INSERT INTO epreuve (
-    nom_epreuve,
-    description,
-    age_min,
-    age_max,
-    date_debut,
-    date_fin,
-    discipline,
-    genre,
-    nb_elim_par_match,
-    nombre_equipe_par_match,
-    statut,
-    taille_equipe,
-    competition_id_competition,
-    type_resultat
-) VALUES (
-    'Épreuve dsfhdshfklfdhskjh',                   -- nom
-    'Épreuve test', -- description
-    1,                                -- age_min
-    99,                               -- age_max
-    CURRENT_DATE,                     -- date_debut
-    CURRENT_DATE + INTERVAL '1 day',  -- date_fin
-    0,                                -- discipline (0..8)
-    0,                                -- genre (0..2)
-    1,                                -- nb_elim_par_match
-    2,                                -- nombre_equipe_par_match
-    0,                                -- statut (0..5)
-    2,                                -- taille_equipe
-    2,                                -- competition existante
-    'POINTS'                          -- type_resultat
-);
+INSERT INTO epreuve (nom_epreuve, description, age_min, age_max, date_debut, date_fin, discipline, genre, nb_elim_par_match, nombre_equipe_par_match, statut, taille_equipe, competition_id_competition, type_resultat, commissaire_id) VALUES
+('Épreuve Vitesse Printemps', 'Sprint 100m', 1, 99, '2026-04-05 09:00:00', '2026-04-05 18:00:00', 0, 0, 1, 2, 0, 2, 1, 'POINTS', 12),
+('Challenge Endurance Été', 'Course de fond 5000m', 0, 99, '2026-07-10 10:00:00', '2026-07-10 17:00:00', 0, 0, 1, 2, 0, 2, 2, 'POINTS', 12);
 
+-- ============================
+-- Participations aux épreuves
+-- ============================
 
-INSERT INTO epreuve (
-    nom_epreuve,
-    description,
-    age_min,
-    age_max,
-    date_debut,
-    date_fin,
-    discipline,
-    genre,
-    nb_elim_par_match,
-    nombre_equipe_par_match,
-    statut,
-    taille_equipe,
-    competition_id_competition,
-    type_resultat
-) VALUES (
-    'Épreuve Test',                   -- nom
-    'Épreuve pour test affectations', -- description
-    0,                                -- age_min
-    99,                               -- age_max
-    CURRENT_DATE,                     -- date_debut
-    CURRENT_DATE + INTERVAL '1 day',  -- date_fin
-    0,                                -- discipline (0..8)
-    0,                                -- genre (0..2)
-    1,                                -- nb_elim_par_match
-    2,                                -- nombre_equipe_par_match
-    0,                                -- statut (0..5)
-    2,                                -- taille_equipe
-    1,                                -- competition existante
-    'POINTS'                          -- type_resultat
-);
+-- Participations pour Épreuve 1 (ID 1)
+-- On utilise les participants individuels (16 à 25)
+INSERT INTO participation (competition_id_competition, participant_id_participant, epreuve_id, statut) VALUES
+(1, 16, 1, 'QUALIFIE'), (1, 17, 1, 'QUALIFIE'), (1, 18, 1, 'QUALIFIE'), (1, 19, 1, 'QUALIFIE'), (1, 20, 1, 'QUALIFIE'),
+(1, 21, 1, 'QUALIFIE'), (1, 22, 1, 'QUALIFIE'), (1, 23, 1, 'QUALIFIE'), (1, 24, 1, 'QUALIFIE'), (1, 25, 1, 'QUALIFIE');
 
+-- Participations pour Épreuve 2 (ID 2)
+-- On utilise les équipes (11 à 15)
+INSERT INTO participation (competition_id_competition, participant_id_participant, epreuve_id, statut) VALUES
+(2, 11, 2, 'QUALIFIE'), (2, 12, 2, 'QUALIFIE'), (2, 13, 2, 'QUALIFIE'), (2, 14, 2, 'QUALIFIE'), (2, 15, 2, 'QUALIFIE');
 
-
-
-
-INSERT INTO affectation_volontaire (
-    volontaire_id_utilisateur,
-    epreuve_id_epreuve,
-    date_affectation,
-    heure_debut,
-    heure_fin,
-    lieu_rdv_id_lieu,
-    poste,
-    commentaire
-) VALUES
-(
-    25,                 -- ID utilisateur (volontaire)
-    1,                  -- ID épreuve
-    CURRENT_DATE,
-    '08:00:00',
-    '12:00:00',
-    1,                  -- lieu
-    0,                  -- poste (ordinal enum)
-    'Accueil des participants'
-),
-(
-    26,
-    1,
-    CURRENT_DATE,
-    '12:00:00',
-    '16:00:00',
-    1,
-    1,
-    'Gestion ravitaillement'
-);
+--INSERT INTO affectation_volontaire (volontaire_id_utilisateur, epreuve_id_epreuve, date_affectation, heure_debut, heure_fin, lieu_rdv_id_lieu, poste, commentaire) VALUES
+--(14, 1, '2026-04-05', '08:00:00', '12:00:00', 1, 0, 'Accueil des participants'),
+--(15, 1, '2026-04-05', '12:00:00', '16:00:00', 1, 1, 'Gestion ravitaillement');
 
 -- ============================
 -- Création des comptes (Authentification)
 -- ============================
 
 INSERT INTO compte (username, password, type, active, date_creation, id_utilisateur) VALUES
-('admin', 'password', 'ADMIN', true, NOW(), 21),
-('commissaire', 'password', 'COMMISSAIRE', true, NOW(), 22),
-('visiteur', 'password', 'VISITEUR', true, NOW(), 23),
+('admin', 'password', 'ADMIN', true, NOW(), 11),
+('commissaire', 'password', 'COMMISSAIRE', true, NOW(), 12),
+('visiteur', 'password', 'VISITEUR', true, NOW(), 13),
 ('sportif', 'password', 'SPORTIF', true, NOW(), 1),
-('volontaire', 'password', 'VOLONTAIRE', true, NOW(), 24);
+('volontaire', 'password', 'VOLONTAIRE', true, NOW(), 14),
+('superadmin', 'password', 'ADMIN', true, NOW(), 19);

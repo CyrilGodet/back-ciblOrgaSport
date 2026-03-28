@@ -12,4 +12,7 @@ public interface ParticipantEquipeRepository extends JpaRepository<ParticipantEq
 
     @org.springframework.data.jpa.repository.Query("SELECT pe FROM ParticipantEquipe pe WHERE LOWER(pe.nomEquipe) LIKE LOWER(CONCAT('%', :query, '%')) AND SIZE(pe.sportifs) = :size")
     List<ParticipantEquipe> findByNomEquipeContainingIgnoreCaseAndTaille(String query, int size);
+
+    @org.springframework.data.jpa.repository.Query("SELECT pe FROM ParticipantEquipe pe JOIN pe.sportifs s WHERE s.idUtilisateur = :sportifId")
+    List<ParticipantEquipe> findEquipesBySportifId(@org.springframework.data.repository.query.Param("sportifId") Long sportifId);
 }

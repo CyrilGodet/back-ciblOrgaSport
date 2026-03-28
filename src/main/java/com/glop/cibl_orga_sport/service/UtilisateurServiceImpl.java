@@ -4,6 +4,7 @@ import com.glop.cibl_orga_sport.data.Sportif;
 import com.glop.cibl_orga_sport.data.Utilisateur;
 import com.glop.cibl_orga_sport.data.Visiteur;
 import com.glop.cibl_orga_sport.data.Commissaire;
+import com.glop.cibl_orga_sport.data.enumType.DocumentStatusEnum;
 import com.glop.cibl_orga_sport.data.Lieu;
 import com.glop.cibl_orga_sport.data.ParticipantSportif;
 import com.glop.cibl_orga_sport.data.UserDtoJson;
@@ -19,12 +20,17 @@ import com.glop.cibl_orga_sport.mapper.SportifMapper;
 import com.glop.cibl_orga_sport.mapper.VisiteurMapper;
 import com.glop.cibl_orga_sport.exception.EntityNotFoundException;
 import com.glop.cibl_orga_sport.exception.ErrorCodes;
+import com.glop.cibl_orga_sport.mapper.UtilisateurMapper;
+import com.glop.cibl_orga_sport.mapper.ParticipantMapper;
+import com.glop.cibl_orga_sport.mapper.CompetitionMapper;
+import com.glop.cibl_orga_sport.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -42,6 +48,12 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
     @Autowired
     private ParticipantSportifRepository participantSportifRepository;
+
+    @Autowired
+    private ParticipantEquipeRepository participantEquipeRepository;
+
+    @Autowired
+    private ParticipationRepository participationRepository;
 
     @Autowired
     private LieuRepository lieuRepository;
@@ -123,8 +135,49 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     }
 
     @Override
-    public UtilisateurDTO findById(Integer id) {
-        return null;
+    public UtilisateurDTO findById(Long id) {
+        return repository.findById(id)
+                .map(UtilisateurMapper::toSpecificDTO)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Aucun utilisateur avec l'id = " + id + " n'a été trouvé dans la BDD",
+                        ErrorCodes.USER_NOT_FOUND));
+    }
+
+    @Override
+    public com.glop.cibl_orga_sport.dto.SportifParticipationsDTO getSportifParticipations(Long sportifId) {
+        com.glop.cibl_orga_sport.dto.SportifParticipationsDTO dto = new com.glop.cibl_orga_sport.dto.SportifParticipationsDTO();
+        
+        participantSportifRepository.findBySportifId(sportifId)
+                .map(ps -> (com.glop.cibl_orga_sport.dto.ParticipantSportifDTO) ParticipantMapper.toDTO(ps))
+                .ifPresent(dto::setParticipantSportif);
+
+        List<com.glop.cibl_orga_sport.dto.ParticipantEquipeDTO> equipes = participantEquipeRepository.findEquipesBySportifId(sportifId).stream()
+                .map(pe -> (com.glop.cibl_orga_sport.dto.ParticipantEquipeDTO) ParticipantMapper.toDTO(pe))
+                .collect(Collectors.toList());
+        dto.setParticipantEquipes(equipes);
+        
+        return dto;
+    }
+
+    @Override
+    public List<com.glop.cibl_orga_sport.dto.CompetitionDTO> getCompetitionsBySportif(Long sportifId) {
+        java.util.List<Long> participantIds = new java.util.ArrayList<>();
+        
+        participantSportifRepository.findBySportifId(sportifId)
+                .ifPresent(ps -> participantIds.add(ps.getIdParticipant()));
+                
+        participantEquipeRepository.findEquipesBySportifId(sportifId)
+                .forEach(pe -> participantIds.add(pe.getIdParticipant()));
+
+        if (participantIds.isEmpty()) {
+            return java.util.Collections.emptyList();
+        }
+
+        return participationRepository.findByParticipant_IdParticipantIn(participantIds).stream()
+                .map(com.glop.cibl_orga_sport.data.Participation::getCompetition)
+                .distinct()
+                .map(CompetitionMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -185,6 +238,76 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         return repository.findAll().stream()
                 .map(user -> convertToUserDtoJson(UtilisateurDTO.fromEntity(user)))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public void updateCertificatMedical(Long id, byte[] content) {
+        log.info("Updating medical certificate for athlete {}", id);
+        sportifRepository.findById(id).ifPresent(sportif -> {
+            sportif.setCertificatMedicalContenu(content);
+            sportif.setaFounicertificatMedical(true);
+            sportif.setCertificatMedicalStatus(DocumentStatusEnum.EN_ATTENTE_DE_VALIDATION);
+            Sportif saved = sportifRepository.save(sportif);
+            System.out.println("Certificat médical enregistré pour le sportif " + id + " (taille: " + content.length + " octets). Status: EN_ATTENTE");
+            historyService.saveHistory("upload medical certificate", "success", saved);
+        });
+    }
+
+    @Override
+    @Transactional
+    public void updatePasseport(Long id, byte[] content) {
+        log.info("Updating passport for athlete {}", id);
+        sportifRepository.findById(id).ifPresent(sportif -> {
+            sportif.setPasseportContenu(content);
+            sportif.setaFouniPasseport(true);
+            sportif.setPasseportStatus(DocumentStatusEnum.EN_ATTENTE_DE_VALIDATION);
+            Sportif saved = sportifRepository.save(sportif);
+            System.out.println("Passeport enregistré pour le sportif " + id + " (taille: " + content.length + " octets). Status: EN_ATTENTE");
+            historyService.saveHistory("upload passport", "success", saved);
+        });
+    }
+
+    @Override
+    @Transactional
+    public void updateCharteConformite(Long id, boolean value) {
+        log.info("Updating charter compliance for athlete {}", id);
+        sportifRepository.findById(id).ifPresent(sportif -> {
+            sportif.setEstConformeCharteEuropeenne(value);
+            Sportif saved = sportifRepository.save(sportif);
+            System.out.println("Conformité charte mise à jour pour le sportif " + id + " : " + value);
+            historyService.saveHistory("update charter compliance", "success", saved);
+        });
+    }
+
+    @Override
+    @Transactional
+    public void updateCertificatMedicalStatus(Long id, DocumentStatusEnum status) {
+        log.info("Updating medical certificate status for athlete {}", id);
+        sportifRepository.findById(id).ifPresent(sportif -> {
+            sportif.setCertificatMedicalStatus(status);
+            if (status == DocumentStatusEnum.REFUSE) {
+                sportif.setaFounicertificatMedical(false);
+            }
+            Sportif saved = sportifRepository.save(sportif);
+            System.out.println("Statut certificat médical mis à jour pour le sportif " + id + " : " + status);
+            historyService.saveHistory("update medical cert status", "success", saved);
+        });
+    }
+
+    @Override
+    @Transactional
+    public void updatePasseportStatus(Long id, DocumentStatusEnum status) {
+        log.info("Updating passport status for athlete {}", id);
+        sportifRepository.findById(id).ifPresent(sportif -> {
+            sportif.setPasseportStatus(status);
+            if (status == DocumentStatusEnum.REFUSE) {
+                sportif.setaFouniPasseport(false);
+            }
+            Sportif saved = sportifRepository.save(sportif);
+            System.out.println("Statut passeport mis à jour pour le sportif " + id + " : " + status);
+            historyService.saveHistory("update passport status", "success", saved);
+        });
     }
 
     private UserDtoJson convertToUserDtoJson(UtilisateurDTO dto) {

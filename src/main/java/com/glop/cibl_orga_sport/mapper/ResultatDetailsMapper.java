@@ -15,6 +15,7 @@ public class ResultatDetailsMapper {
         dto.setParticipant(ParticipantMapper.toDTO(entity.getParticipant()));
         dto.setRang(entity.getRang());
         dto.setStatus(entity.getStatus());
+        dto.setValeur(entity.getValeur());
 
         return dto;
     }
@@ -29,6 +30,7 @@ public class ResultatDetailsMapper {
         entity.setParticipant(ParticipantMapper.toEntity(dto.getParticipant()));
         entity.setRang(dto.getRang());
         entity.setStatus(dto.getStatus());
+        entity.setValeur(dto.getValeur());
 
         return entity;
     }

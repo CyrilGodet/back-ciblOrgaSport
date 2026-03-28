@@ -4,6 +4,7 @@ import java.sql.Date;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionStatusEnum;
 import com.glop.cibl_orga_sport.data.enumType.DisciplineEnum;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionGenreEnum;
+import com.glop.cibl_orga_sport.data.enumType.TypeResultatEnum;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -24,6 +25,8 @@ public class EpreuveDTO {
     private int nbElimMatch;
     private CompetitionPhaseTypeDto phaseOnGoing;
     private int tailleEquipe;
+    private TypeResultatEnum typeResultat;
+    private Long commissaireId;
 
     public EpreuveDTO() {
     }
@@ -182,6 +185,22 @@ public class EpreuveDTO {
 
     public void setTailleEquipe(int tailleEquipe) {
         this.tailleEquipe = tailleEquipe;
+    }
+
+    public TypeResultatEnum getTypeResultat() {
+        return typeResultat;
+    }
+
+    public void setTypeResultat(TypeResultatEnum typeResultat) {
+        this.typeResultat = typeResultat;
+    }
+
+    public Long getCommissaireId() {
+        return commissaireId;
+    }
+
+    public void setCommissaireId(Long commissaireId) {
+        this.commissaireId = commissaireId;
     }
 
 }

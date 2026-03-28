@@ -17,13 +17,13 @@ import java.time.Instant;
 public class History{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_history")
     private Long idHistory;
 
     private String action;
     private String status;
 
     @ManyToOne
-    @JoinColumn(name = "idUtilisateur")
     private Utilisateur user;
 
     private String userConnected;

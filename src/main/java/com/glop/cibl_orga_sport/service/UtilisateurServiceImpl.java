@@ -106,7 +106,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
             return null;
         }
         return repository.findByEmail(email)
-                .map(utilisateur -> UtilisateurDTO.fromEntity(utilisateur))  // ✅ Lambda
+                .map(utilisateur -> UtilisateurDTO.fromEntity(utilisateur))
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Aucun utilisateur avec l'email = " + email + " n'a été trouvé dans la BDD",
                         ErrorCodes.USER_NOT_FOUND));

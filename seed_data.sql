@@ -5,32 +5,32 @@
 -- ============================
 -- Création des lieux
 -- ============================
-INSERT INTO lieu (nom_lieu, ville, adresse, categorie_lieu) VALUES
+INSERT INTO lieu (nom_lieu, ville, adresse, categorie_lieu, latitude, longitude) VALUES
 -- Lieux génériques (ID 1-10)
-('Stade Pierre-Mauroy', 'Lille', '261 Boulevard de Tournai', 'EVENEMENT'),
-('Parc des Sports', 'Roubaix', 'Avenue Alfred Motte', 'EVENEMENT'),
-('Complexe Sportif Jean Bouin', 'Paris', '20 Avenue du Général Sarrail', 'EVENEMENT'),
-('Stade Vélodrome', 'Marseille', '3 Boulevard Michelet', 'EVENEMENT'),
-('Stade de Gerland', 'Lyon', '353 Avenue Jean Jaurès', 'EVENEMENT'),
-('Complexe Sportif Bordeaux Lac', 'Bordeaux', 'Rue du Petit Barail', 'EVENEMENT'),
-('Stade Marcel Picot', 'Nancy', '90 Boulevard Jean Jaurès', 'EVENEMENT'),
-('Stade de la Mosson', 'Montpellier', '345 Avenue de Heidelberg', 'EVENEMENT'),
-('Complexe Sportif Nantes Métropole', 'Nantes', '2 Boulevard de Berlin', 'EVENEMENT'),
-('Piscine Olympique', 'Paris', '1 Avenue des Sports', 'EVENEMENT'),
+('Stade Pierre-Mauroy', 'Lille', '261 Boulevard de Tournai', 'EVENEMENT', 50.6119, 3.1306),
+('Parc des Sports', 'Roubaix', 'Avenue Alfred Motte', 'EVENEMENT', 50.6775, 3.2045),
+('Complexe Sportif Jean Bouin', 'Paris', '20 Avenue du Général Sarrail', 'EVENEMENT', 48.8436, 2.2536),
+('Stade Vélodrome', 'Marseille', '3 Boulevard Michelet', 'EVENEMENT', 43.2699, 5.3959),
+('Stade de Gerland', 'Lyon', '353 Avenue Jean Jaurès', 'EVENEMENT', 45.7238, 4.8322),
+('Complexe Sportif Bordeaux Lac', 'Bordeaux', 'Rue du Petit Barail', 'EVENEMENT', 44.8974, -0.5627),
+('Stade Marcel Picot', 'Nancy', '90 Boulevard Jean Jaurès', 'EVENEMENT', 48.6961, 6.2106),
+('Stade de la Mosson', 'Montpellier', '345 Avenue de Heidelberg', 'EVENEMENT', 43.6219, 3.8122),
+('Complexe Sportif Nantes Métropole', 'Nantes', '2 Boulevard de Berlin', 'EVENEMENT', 47.2558, -1.5247),
+('Piscine Olympique', 'Paris', '1 Avenue des Sports', 'EVENEMENT', 48.8566, 2.3522),
 -- Lieux personnels (ID 11-25 for reduced set)
-('lucas.martin@example.com', 'Paris', 'Domicile', 'UTILISATEUR'),
-('hugo.bernard@example.com', 'Marseille', 'Domicile', 'UTILISATEUR'),
-('nathan.dubois@example.com', 'Lyon', 'Domicile', 'UTILISATEUR'),
-('louis.thomas@example.com', 'Toulouse', 'Domicile', 'UTILISATEUR'),
-('jules.robert@example.com', 'Nice', 'Domicile', 'UTILISATEUR'),
-('adam.richard@example.com', 'Nantes', 'Domicile', 'UTILISATEUR'),
-('leo.petit@example.com', 'Strasbourg', 'Domicile', 'UTILISATEUR'),
-('noah.durand@example.com', 'Montpellier', 'Domicile', 'UTILISATEUR'),
-('ethan.leroy@example.com', 'Bordeaux', 'Domicile', 'UTILISATEUR'),
-('gabriel.moreau@example.com', 'Lille', 'Domicile', 'UTILISATEUR'),
-('admin@glop.com', 'Paris', 'Bureau Admin', 'UTILISATEUR'),
-('commissaire@glop.com', 'Lyon', 'Bureau Commissaire', 'UTILISATEUR'),
-('visiteur@glop.com', 'Marseille', 'Accueil', 'UTILISATEUR');
+('lucas.martin@example.com', 'Paris', 'Domicile', 'UTILISATEUR', 0.0, 0.0),
+('hugo.bernard@example.com', 'Marseille', 'Domicile', 'UTILISATEUR', 0.0, 0.0),
+('nathan.dubois@example.com', 'Lyon', 'Domicile', 'UTILISATEUR', 0.0, 0.0),
+('louis.thomas@example.com', 'Toulouse', 'Domicile', 'UTILISATEUR', 0.0, 0.0),
+('jules.robert@example.com', 'Nice', 'Domicile', 'UTILISATEUR', 0.0, 0.0),
+('adam.richard@example.com', 'Nantes', 'Domicile', 'UTILISATEUR', 0.0, 0.0),
+('leo.petit@example.com', 'Strasbourg', 'Domicile', 'UTILISATEUR', 0.0, 0.0),
+('noah.durand@example.com', 'Montpellier', 'Domicile', 'UTILISATEUR', 0.0, 0.0),
+('ethan.leroy@example.com', 'Bordeaux', 'Domicile', 'UTILISATEUR', 0.0, 0.0),
+('gabriel.moreau@example.com', 'Lille', 'Domicile', 'UTILISATEUR', 0.0, 0.0),
+('admin@glop.com', 'Paris', 'Bureau Admin', 'UTILISATEUR', 0.0, 0.0),
+('commissaire@glop.com', 'Lyon', 'Bureau Commissaire', 'UTILISATEUR', 0.0, 0.0),
+('visiteur@glop.com', 'Marseille', 'Accueil', 'UTILISATEUR', 0.0, 0.0);
 
 -- ============================
 -- Création des équipes (Maintenant via Polymorphisme Participant)

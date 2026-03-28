@@ -8,6 +8,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Embedded;
 import com.glop.cibl_orga_sport.data.enumType.LieuCategorieEnum;
 
 @Entity
@@ -30,14 +31,26 @@ public class Lieu {
     @Column(name = "categorie_lieu")
     private LieuCategorieEnum categorie = LieuCategorieEnum.UTILISATEUR;
 
+    @Embedded
+    private CoordonneesGPS gpsCoordinates;
+
     public Lieu() {}
 
+
+    public Lieu(String nomLieu, String ville, String adresse, LieuCategorieEnum categorie, CoordonneesGPS gpsCoordinates) {
+        this.nomLieu = nomLieu;
+        this.ville = ville;
+        this.adresse = adresse;
+        this.categorie = categorie;
+        this.gpsCoordinates = gpsCoordinates;
+    }
 
     public Lieu(String nomLieu, String ville, String adresse, LieuCategorieEnum categorie) {
         this.nomLieu = nomLieu;
         this.ville = ville;
         this.adresse = adresse;
         this.categorie = categorie;
+        this.gpsCoordinates = null;
     }
 
     public Long getIdLieu() {
@@ -78,5 +91,13 @@ public class Lieu {
 
     public void setCategorie(LieuCategorieEnum categorie) {
         this.categorie = categorie;
+    }
+
+    public CoordonneesGPS getGpsCoordinates() {
+        return gpsCoordinates;
+    }
+
+    public void setGpsCoordinates(CoordonneesGPS gpsCoordinates) {
+        this.gpsCoordinates = gpsCoordinates;
     }
 }

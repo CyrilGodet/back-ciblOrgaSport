@@ -58,7 +58,7 @@ public class LieuController {
 
     @PutMapping("/{id}")
     public ResponseEntity<LieuDTO> updateLieu(@PathVariable Long id, @RequestBody LieuDTO lieuDTO) {
-        Lieu updated = lieuService.updateLieu(id, lieuDTO.getNomLieu(), lieuDTO.getVille(), lieuDTO.getAdresse());
+        Lieu updated = lieuService.updateLieu(id, lieuDTO.getNomLieu(), lieuDTO.getVille(), lieuDTO.getAdresse(), lieuDTO.getGpsCoordinates());
         if (updated != null) {
             return ResponseEntity.ok(LieuMapper.toDTO(updated));
         }

@@ -65,6 +65,10 @@ public class Utilisateur implements UserDetails {
         return mdp;
     }
 
+    public void setPassword(String mdp) {
+        this.mdp = mdp;
+    }
+
     @Override
     public String getUsername() {
         return email;

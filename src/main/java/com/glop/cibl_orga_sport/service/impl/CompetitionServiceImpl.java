@@ -674,4 +674,8 @@ public class CompetitionServiceImpl implements CompetitionService {
         System.out.println("Compétition non trouvée : " + id);
         return null;
     }
+    @Override
+    public List<Competition> getCompetitionsByCommissaireId(Long commissaireId) {
+        return repository.findByCommissaireId(commissaireId);
+    }
 }

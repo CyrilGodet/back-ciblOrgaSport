@@ -2,6 +2,7 @@ package com.glop.cibl_orga_sport.data;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import com.glop.cibl_orga_sport.data.enumType.DocumentStatusEnum;
 import jakarta.persistence.*;
 import java.util.List;
 import java.util.ArrayList;
@@ -21,6 +22,18 @@ public class Sportif extends Utilisateur {
 
     @Column
     public boolean aFounicertificatMedical;
+
+    @Enumerated(EnumType.STRING)
+    private DocumentStatusEnum certificatMedicalStatus;
+
+    @Enumerated(EnumType.STRING)
+    private DocumentStatusEnum passeportStatus;
+
+    @Column(name = "certificat_medical_contenu", columnDefinition = "bytea")
+    private byte[] certificatMedicalContenu;
+
+    @Column(name = "passeport_contenu", columnDefinition = "bytea")
+    private byte[] passeportContenu;
 
     @ManyToMany(mappedBy = "sportifs")
     @JsonBackReference("equipe-sportifs")
@@ -77,6 +90,38 @@ public class Sportif extends Utilisateur {
 
     public void setaFounicertificatMedical(boolean aFounicertificatMedical) {
         this.aFounicertificatMedical = aFounicertificatMedical;
+    }
+
+    public byte[] getCertificatMedicalContenu() {
+        return certificatMedicalContenu;
+    }
+
+    public void setCertificatMedicalContenu(byte[] certificatMedicalContenu) {
+        this.certificatMedicalContenu = certificatMedicalContenu;
+    }
+
+    public byte[] getPasseportContenu() {
+        return passeportContenu;
+    }
+
+    public void setPasseportContenu(byte[] passeportContenu) {
+        this.passeportContenu = passeportContenu;
+    }
+
+    public DocumentStatusEnum getCertificatMedicalStatus() {
+        return certificatMedicalStatus;
+    }
+
+    public void setCertificatMedicalStatus(DocumentStatusEnum certificatMedicalStatus) {
+        this.certificatMedicalStatus = certificatMedicalStatus;
+    }
+
+    public DocumentStatusEnum getPasseportStatus() {
+        return passeportStatus;
+    }
+
+    public void setPasseportStatus(DocumentStatusEnum passeportStatus) {
+        this.passeportStatus = passeportStatus;
     }
 
     public List<ParticipantEquipe> getEquipes() {

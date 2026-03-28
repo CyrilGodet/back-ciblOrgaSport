@@ -1,14 +1,21 @@
 package com.glop.cibl_orga_sport.service;
 
 import com.glop.cibl_orga_sport.data.Competition;
+import com.glop.cibl_orga_sport.data.Epreuve;
+import com.glop.cibl_orga_sport.data.Participation;
+import com.glop.cibl_orga_sport.data.ParticipantSportif;
 import com.glop.cibl_orga_sport.data.Periode;
 import com.glop.cibl_orga_sport.data.Lieu;
 import com.glop.cibl_orga_sport.data.ConditionAge;
+import com.glop.cibl_orga_sport.data.Match;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionStatusEnum;
+import com.glop.cibl_orga_sport.data.enumType.CompetitionPhaseType;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionGenreEnum;
+import com.glop.cibl_orga_sport.data.enumType.ParticipationStatusEnum;
 import com.glop.cibl_orga_sport.data.enumType.CompetitionSportEnum;
 import com.glop.cibl_orga_sport.dto.CompetitionDTO;
 import com.glop.cibl_orga_sport.repository.CompetitionRepository;
+import com.glop.cibl_orga_sport.repository.MatchRepository;
 import com.glop.cibl_orga_sport.service.impl.CompetitionServiceImpl;
 
 import org.junit.jupiter.api.Test;
@@ -18,6 +25,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -31,6 +39,8 @@ class CompetitionServiceImplTest {
 
     @Mock
     private CompetitionRepository competitionRepository;
+    @Mock
+    private MatchRepository matchRepository;
 
     @InjectMocks
     private CompetitionServiceImpl competitionService;
@@ -154,9 +164,7 @@ class CompetitionServiceImplTest {
         dto.setAgeMax(99);
         dto.setStatut(CompetitionStatusEnum.DRAFT);
 
-        Competition result = competitionService.updateCompetition(999L, dto);
-
-        assertNull(result);
+        assertThrows(IllegalArgumentException.class, () -> competitionService.updateCompetition(999L, dto));
     }
 
     @Test
@@ -165,6 +173,7 @@ class CompetitionServiceImplTest {
         Competition competition = new Competition("Championnats du monde de natation", null, periode, null, null, null,
                 CompetitionStatusEnum.DRAFT, null);
         competition.setIdCompetition(1L);
+        competition.setGenre(CompetitionGenreEnum.MIXTE);
 
         when(competitionRepository.findById(1L)).thenReturn(Optional.of(competition));
 
@@ -188,6 +197,22 @@ class CompetitionServiceImplTest {
         Competition competition = new Competition("Championnats du monde de natation", null, periode, null, null, null,
                 CompetitionStatusEnum.DRAFT, null);
         competition.setIdCompetition(1L);
+        competition.setGenre(CompetitionGenreEnum.MIXTE);
+
+        Epreuve epreuve = new Epreuve("100m");
+        epreuve.setGenre(CompetitionGenreEnum.MIXTE);
+        epreuve.setPeriode(periode);
+        epreuve.setNombreEquipeParMatch(2);
+        epreuve.setNbElimParMatch(1);
+        competition.addEpreuve(epreuve);
+
+        ParticipantSportif participant = new ParticipantSportif();
+        participant.setIdParticipant(10L);
+        Participation participation = new Participation();
+        participation.setParticipant(participant);
+        participation.setCompetition(competition);
+        participation.setStatut(ParticipationStatusEnum.INSCRIT);
+        competition.getParticipations().add(participation);
 
         when(competitionRepository.findById(1L)).thenReturn(Optional.of(competition));
         when(competitionRepository.save(any(Competition.class))).thenReturn(competition);
@@ -270,5 +295,50 @@ class CompetitionServiceImplTest {
         Competition result = competitionService.finishCompetition(1L);
 
         assertNull(result);
+    }
+
+    @Test
+    void testGetPublishedCompetitions() {
+        Competition published = new Competition();
+        published.setStatut(CompetitionStatusEnum.PUBLISH);
+        when(competitionRepository.findByStatut(CompetitionStatusEnum.PUBLISH)).thenReturn(List.of(published));
+
+        List<Competition> result = competitionService.getPublishedCompetitions();
+
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    void testUnpublishCompetition() {
+        Competition competition = new Competition();
+        competition.setStatut(CompetitionStatusEnum.PUBLISH);
+        when(competitionRepository.findById(50L)).thenReturn(Optional.of(competition));
+        when(competitionRepository.save(any(Competition.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Competition result = competitionService.unpublishCompetition(50L);
+
+        assertNotNull(result);
+        assertEquals(CompetitionStatusEnum.UNPUBLISHED, result.getStatut());
+    }
+
+    @Test
+    void testGetOngoingMatches() {
+        Competition competition = new Competition();
+        competition.setIdCompetition(1L);
+        competition.setEpreuves(new ArrayList<>());
+
+        Epreuve epreuve = new Epreuve("Epreuve ongoing");
+        epreuve.setIdEpreuve(2L);
+        epreuve.setPhaseOnGoing(CompetitionPhaseType.FINALE);
+        competition.addEpreuve(epreuve);
+
+        when(competitionRepository.findById(1L)).thenReturn(Optional.of(competition));
+        when(matchRepository.findByEtapeEpreuveEpreuveIdEpreuveAndEtapeEpreuveEtapeEpreuveEnum(2L,
+                com.glop.cibl_orga_sport.data.enumType.EtapeEpreuveEnum.FINALE))
+                .thenReturn(List.of(new Match()));
+
+        List<Match> result = competitionService.getOngoingMatches(1L);
+
+        assertEquals(1, result.size());
     }
 }

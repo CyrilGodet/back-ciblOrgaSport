@@ -11,4 +11,6 @@ public interface ParticipationRepository extends JpaRepository<Participation, Lo
     List<Participation> findByCompetition_IdCompetition(Long idCompetition);
 
     List<Participation> findByParticipant_IdParticipant(Long idParticipant);
+
+    List<Participation> findByParticipant_IdParticipantIn(List<Long> idParticipants);
 }

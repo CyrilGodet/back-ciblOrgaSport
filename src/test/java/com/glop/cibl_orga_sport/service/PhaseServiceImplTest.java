@@ -136,4 +136,14 @@ class PhaseServiceImplTest {
 
         assertFalse(result);
     }
+
+    @Test
+    void testGetPhasesByCompetitionId() {
+        when(phaseRepository.findByEpreuveCompetitionIdCompetition(12L))
+                .thenReturn(List.of(new EtapeEpreuve(), new EtapeEpreuve()));
+
+        List<EtapeEpreuve> result = phaseService.getPhasesByCompetitionId(12L);
+
+        assertEquals(2, result.size());
+    }
 }

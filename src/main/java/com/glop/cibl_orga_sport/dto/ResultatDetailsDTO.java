@@ -7,6 +7,7 @@ public class ResultatDetailsDTO {
     private ParticipantDTO participant;
     private int rang;
     private ResultatDetailsStatusEnum status;
+    private Double valeur;
 
     public ResultatDetailsDTO() {
     }
@@ -41,5 +42,13 @@ public class ResultatDetailsDTO {
 
     public void setStatus(ResultatDetailsStatusEnum status) {
         this.status = status;
+    }
+
+    public Double getValeur() {
+        return valeur;
+    }
+
+    public void setValeur(Double valeur) {
+        this.valeur = valeur;
     }
 }

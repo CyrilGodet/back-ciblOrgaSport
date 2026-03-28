@@ -45,6 +45,9 @@ public class ResultatServiceImpl implements ResultatService {
     @Autowired
     private ParticipationRepository participationRepository;
 
+    @Autowired
+    private ParticipantRepository participantRepository;
+
 
     @Override
     @Transactional
@@ -80,6 +83,7 @@ public class ResultatServiceImpl implements ResultatService {
                 detail.setParticipant(equipe);
                 detail.setRang(detailDTO.getRang());
                 detail.setStatus(detailDTO.getStatus());
+                detail.setValeur(detailDTO.getValeur());
 
                 resultat.addDetail(detail);
                 logger.info("Ajout du détail pour le participant ID: {}, rang: {}, status: {}",
@@ -160,7 +164,7 @@ public class ResultatServiceImpl implements ResultatService {
             for (ResultatDetails matchDetail : matchResultat.getDetails()) {
                 // Ajouter le détail au résultat de l'étape
                 ResultatDetails etapeDetail = new ResultatDetails(
-                        matchDetail.getParticipant(), etapeResultat, matchDetail.getRang(), matchDetail.getStatus());
+                        matchDetail.getParticipant(), etapeResultat, matchDetail.getRang(), matchDetail.getStatus(), matchDetail.getValeur());
                 etapeResultat.addDetail(etapeDetail);
 
                 // Mettre à jour la participation
@@ -289,5 +293,50 @@ public class ResultatServiceImpl implements ResultatService {
         // Puisque c'est généré à la volée, on remplace.
         nextEtape.getMatches().clear();
         nextEtape.getMatches().addAll(matches);
+    }
+
+    @Override
+    @Transactional
+    public void declareAbandonForMatch(Long matchId, Long participantId) {
+        logger.info("Déclaration d'abandon pour le match ID: {} et le participant ID: {}", matchId, participantId);
+        
+        Match match = matchRepository.findById(matchId)
+                .orElseThrow(() -> new IllegalArgumentException("Match non trouvé : " + matchId));
+        
+        Participant participant = participantRepository.findById(participantId)
+                .orElseThrow(() -> new IllegalArgumentException("Participant non trouvé : " + participantId));
+        
+        // Vérifier que le participant est bien dans le match
+        boolean found = match.getParticipants().stream()
+                .anyMatch(p -> p.getIdParticipant().equals(participantId));
+        if (!found) {
+            throw new IllegalArgumentException("Le participant " + participantId + " ne fait pas partie du match " + matchId);
+        }
+
+        Resultat resultat = match.getResultat();
+        if (resultat == null) {
+            resultat = new Resultat(ResultatStatusEnum.DRAFT);
+            match.setResultat(resultat);
+        }
+
+        final Resultat finalResult = resultat;
+        // Trouver ou créer le détail pour ce participant
+        ResultatDetails detail = resultat.getDetails().stream()
+                .filter(d -> d.getParticipant().getIdParticipant().equals(participantId))
+                .findFirst()
+                .orElseGet(() -> {
+                    ResultatDetails newDetail = new ResultatDetails();
+                    newDetail.setParticipant(participant);
+                    finalResult.addDetail(newDetail);
+                    return newDetail;
+                });
+
+        detail.setStatus(ResultatDetailsStatusEnum.ABANDON);
+        detail.setRang(99); // Rang élevé pour indiquer l'abandon
+        detail.setValeur(0.0);
+
+        resultatRepository.save(resultat);
+        matchRepository.save(match);
+        logger.info("Abandon enregistré pour le participant {} dans le match {}", participantId, matchId);
     }
 }

@@ -33,14 +33,18 @@ public class ResultatDetails {
     @Column(nullable = false)
     private ResultatDetailsStatusEnum status;
 
+    @Column(nullable = true)
+    private Double valeur;
+
     public ResultatDetails() {
     }
 
-    public ResultatDetails(Participant participant, Resultat resultat, int rang, ResultatDetailsStatusEnum status) {
+    public ResultatDetails(Participant participant, Resultat resultat, int rang, ResultatDetailsStatusEnum status, Double valeur) {
         this.participant = participant;
         this.resultat = resultat;
         this.rang = rang;
         this.status = status;
+        this.valeur = valeur;
     }
 
     public Long getIdResultatDetails() {
@@ -81,5 +85,13 @@ public class ResultatDetails {
 
     public void setStatus(ResultatDetailsStatusEnum status) {
         this.status = status;
+    }
+
+    public Double getValeur() {
+        return valeur;
+    }
+
+    public void setValeur(Double valeur) {
+        this.valeur = valeur;
     }
 }

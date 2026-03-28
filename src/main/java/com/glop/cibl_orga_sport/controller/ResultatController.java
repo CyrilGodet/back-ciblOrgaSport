@@ -15,7 +15,8 @@ public class ResultatController {
     private ResultatService resultatService;
 
     @PutMapping("/match/{matchId}")
-    public ResponseEntity<ResultatDTO> saveDraftResultat(@PathVariable Long matchId, @RequestBody ResultatDTO resultatDTO) {
+    public ResponseEntity<ResultatDTO> saveDraftResultat(@PathVariable Long matchId,
+            @RequestBody ResultatDTO resultatDTO) {
         ResultatDTO savedResult = resultatService.saveDraftResultat(matchId, resultatDTO);
         return ResponseEntity.ok(savedResult);
     }
@@ -29,6 +30,12 @@ public class ResultatController {
     @PostMapping("/etape-epreuve/{idEtapeEpreuve}/publish")
     public ResponseEntity<Void> publishResultatsForEtape(@PathVariable Long idEtapeEpreuve) {
         resultatService.publishResultatsForEtape(idEtapeEpreuve);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/match/{matchId}/participant/{participantId}/abandon")
+    public ResponseEntity<Void> declareAbandonForMatch(@PathVariable Long matchId, @PathVariable Long participantId) {
+        resultatService.declareAbandonForMatch(matchId, participantId);
         return ResponseEntity.ok().build();
     }
 }

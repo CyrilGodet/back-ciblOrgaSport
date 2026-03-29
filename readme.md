@@ -10,7 +10,7 @@
 
 ### Arrêt de Docker
 
-docker compose down
+`docker compose down`
 
 ### Accès à la base de données 
 
@@ -53,3 +53,15 @@ Les identifiants par défaut sont :
 Une version de l'application a été déployée sur Render
 
 Elle est accessible via ce [lien](https://front-ciblorgasport-wdcm.onrender.com)
+
+Pour vous connecter vous pouvez utiliser ces comptes:
+
+Admin : 
+* login: admin , password: password
+  
+Commissaire :
+* login: commissaire , password: password
+
+Visiteur :
+* login: visiteur , password: password   
+

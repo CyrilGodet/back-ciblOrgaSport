@@ -1,12 +1,10 @@
 package com.glop.cibl_orga_sport.controller;
 
-import com.glop.cibl_orga_sport.controller.api.RolesApi;
 import com.glop.cibl_orga_sport.data.Roles;
 import com.glop.cibl_orga_sport.dto.RolesDto;
 import com.glop.cibl_orga_sport.service.RolesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,17 +12,11 @@ import java.util.List;
 
 import static com.glop.cibl_orga_sport.utils.Constants.ROLES_ENDPOINT;
 
-import com.glop.cibl_orga_sport.dto.RolesDto;
-import com.glop.cibl_orga_sport.service.RolesService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
-import static com.glop.cibl_orga_sport.utils.Constants.ROLES_ENDPOINT;
+
 
 @RestController
-@RequestMapping(ROLES_ENDPOINT)  // ✅ "/api/roles"
-@CrossOrigin(origins = "http://localhost:4200")
+@RequestMapping(ROLES_ENDPOINT)  
 public class RolesController {
 
     @Autowired

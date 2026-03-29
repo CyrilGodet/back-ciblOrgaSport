@@ -24,7 +24,6 @@ import com.glop.cibl_orga_sport.service.PhaseService;
 
 @RestController
 @RequestMapping("/api/competitions")
-@CrossOrigin(origins = "http://localhost:4200")
 public class CompetitionController {
 
     @Autowired

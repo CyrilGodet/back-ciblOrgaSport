@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/phases")
-@CrossOrigin(origins = "http://localhost:4200")
 public class PhaseController {
 
     @Autowired

@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/lieux")
-@CrossOrigin(origins = "http://localhost:4200")
 public class LieuController {
     
     @Autowired

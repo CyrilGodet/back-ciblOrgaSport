@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/equipes")
-@CrossOrigin(origins = "http://localhost:4200")
 public class ParticipantEquipeController {
 
     @Autowired

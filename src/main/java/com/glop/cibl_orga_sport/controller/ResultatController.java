@@ -8,7 +8,6 @@ import com.glop.cibl_orga_sport.dto.ResultatDTO;
 
 @RestController
 @RequestMapping("/api/resultats")
-@CrossOrigin(origins = "http://localhost:4200")
 public class ResultatController {
 
     @Autowired

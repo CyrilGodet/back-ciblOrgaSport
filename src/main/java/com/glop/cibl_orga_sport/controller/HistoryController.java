@@ -3,7 +3,6 @@ package com.glop.cibl_orga_sport.controller;
 import com.glop.cibl_orga_sport.controller.api.HistoryApi;
 import com.glop.cibl_orga_sport.dto.HistoryDto;
 import com.glop.cibl_orga_sport.service.HistoryService;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +13,6 @@ import java.util.List;
 import static com.glop.cibl_orga_sport.utils.Constants.HISTORY_ENDPOINT;
 
 @RequestMapping(HISTORY_ENDPOINT)
-@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 public class HistoryController implements HistoryApi {
     private HistoryService historyService;

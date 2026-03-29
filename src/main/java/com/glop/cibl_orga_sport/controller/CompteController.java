@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/comptes")
-@CrossOrigin(origins = "http://localhost:4200")
 public class CompteController {
 
     @Autowired

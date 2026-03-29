@@ -144,3 +144,13 @@ INSERT INTO compte (username, password, type, active, date_creation, id_utilisat
 ('sportif', 'password', 'SPORTIF', true, NOW(), 1),
 ('volontaire', 'password', 'VOLONTAIRE', true, NOW(), 14),
 ('superadmin', 'password', 'ADMIN', true, NOW(), 19);
+
+-- ============================
+-- Billets pour le visiteur seed
+-- ============================
+
+INSERT INTO billet (date_achat, epreuve_id_epreuve, visiteur_id_utilisateur, categorie, numero_billet) VALUES
+(NOW(), 1, 13, 'STANDARD', 'BIL-2026-0001'),
+(NOW(), 1, 13, 'VIP', 'BIL-2026-0002'),
+(NOW(), 2, 13, 'FAMILLE', 'BIL-2026-0003');
+

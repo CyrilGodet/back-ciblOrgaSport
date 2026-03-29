@@ -3,6 +3,7 @@ package com.glop.cibl_orga_sport.service.impl;
 import com.glop.cibl_orga_sport.data.Volontaire;
 import com.glop.cibl_orga_sport.dto.VolontaireDTO;
 import com.glop.cibl_orga_sport.mapper.VolontaireMapper;
+import com.glop.cibl_orga_sport.metrics.AdminUsageMetricsService;
 import com.glop.cibl_orga_sport.repository.VolontaireRepository;
 import com.glop.cibl_orga_sport.service.VolontaireService;
 
@@ -18,6 +19,9 @@ public class VolontaireServiceImpl implements VolontaireService {
     
     @Autowired
     private VolontaireRepository volontaireRepository;
+
+    @Autowired
+    private AdminUsageMetricsService adminUsageMetricsService;
     
     @Override
     public List<VolontaireDTO> getAllVolontaires() {
@@ -42,6 +46,7 @@ public class VolontaireServiceImpl implements VolontaireService {
     public VolontaireDTO createVolontaire(VolontaireDTO volontaireDTO) {
         Volontaire volontaire = VolontaireMapper.toEntity(volontaireDTO);
         Volontaire savedVolontaire = volontaireRepository.save(volontaire);
+        adminUsageMetricsService.incrementVolontairesCrees();
         return VolontaireMapper.toDTO(savedVolontaire);
     }
     

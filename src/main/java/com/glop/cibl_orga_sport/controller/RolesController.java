@@ -23,7 +23,7 @@ import java.util.List;
 import static com.glop.cibl_orga_sport.utils.Constants.ROLES_ENDPOINT;
 
 @RestController
-@RequestMapping(ROLES_ENDPOINT)  // ✅ "/api/roles"
+@RequestMapping(ROLES_ENDPOINT)  //"/api/roles"
 @CrossOrigin(origins = "http://localhost:4200")
 public class RolesController {
 

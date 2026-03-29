@@ -1,38 +1,95 @@
 package com.glop.cibl_orga_sport.data;
 
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.glop.cibl_orga_sport.data.enumType.CompetitionStatusEnum;
+import com.glop.cibl_orga_sport.data.enumType.DisciplineEnum;
+import com.glop.cibl_orga_sport.data.enumType.CompetitionGenreEnum;
+import com.glop.cibl_orga_sport.data.enumType.CompetitionPhaseType;
+import com.glop.cibl_orga_sport.data.enumType.TypeResultatEnum;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
 @Entity
 public class Epreuve {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idEpreuve;
 
-    @Column
+    @ManyToOne
+    @JsonBackReference("competition-epreuves")
+    private Competition competition;
+
+    @Column(nullable = false)
     private String nomEpreuve;
 
-    @ManyToMany(mappedBy = "epreuves")
-    private Set<Competition> competitions;
+    @Column(nullable = true)
+    private String description;
 
-    @OneToMany(mappedBy = "epreuve")
-    private Set<Phase> phases;
+    @Embedded
+    private Periode periode;
 
-    @OneToMany(mappedBy = "epreuve")
-    private Set<Category> categories;
+    @Embedded
+    private ConditionAge conditionAge;
 
-    public Epreuve() {}
+    @OneToMany(mappedBy = "epreuve", cascade = jakarta.persistence.CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference("epreuve-phases")
+    private List<EtapeEpreuve> etapesEpreuves;
+
+    @OneToMany(mappedBy = "epreuve", cascade = jakarta.persistence.CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference("epreuve-participations")
+    private List<Participation> participations = new ArrayList<>();
+
+    @Column(nullable = false)
+    private int tailleEquipe;
+
+    @Column(nullable = false)
+    private DisciplineEnum discipline;
+
+    @Column(nullable = false)
+    private CompetitionGenreEnum genre;
+
+    @Column(nullable = false)
+    private CompetitionStatusEnum statut;
+
+    @Column(nullable = false)
+    private int nombreEquipeParMatch = 2;
+
+    @Column(nullable = false)
+    private int nbElimParMatch = 1;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = true)
+    private CompetitionPhaseType phaseOnGoing;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private TypeResultatEnum typeResultat;
+
+    @Column(nullable = true)
+    private Long commissaireId;
+
+    public Epreuve() {
+    }
 
     public Epreuve(String nomEpreuve) {
         this.nomEpreuve = nomEpreuve;
+        this.etapesEpreuves = new ArrayList<>();
+        this.nombreEquipeParMatch = 2;
+        this.nbElimParMatch = 1;
     }
 
     public Long getIdEpreuve() {
@@ -42,7 +99,7 @@ public class Epreuve {
     public void setIdEpreuve(Long idEpreuve) {
         this.idEpreuve = idEpreuve;
     }
-    
+
     public String getNomEpreuve() {
         return nomEpreuve;
     }
@@ -51,58 +108,147 @@ public class Epreuve {
         this.nomEpreuve = nomEpreuve;
     }
 
-    public Set<Competition> getCompetitions() {
-        return competitions;
+    public Competition getCompetition() {
+        return competition;
     }
 
-    public void setCompetitions(Set<Competition> competitions) {
-        this.competitions = competitions;
+    public void setCompetition(Competition competition) {
+        this.competition = competition;
     }
 
-    public void addCompetition(Competition competition) {
-        this.competitions.add(competition);
+    public List<EtapeEpreuve> getEtapesEpreuves() {
+        return etapesEpreuves;
     }
 
-    public void removeCompetition(Competition competition) throws IllegalArgumentException {
-        if (!this.competitions.remove(competition)) {
-            throw new IllegalArgumentException("La compétition n'est pas associée à cette épreuve");
-        }
+    public void setEtapesEpreuves(List<EtapeEpreuve> etapesEpreuves) {
+        this.etapesEpreuves = etapesEpreuves;
     }
 
-    public Set<Phase> getPhases() {
-        return phases;
+    public void addPhase(EtapeEpreuve phase) {
+        this.etapesEpreuves.add(phase);
+        phase.setEpreuve(this);
     }
 
-    public void setPhases(Set<Phase> phases) {
-        this.phases = phases;
-    }
-
-    public void addPhase(Phase phase) {
-        this.phases.add(phase);
-    }
-
-    public void removePhase(Phase phase) throws IllegalArgumentException {
-        if (!this.phases.remove(phase)) {
+    public void removePhase(EtapeEpreuve phase) throws IllegalArgumentException {
+        if (!this.etapesEpreuves.remove(phase)) {
             throw new IllegalArgumentException("La phase n'est pas associée à cette épreuve");
         }
+        phase.setEpreuve(null);
     }
 
-    public Set<Category> getCategories() {
-        return categories;
+    public DisciplineEnum getDiscipline() {
+        return discipline;
     }
 
-    public void setCategories(Set<Category> categories) {
-        this.categories = categories;
+    public void setDiscipline(DisciplineEnum discipline) {
+        this.discipline = discipline;
     }
 
-    public void addCategory(Category category) {
-        this.categories.add(category);
+    public CompetitionGenreEnum getGenre() {
+        return genre;
     }
 
-    public void removeCategory(Category category) throws IllegalArgumentException {
-        if (!this.categories.remove(category)) {
-            throw new IllegalArgumentException("La catégorie n'est pas associée à cette épreuve");
+    public void setGenre(CompetitionGenreEnum genre) {
+        this.genre = genre;
+    }
+
+    public CompetitionStatusEnum getStatut() {
+        return statut;
+    }
+
+    public void setStatut(CompetitionStatusEnum statut) {
+        this.statut = statut;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Periode getPeriode() {
+        return periode;
+    }
+
+    public void setPeriode(Periode periode) {
+        this.periode = periode;
+    }
+
+    public ConditionAge getConditionAge() {
+        return conditionAge;
+    }
+
+    public void setConditionAge(ConditionAge conditionAge) {
+        this.conditionAge = conditionAge;
+    }
+
+    public int getTailleEquipe() {
+        return tailleEquipe;
+    }
+
+    public void setTailleEquipe(int tailleEquipe) {
+        this.tailleEquipe = tailleEquipe;
+    }
+
+    public int getNombreEquipeParMatch() {
+        return nombreEquipeParMatch;
+    }
+
+    public void setNombreEquipeParMatch(int nombreEquipeParMatch) {
+        this.nombreEquipeParMatch = nombreEquipeParMatch;
+    }
+
+    public int getNbElimParMatch() {
+        return nbElimParMatch;
+    }
+
+    public void setNbElimParMatch(int nbElimParMatch) {
+        this.nbElimParMatch = nbElimParMatch;
+    }
+
+    public CompetitionPhaseType getPhaseOnGoing() {
+        return phaseOnGoing;
+    }
+
+    public void setPhaseOnGoing(CompetitionPhaseType phaseOnGoing) {
+        this.phaseOnGoing = phaseOnGoing;
+    }
+
+    public TypeResultatEnum getTypeResultat() {
+        return typeResultat;
+    }
+
+    public void setTypeResultat(TypeResultatEnum typeResultat) {
+        this.typeResultat = typeResultat;
+    }
+
+    public Long getCommissaireId() {
+        return commissaireId;
+    }
+
+    public void setCommissaireId(Long commissaireId) {
+        this.commissaireId = commissaireId;
+    }
+
+        public void addParticipation(Participation p) {
+            participations.add(p);
+            p.setEpreuve(this);
         }
-    }
+
+        public void removeParticipation(Participation p) {
+            participations.remove(p);
+            p.setEpreuve(null);
+        }
+
+
+        public List<Participation> getParticipations() {
+    return participations;
+}
+
+public void setParticipations(List<Participation> participations) {
+    this.participations = participations;
+}
 
 }

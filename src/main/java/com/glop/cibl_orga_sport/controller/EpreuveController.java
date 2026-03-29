@@ -1,68 +1,132 @@
 package com.glop.cibl_orga_sport.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+import com.glop.cibl_orga_sport.data.Competition;
 import com.glop.cibl_orga_sport.data.Epreuve;
+import com.glop.cibl_orga_sport.dto.EpreuveDTO;
+import com.glop.cibl_orga_sport.mapper.EpreuveMapper;
+import com.glop.cibl_orga_sport.service.CompetitionService;
 import com.glop.cibl_orga_sport.service.EpreuveService;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-@Controller
-@RequestMapping("/epreuves")
+@RestController
+@RequestMapping("/api/epreuves")
+@CrossOrigin(origins = "http://localhost:4200")
 public class EpreuveController {
-    
+
     @Autowired
     private EpreuveService epreuveService;
 
+    @Autowired
+    private CompetitionService competitionService;
+
     @GetMapping
-    public ModelAndView listEpreuves() {
-        ModelAndView model = new ModelAndView("epreuve/list");
-        model.addObject("epreuves", epreuveService.getAllEpreuves());
-        return model;
+    public List<EpreuveDTO> getAllEpreuves() {
+        return epreuveService.getAllEpreuves().stream()
+                .map(EpreuveMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
-    @GetMapping("/new")
-    public ModelAndView showForm() {
-        ModelAndView model = new ModelAndView("epreuve/form");
-        model.addObject("epreuve", new Epreuve());
-        model.addObject("isEdit", false);
-        return model;
-    }
-
-    @GetMapping("/edit/{id}")
-    public ModelAndView showEditForm(@PathVariable Long id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<EpreuveDTO> getEpreuve(@PathVariable Long id) {
         Optional<Epreuve> epreuve = epreuveService.getEpreuve(id);
-        if (epreuve.isPresent()) {
-            ModelAndView model = new ModelAndView("epreuve/form");
-            model.addObject("epreuve", epreuve.get());
-            model.addObject("isEdit", true);
-            return model;
-        }
-        return new ModelAndView("redirect:/epreuves");
+        return epreuve.map(EpreuveMapper::toDTO)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/save")
-    public RedirectView saveEpreuve(@ModelAttribute Epreuve epreuve) {
-        if (epreuve.getIdEpreuve() != null) {
-            epreuveService.updateEpreuve(epreuve.getIdEpreuve(), epreuve.getNomEpreuve());
-        } 
-        else {
-            epreuveService.createEpreuve(epreuve.getNomEpreuve());
+    @PostMapping
+    public ResponseEntity<EpreuveDTO> createEpreuve(@RequestBody EpreuveDTO epreuveDTO) {
+        Competition competition = null;
+        if (epreuveDTO.getCompetitionId() != null) {
+            Optional<Competition> competitionOpt = competitionService.getCompetition(epreuveDTO.getCompetitionId());
+            if (competitionOpt.isPresent()) {
+                competition = competitionOpt.get();
+            }
         }
-        return new RedirectView("/epreuves");
+        Epreuve created = epreuveService.createEpreuve(
+                epreuveDTO.getNomEpreuve(),
+                epreuveDTO.getDescription(),
+                epreuveDTO.getDiscipline(),
+                epreuveDTO.getGenre(),
+                epreuveDTO.getDateDebut(),
+                epreuveDTO.getDateFin(),
+                epreuveDTO.getAgeMin(),
+                epreuveDTO.getAgeMax(),
+                competition);
+        return ResponseEntity.status(201).body(EpreuveMapper.toDTO(created));
     }
 
-    @GetMapping("/delete/{id}")
-    public RedirectView deleteEpreuve(@PathVariable Long id) {
-        epreuveService.deleteEpreuve(id);
-        return new RedirectView("/epreuves");
+    @PutMapping("/{id}")
+    public ResponseEntity<EpreuveDTO> updateEpreuve(@PathVariable Long id, @RequestBody EpreuveDTO epreuveDTO) {
+        Competition competition = null;
+        if (epreuveDTO.getCompetitionId() != null) {
+            Optional<Competition> competitionOpt = competitionService.getCompetition(epreuveDTO.getCompetitionId());
+            if (competitionOpt.isPresent()) {
+                competition = competitionOpt.get();
+            }
+        }
+        Epreuve updated = epreuveService.updateEpreuve(
+                id,
+                epreuveDTO.getNomEpreuve(),
+                epreuveDTO.getDescription(),
+                epreuveDTO.getDiscipline(),
+                epreuveDTO.getGenre(),
+                epreuveDTO.getDateDebut(),
+                epreuveDTO.getDateFin(),
+                epreuveDTO.getAgeMin(),
+                epreuveDTO.getAgeMax(),
+                epreuveDTO.getStatut(),
+                competition);
+        if (updated != null) {
+            return ResponseEntity.ok(EpreuveMapper.toDTO(updated));
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteEpreuve(@PathVariable Long id) {
+        try {
+            boolean deleted = epreuveService.deleteEpreuve(id);
+            if (deleted) {
+                return ResponseEntity.noContent().build();
+            }
+            return ResponseEntity.notFound().build();
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(409).body("{\"error\":\"" + e.getMessage() + "\"}");
+        }
+    }
+
+    @PatchMapping("/{id}/publish")
+    public ResponseEntity<EpreuveDTO> publishEpreuve(@PathVariable Long id) {
+        Epreuve published = epreuveService.publishEpreuve(id);
+        if (published != null) {
+            return ResponseEntity.ok(EpreuveMapper.toDTO(published));
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
+    @PatchMapping("/{id}/start")
+    public ResponseEntity<EpreuveDTO> startEpreuve(@PathVariable Long id) {
+        Epreuve started = epreuveService.startEpreuve(id);
+        if (started != null) {
+            return ResponseEntity.ok(EpreuveMapper.toDTO(started));
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
+    @PatchMapping("/{id}/finish")
+    public ResponseEntity<EpreuveDTO> finishEpreuve(@PathVariable Long id) {
+        Epreuve finished = epreuveService.finishEpreuve(id);
+        if (finished != null) {
+            return ResponseEntity.ok(EpreuveMapper.toDTO(finished));
+        }
+        return ResponseEntity.badRequest().build();
     }
 }

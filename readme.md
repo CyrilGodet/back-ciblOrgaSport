@@ -4,16 +4,24 @@
 
 ### Lancement de Docker
 
-docker compose up -d
+`docker compose up -d`
+
+*Remarque*: Si c'est la première fois que vous lancez l'application ou que vous avez modifié le code, il ne faut pas oublier de build l'application Spring au moment du démarrage du conteneur Docker. Pour cela, il faut plutôt lancer la commande : `docker compose up --build -d`
 
 ### Arrêt de Docker
 
 docker compose down
 
-### Accès à la base de données
+### Accès à la base de données 
 
 `docker exec -it back-ciblorgasport-postgres-1 psql -U admin -d glop`
 
+### Exécuter le scipt SQL pour injecter des données dans la base de données
+
+`cat seed_data.sql |  docker compose exec -T postgres psql -U admin -d glop`
+
+
+## Monitoring
 
 ### Accès à Grafana
 
@@ -38,21 +46,10 @@ Les identifiants par défaut sont :
 4. Sélectionner la data source Prometheus créée précédemment.
 5. Cliquer sur "Import" pour ajouter le dashboard.
 
+*Remarque*: La création du data source et de la configuration du dashboad n'est qu'a réaliser qu'une seule fois parce que par la suite tout est stocké dans un volume Docker.
 
+## Déploiement sur Render
 
+Une version de l'application a été déployée sur Render
 
-sudo docker exec -it postgresql_database psql -U admin -d glop
-cat seed_data.sql | sudo docker exec -i postgresql_database psql -U admin -d glop
-
-
-cat seed_data.sql |  docker exec -i postgresql_database psql -U admin -d glop
-
-
-
-FAC:
-docker compose up -d postgres
-mvn clean install run 
-cat seed_data.sql |  docker exec -i back-ciblorgasport-postgres-1   psql -U admin -d glop
-
-
-
+Elle est accessible via ce [lien](https://front-ciblorgasport-wdcm.onrender.com)
